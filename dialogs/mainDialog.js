@@ -5,18 +5,22 @@ const { TimexProperty } = require('@microsoft/recognizers-text-data-types-timex-
 const { ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialog } = require('botbuilder-dialogs');
 const { BookingDialog } = require('./bookingDialog');
 const { BrowsingDialog, BROWSING_DIALOG } = require('./browsingDialog');
+const { JobSearchDialog, JOB_SEARCH_DIALOG } = require('./jobSearchDialog');
 const { LuisHelper } = require('./luisHelper');
 
+const { UserProfile } = require('../userProfile');
 const { userIntent } = require('../helperFunctions');
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
 const BOOKING_DIALOG = 'bookingDialog';
-// const BROWSING_DIALOG = 'browsingDialog';
-// const USER_PROFILE_PROPERTY = 'userProfileProperty';
+const USER_PROFILE_PROPERTY = 'userProfile';
 
 class MainDialog extends ComponentDialog {
-    constructor(logger) {
+    constructor(userState, logger) {
         super('MainDialog');
+
+        this.userState = userState;
+        this.userProfile = userState.createProperty(USER_PROFILE_PROPERTY);
 
         if (!logger) {
             logger = console;
@@ -30,7 +34,9 @@ class MainDialog extends ComponentDialog {
         this.addDialog(new TextPrompt('TextPrompt'))
             .addDialog(new BookingDialog(BOOKING_DIALOG))
             .addDialog(new BrowsingDialog(BROWSING_DIALOG))
+            .addDialog(new JobSearchDialog(JOB_SEARCH_DIALOG, this.userProfile, userState))
             .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
+                this.createUserProfileStep.bind(this),
                 this.firstInteractionStep.bind(this),
                 this.introStep.bind(this),
                 this.actStep.bind(this),
@@ -57,13 +63,30 @@ class MainDialog extends ComponentDialog {
         }
     }
 
+    async createUserProfileStep(stepContext) {
+        // this.userState.userProfile = new UserProfile();
+        // console.log(`userState: ${ JSON.stringify(this.userState) }`);
+        // await this.userState.saveChanges(stepContext.context);
+        const user = await this.userProfile.get(stepContext.context, new UserProfile());
+        await this.userProfile.set(stepContext.context, user);
+
+        return await stepContext.next();
+    }
+
     async firstInteractionStep(stepContext) {
+        // Create a profile for the user to collect information within the dialog.
+        // const user = await this.userProfile.get(stepContext.context, new UserProfile());
+        // await this.userProfile.set(stepContext.context, user);
+        // console.log(`User profile from mainDialog ${ JSON.stringify(user) }`);
+        // console.log(`userState: ${ JSON.stringify(this.userState) }`);
+        // console.log(`User profile from mainDialog ${ JSON.stringify(user) }`);
+
         const text = stepContext.context.activity.text;
 
         if (text === userIntent.searchJobs) {
             await stepContext.context.sendActivity('This will help you find a job');
+            return await stepContext.beginDialog(JOB_SEARCH_DIALOG);
         } else if (text === userIntent.browsing) {
-            await stepContext.context.sendActivity('This will take you to the browsing dialog.');
             return await stepContext.beginDialog(BROWSING_DIALOG);
         }
 
@@ -80,6 +103,8 @@ class MainDialog extends ComponentDialog {
             await stepContext.context.sendActivity('NOTE: LUIS is not configured. To enable all capabilities, add `LuisAppId`, `LuisAPIKey` and `LuisAPIHostName` to the .env file.');
             return await stepContext.next();
         }
+        let user = await this.userProfile.get(stepContext.context);
+        console.log(`userState: ${ JSON.stringify(user) }`);
 
         return await stepContext.prompt('TextPrompt', { prompt: 'What can I help you with today?\nSay something like "Book a flight from Paris to Berlin on March 22, 2020"' });
     }

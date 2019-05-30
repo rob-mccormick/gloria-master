@@ -2,7 +2,10 @@
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
 const { ComponentDialog, WaterfallDialog, Dialog } = require('botbuilder-dialogs');
-const { MessageFactory } = require('botbuilder');
+const { MessageFactory, ActivityTypes } = require('botbuilder');
+
+const { JobSearchDialog, JOB_SEARCH_DIALOG } = require('./jobSearchDialog');
+const { delay } = require('../helperFunctions');
 
 const BROWSING_DIALOG = 'browsingDialog';
 
@@ -28,11 +31,12 @@ class BrowsingDialog extends ComponentDialog {
     constructor() {
         super(BROWSING_DIALOG);
 
-        this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
-            this.whyOnSiteStep.bind(this),
-            this.getBackOnTrackStep.bind(this),
-            this.redirectStep.bind(this)
-        ]));
+        this.addDialog(new JobSearchDialog(JOB_SEARCH_DIALOG))
+            .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
+                this.whyOnSiteStep.bind(this),
+                this.getBackOnTrackStep.bind(this),
+                this.redirectStep.bind(this)
+            ]));
 
         this.initialDialogId = WATERFALL_DIALOG;
     }
@@ -43,7 +47,12 @@ class BrowsingDialog extends ComponentDialog {
     async whyOnSiteStep(stepContext) {
         const question = MessageFactory.suggestedActions(userOptions.whyOnSite, `What brought you to our career site today?`);
 
+        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+        await delay(1000);
         await stepContext.context.sendActivity('No worries.');
+
+        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+        await delay(1000);
         await stepContext.context.sendActivity(question);
         return Dialog.EndOfTurn;
     }
@@ -57,14 +66,27 @@ class BrowsingDialog extends ComponentDialog {
         case userOptions.whyOnSite[0]:
             const hiringQuestion = MessageFactory.suggestedActions(userOptions.heardHiring, 'Are you happy looking around, or would you like me to find jobs just for you?');
 
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1000);
             await stepContext.context.sendActivity('You heard right - we have some great roles available!');
+
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(2000);
             await stepContext.context.sendActivity(hiringQuestion);
             return Dialog.EndOfTurn;
         case userOptions.whyOnSite[1]:
             const lookingQuestion = MessageFactory.suggestedActions(userOptions.lookingAround, 'Are you looking in a particular business area?');
 
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1000);
             await stepContext.context.sendActivity(`You've come to the right place!`);
+
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(2000);
             await stepContext.context.sendActivity(`Here you can learn about what we offer, check out our offices and hear from our team.`);
+
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(3000);
             await stepContext.context.sendActivity(lookingQuestion);
             return Dialog.EndOfTurn;
         default:
@@ -81,7 +103,7 @@ class BrowsingDialog extends ComponentDialog {
     async redirectStep(stepContext) {
         if (stepContext.result === userOptions.heardHiring[0] || stepContext.result === userOptions.lookingAround[0]) {
             await stepContext.context.sendActivity('This will replace with the jobSearch dialog');
-            return await stepContext.endDialog();
+            return await stepContext.replaceDialog(JOB_SEARCH_DIALOG);
         } else {
             await stepContext.context.sendActivity(`No problem.`);
             await stepContext.context.sendActivity('This will redirect user to final dialog');

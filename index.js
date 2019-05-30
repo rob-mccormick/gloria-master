@@ -61,7 +61,7 @@ userState = new UserState(storage);
 const logger = console;
 
 // Create the main dialog.
-const dialog = new MainDialog(logger);
+const dialog = new MainDialog(userState, logger);
 const bot = new DialogAndWelcomeBot(conversationState, userState, dialog, logger);
 
 // Create HTTP server

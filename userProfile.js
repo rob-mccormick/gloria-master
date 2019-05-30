@@ -4,7 +4,7 @@
 class UserProfile {
     constructor() {
         // User's details
-        this.name = '';
+        this.name = 'Rob';
         this.email = '';
 
         // User's behaviour default values

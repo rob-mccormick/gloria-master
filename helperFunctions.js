@@ -6,6 +6,7 @@ const userIntent = {
     browsing: `I'm just browsing`
 };
 
+// eslint-disable-next-line promise/param-names
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 module.exports = { userIntent, delay };

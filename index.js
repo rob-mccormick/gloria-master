@@ -1,7 +1,5 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
-// index.js is used to setup and configure your bot
+// Copyright (c) Ideal Role Limited. All rights reserved.
+// Bot Framework licensed under the MIT License from Microsoft Corporation.
 
 // Import required pckages
 const path = require('path');
@@ -9,13 +7,15 @@ const restify = require('restify');
 
 // Import required bot services. See https://aka.ms/bot-services to learn more about the different parts of a bot.
 const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState } = require('botbuilder');
-const { CosmosDbStorage } = require('botbuilder-azure');
+
+// Import Azure storage for user and conversation state
+// const { CosmosDbStorage } = require('botbuilder-azure');
 
 // This bot's main dialog.
 const { DialogAndWelcomeBot } = require('./bots/dialogAndWelcomeBot');
 const { MainDialog } = require('./dialogs/mainDialog');
 
-// Note: Ensure you have a .env file and include LuisAppId, LuisAPIKey and LuisAPIHostName.
+// Read environment variables from .env file
 const ENV_FILE = path.join(__dirname, '.env');
 require('dotenv').config({ path: ENV_FILE });
 
@@ -31,8 +31,7 @@ const adapter = new BotFrameworkAdapter({
 // Catch-all for errors.
 adapter.onTurnError = async (context, error) => {
     // This check writes out errors to console log
-    // NOTE: In production environment, you should consider logging this to Azure
-    //       application insights.
+    // TO SET UP production environment - Azure application insights.
     console.error(`\n [onTurnError]: ${ error }`);
     // Send a message to the user
     await context.sendActivity(`Oops. Something went wrong!`);
@@ -40,25 +39,25 @@ adapter.onTurnError = async (context, error) => {
     await conversationState.delete(context);
 };
 
-// Define a state store for your bot. See https://aka.ms/about-bot-state to learn more about using MemoryStorage.
+// Define a state store for bot.
 // A bot requires a state store to persist the dialog and user state between messages.
 let conversationState, userState;
 
 // For local development, in-memory storage is used.
-// const storage = new MemoryStorage();
+const storage = new MemoryStorage();
 
-// Create access to CosmosDb Storage - this replaces local Memory Storage.
-const storage = new CosmosDbStorage({
-    serviceEndpoint: process.env.DB_SERVICE_ENDPOINT,
-    authKey: process.env.AUTH_KEY,
-    databaseId: process.env.DATABASE,
-    collectionId: process.env.COLLECTION
-});
+// For production create access to CosmosDb Storage.
+// const storage = new CosmosDbStorage({
+//     serviceEndpoint: process.env.DB_SERVICE_ENDPOINT,
+//     authKey: process.env.AUTH_KEY,
+//     databaseId: process.env.DATABASE,
+//     collectionId: process.env.COLLECTION
+// });
 
 conversationState = new ConversationState(storage);
 userState = new UserState(storage);
 
-// Pass in a logger to the bot. For this sample, the logger is the console, but alternatives such as Application Insights and Event Hub exist for storing the logs of the bot.
+// Pass in a logger to the bot.  Use app insights for production.
 const logger = console;
 
 // Create the main dialog.

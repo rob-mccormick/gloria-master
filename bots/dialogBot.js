@@ -1,5 +1,5 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
+// Copyright (c) Ideal Role Limited. All rights reserved.
+// Bot Framework licensed under the MIT License from Microsoft Corporation.
 
 const { ActivityHandler } = require('botbuilder');
 
@@ -33,7 +33,7 @@ class DialogBot extends ActivityHandler {
             // Run the Dialog with the new message Activity.
             await this.dialog.run(context, this.dialogState);
 
-            // By calling next() you ensure that the next BotHandler is run.
+            // Calling next() to ensure that the next BotHandler is run.
             await next();
         });
 
@@ -42,7 +42,7 @@ class DialogBot extends ActivityHandler {
             await this.conversationState.saveChanges(context, false);
             await this.userState.saveChanges(context, false);
 
-            // By calling next() you ensure that the next BotHandler is run.
+            // Calling next() to ensure that the next BotHandler is run.
             await next();
         });
     }

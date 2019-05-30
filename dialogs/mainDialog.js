@@ -1,13 +1,18 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
+// Copyright (c) Ideal Role Limited. All rights reserved.
+// Bot Framework licensed under the MIT License from Microsoft Corporation.
 
 const { TimexProperty } = require('@microsoft/recognizers-text-data-types-timex-expression');
 const { ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialog } = require('botbuilder-dialogs');
 const { BookingDialog } = require('./bookingDialog');
+const { BrowsingDialog, BROWSING_DIALOG } = require('./browsingDialog');
 const { LuisHelper } = require('./luisHelper');
+
+const { userIntent } = require('../helperFunctions');
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
 const BOOKING_DIALOG = 'bookingDialog';
+// const BROWSING_DIALOG = 'browsingDialog';
+// const USER_PROFILE_PROPERTY = 'userProfileProperty';
 
 class MainDialog extends ComponentDialog {
     constructor(logger) {
@@ -24,7 +29,9 @@ class MainDialog extends ComponentDialog {
         // This is a sample "book a flight" dialog.
         this.addDialog(new TextPrompt('TextPrompt'))
             .addDialog(new BookingDialog(BOOKING_DIALOG))
+            .addDialog(new BrowsingDialog(BROWSING_DIALOG))
             .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
+                this.firstInteractionStep.bind(this),
                 this.introStep.bind(this),
                 this.actStep.bind(this),
                 this.finalStep.bind(this)
@@ -48,6 +55,19 @@ class MainDialog extends ComponentDialog {
         if (results.status === DialogTurnStatus.empty) {
             await dialogContext.beginDialog(this.id);
         }
+    }
+
+    async firstInteractionStep(stepContext) {
+        const text = stepContext.context.activity.text;
+
+        if (text === userIntent.searchJobs) {
+            await stepContext.context.sendActivity('This will help you find a job');
+        } else if (text === userIntent.browsing) {
+            await stepContext.context.sendActivity('This will take you to the browsing dialog.');
+            return await stepContext.beginDialog(BROWSING_DIALOG);
+        }
+
+        return await stepContext.next();
     }
 
     /**

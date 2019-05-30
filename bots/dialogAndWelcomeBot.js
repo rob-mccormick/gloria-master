@@ -1,9 +1,11 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
+// Copyright (c) Ideal Role Limited. All rights reserved.
+// Bot Framework licensed under the MIT License from Microsoft Corporation.
 
-const { CardFactory } = require('botbuilder-core');
 const { DialogBot } = require('./dialogBot');
-const WelcomeCard = require('./resources/welcomeCard.json');
+const { MessageFactory } = require('botbuilder');
+
+const { company } = require('../companyDetails');
+const { userIntent } = require('../helperFunctions');
 
 class DialogAndWelcomeBot extends DialogBot {
     constructor(conversationState, userState, dialog, logger) {
@@ -13,12 +15,15 @@ class DialogAndWelcomeBot extends DialogBot {
             const membersAdded = context.activity.membersAdded;
             for (let cnt = 0; cnt < membersAdded.length; cnt++) {
                 if (membersAdded[cnt].id !== context.activity.recipient.id) {
-                    const welcomeCard = CardFactory.adaptiveCard(WelcomeCard);
-                    await context.sendActivity({ attachments: [welcomeCard] });
+                    const choices = [userIntent.searchJobs, userIntent.browsing];
+                    const question = MessageFactory.suggestedActions(choices, `Can I help you find a job at ${ company.name }?`);
+
+                    await context.sendActivity(`Hey there! 👋`);
+                    await context.sendActivity(question);
                 }
             }
 
-            // By calling next() you ensure that the next BotHandler is run.
+            // Calling next() to ensure that the next BotHandler is run.
             await next();
         });
     }

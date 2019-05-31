@@ -7,6 +7,8 @@ const { MessageFactory, ActivityTypes } = require('botbuilder');
 const { company } = require('../companyDetails');
 const { delay } = require('../helperFunctions');
 
+const { UserProfile } = require('../userProfile');
+
 const JOB_SEARCH_DIALOG = 'jobSearchDialog';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
@@ -29,14 +31,12 @@ class JobSearchDialog extends ComponentDialog {
      * Asks the user why they are on the career site
      */
     async testStep(stepContext) {
-        // let user = await this.userProfile.get(stepContext.context);
-        // console.log(`User profile from jobSearchDialog ${ JSON.stringify(user) }`);
-        // console.log(`User profile from jobSearchDialog ${ JSON.stringify(this.userState.userProfile) }`);
-        let userProfile = stepContext.options;
-        console.log(`User profile from jobSearchDialog ${ JSON.stringify(userProfile) }`);
+        const conversationData = stepContext.options;
+        stepContext.values.conversation = conversationData;
+
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(1000);
+        await delay(500);
         await stepContext.context.sendActivity('Made it to the jobSearch dialog!!');
 
         await stepContext.context.sendActivity('Now to check if it goes back to the main dialog correctly...');

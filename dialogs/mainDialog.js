@@ -1,21 +1,26 @@
 // Copyright (c) Ideal Role Limited. All rights reserved.
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
-const { TimexProperty } = require('@microsoft/recognizers-text-data-types-timex-expression');
+// For both my bot and the start up bot
 const { ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialog } = require('botbuilder-dialogs');
+
+// From the start up bot
+const { TimexProperty } = require('@microsoft/recognizers-text-data-types-timex-expression');
 const { BookingDialog } = require('./bookingDialog');
+const { LuisHelper } = require('./luisHelper');
+const { userIntent } = require('../helperFunctions');
+
+const BOOKING_DIALOG = 'bookingDialog';
+
+// MY DATA
+// Import other component dialogs
 const { BrowsingDialog, BROWSING_DIALOG } = require('./browsingDialog');
 const { JobSearchDialog, JOB_SEARCH_DIALOG } = require('./jobSearchDialog');
-const { LuisHelper } = require('./luisHelper');
-
-const { UserProfile } = require('../userProfile');
-const { userIntent } = require('../helperFunctions');
 
 const CONVERSATION_DATA_PROPERTY = 'conversationData';
 const USER_PROFILE_PROPERTY = 'userProfile';
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
-const BOOKING_DIALOG = 'bookingDialog';
 
 class MainDialog extends ComponentDialog {
     constructor(conversationState, userState, logger) {
@@ -42,8 +47,8 @@ class MainDialog extends ComponentDialog {
             .addDialog(new BrowsingDialog())
             .addDialog(new JobSearchDialog())
             .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
-                this.createConversationAndUserDataStep.bind(this),
                 this.firstInteractionStep.bind(this),
+                this.redirectToJobSearchStep.bind(this),
                 this.introStep.bind(this),
                 this.actStep.bind(this),
                 this.finalStep.bind(this)
@@ -69,11 +74,13 @@ class MainDialog extends ComponentDialog {
         }
     }
 
-    async createConversationAndUserDataStep(stepContext) {
-        // If there is no userProfile, create one
-        const userProfile = await this.userProfile.get(stepContext.context, new UserProfile());
-
-        // If there is no conversationDate, create it
+    /**
+     * The first step sets up the conversationData if there is none
+     * Then either sends the user to the browsing dialog or sets jobSearch to true
+     * @param {*} stepContext
+     */
+    async firstInteractionStep(stepContext) {
+        // Create the conversationData object
         const conversationData = await this.conversationData.get(stepContext.context, {
             seenJobDisclaimer: false,
             jobSearch: false,
@@ -81,25 +88,42 @@ class MainDialog extends ComponentDialog {
             finishedConversation: false
         });
 
-        return await stepContext.next();
-    }
-
-    async firstInteractionStep(stepContext) {
-        // Check that data is being saved correctly
-        const userProfile = await this.userProfile.get(stepContext.context);
-        this.logger.log(`UserProfile from step2 mainDialog ${ JSON.stringify(userProfile) }`);
-        const conversationData = await this.conversationData.get(stepContext.context);
-        this.logger.log(`conversationData from step2 mainDialog ${ JSON.stringify(conversationData) }`);
-
+        // Capture the user's response
         const text = stepContext.context.activity.text;
 
         if (text === userIntent.searchJobs) {
-            await stepContext.context.sendActivity('This will help you find a job');
-            return await stepContext.beginDialog(JOB_SEARCH_DIALOG, userProfile);
+            // Set the conversationDate to true for jobSearch
+            conversationData.jobSearch = true;
         } else if (text === userIntent.browsing) {
-            return await stepContext.beginDialog(BROWSING_DIALOG);
+            return await stepContext.beginDialog(BROWSING_DIALOG, conversationData);
         }
 
+        return await stepContext.next();
+    }
+
+    /**
+     * Save the result from the browsing dialog (if completed)
+     * Then either send the user to the job search dialog or continue
+     * @param {*} stepContext
+     */
+    async redirectToJobSearchStep(stepContext) {
+        // If went to browsing route, capture the conversationContext from the previous step
+        if (stepContext.result) {
+            const updatedConversation = stepContext.result;
+
+            // Set the new data as the conversationData
+            await this.conversationData.set(stepContext.context, updatedConversation);
+        }
+
+        const conversationData = await this.conversationData.get(stepContext.context);
+
+        // Redirect user to job search if jobSearch is true
+        if (conversationData.jobSearch) {
+            return await stepContext.beginDialog(JOB_SEARCH_DIALOG, conversationData);
+        }
+
+        // Otherwise continue to the next step
+        await stepContext.context.sendActivity('placeholder - not going on job search');
         return await stepContext.next();
     }
 

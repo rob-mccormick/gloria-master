@@ -4,7 +4,6 @@
 const { ComponentDialog, WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
-const { JobSearchDialog, JOB_SEARCH_DIALOG } = require('./jobSearchDialog');
 const { delay } = require('../helperFunctions');
 
 const BROWSING_DIALOG = 'browsingDialog';
@@ -31,12 +30,11 @@ class BrowsingDialog extends ComponentDialog {
     constructor() {
         super(BROWSING_DIALOG);
 
-        this.addDialog(new JobSearchDialog(JOB_SEARCH_DIALOG))
-            .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
-                this.whyOnSiteStep.bind(this),
-                this.getBackOnTrackStep.bind(this),
-                this.redirectStep.bind(this)
-            ]));
+        this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
+            this.whyOnSiteStep.bind(this),
+            this.getBackOnTrackStep.bind(this),
+            this.redirectStep.bind(this)
+        ]));
 
         this.initialDialogId = WATERFALL_DIALOG;
     }
@@ -45,10 +43,13 @@ class BrowsingDialog extends ComponentDialog {
      * Asks the user why they are on the career site
      */
     async whyOnSiteStep(stepContext) {
+        const conversationData = stepContext.options;
+        stepContext.values.conversation = conversationData;
+
         const question = MessageFactory.suggestedActions(userOptions.whyOnSite, `What brought you to our career site today?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(1000);
+        await delay(500);
         await stepContext.context.sendActivity('No worries.');
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -82,16 +83,20 @@ class BrowsingDialog extends ComponentDialog {
             await stepContext.context.sendActivity(`You've come to the right place!`);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-            await delay(2000);
+            await delay(1000);
             await stepContext.context.sendActivity(`Here you can learn about what we offer, check out our offices and hear from our team.`);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-            await delay(3000);
+            await delay(2500);
             await stepContext.context.sendActivity(lookingQuestion);
             return Dialog.EndOfTurn;
         default:
-            await stepContext.context.sendActivity('This will replace with askQuestion dialog');
-            return await stepContext.endDialog();
+            // Set askQuestion in conversationData to true
+            const conversationData = stepContext.values.conversation;
+            conversationData.hasQuestion = true;
+
+            // Return to mainDialog and pass the conversationData object
+            return await stepContext.endDialog(conversationData);
         }
     }
 
@@ -101,13 +106,24 @@ class BrowsingDialog extends ComponentDialog {
      * - End the dialog as doesn't want to engage
      */
     async redirectStep(stepContext) {
+        // create the conversationData object
+        const conversationData = stepContext.values.conversation;
+
         if (stepContext.result === userOptions.heardHiring[0] || stepContext.result === userOptions.lookingAround[0]) {
-            await stepContext.context.sendActivity('This will replace with the jobSearch dialog');
-            return await stepContext.replaceDialog(JOB_SEARCH_DIALOG);
+            // Set jobSearch in conversationData to true
+            conversationData.jobSearch = true;
+
+            // Pass the conversationData object back to the mainDialog
+            return await stepContext.endDialog(conversationData);
         } else {
+            // Set finishedConversation in conversationData to true
+            conversationData.finishedConversation = true;
+
             await stepContext.context.sendActivity(`No problem.`);
             await stepContext.context.sendActivity('This will redirect user to final dialog');
-            return await stepContext.endDialog();
+
+            // Pass the conversationData object back to the mainDialog
+            return await stepContext.endDialog(conversationData);
         }
     }
 }

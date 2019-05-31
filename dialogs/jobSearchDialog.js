@@ -248,9 +248,6 @@ class JobSearchDialog extends ComponentDialog {
         // Reset the jobSearch to false in conversationData
         conversationData.jobSearch = false;
 
-        console.log(`conversationData: ${ JSON.stringify(conversationData) }`);
-        console.log(`userProfile: ${ JSON.stringify(userProfile) }`);
-
         // End the dialog and return the conversationData and userProfile
         return await stepContext.endDialog({ conversationData, userProfile });
     }

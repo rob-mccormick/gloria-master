@@ -16,6 +16,7 @@ const BOOKING_DIALOG = 'bookingDialog';
 // Import other component dialogs
 const { BrowsingDialog, BROWSING_DIALOG } = require('./browsingDialog');
 const { JobSearchDialog, JOB_SEARCH_DIALOG } = require('./jobSearchDialog');
+const { PipelineDialog, PIPELINE_DIALOG } = require('./pipelineDialog');
 
 const { UserProfile } = require('../userProfile');
 
@@ -48,9 +49,11 @@ class MainDialog extends ComponentDialog {
             .addDialog(new BookingDialog(BOOKING_DIALOG))
             .addDialog(new BrowsingDialog())
             .addDialog(new JobSearchDialog())
+            .addDialog(new PipelineDialog())
             .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
                 this.firstInteractionStep.bind(this),
                 this.redirectToJobSearchStep.bind(this),
+                this.redirectToPipelineStep.bind(this),
                 this.introStep.bind(this),
                 this.actStep.bind(this),
                 this.finalStep.bind(this)
@@ -110,7 +113,7 @@ class MainDialog extends ComponentDialog {
      * @param {*} stepContext
      */
     async redirectToJobSearchStep(stepContext) {
-        // If went to browsing route, capture the conversationContext from the previous step
+        // If went to browsing route, capture the conversationData from the previous step
         if (stepContext.result) {
             const updatedConversation = stepContext.result;
 
@@ -129,6 +132,36 @@ class MainDialog extends ComponentDialog {
 
         // Otherwise continue to the next step
         await stepContext.context.sendActivity('placeholder - not going on job search');
+        return await stepContext.next();
+    }
+
+    /**
+     * Save the result from the browsing dialog (if completed)
+     * Access or create the userProfile
+     * Then either send the user to the job search dialog or continue
+     * @param {*} stepContext
+     */
+    async redirectToPipelineStep(stepContext) {
+        // If completed job search, capture the conversation and user data
+        if (stepContext.result) {
+            const updatedConversation = stepContext.result.conversationData;
+            const updatedUser = stepContext.result.userProfile;
+
+            // Set the new data
+            await this.conversationData.set(stepContext.context, updatedConversation);
+            await this.userProfile.set(stepContext.context, updatedUser);
+        }
+
+        // Access the user data
+        const userProfile = await this.userProfile.get(stepContext.context);
+
+        // Redirect user to pipeline if addToPipeline is true
+        if (userProfile.addToPipeline) {
+            return await stepContext.beginDialog(PIPELINE_DIALOG, userProfile);
+        }
+
+        // Otherwise continue to the next step
+        await stepContext.context.sendActivity('placeholder - not going to pipeline');
         return await stepContext.next();
     }
 

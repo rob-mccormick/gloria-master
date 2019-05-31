@@ -44,7 +44,7 @@ class BrowsingDialog extends ComponentDialog {
      */
     async whyOnSiteStep(stepContext) {
         const conversationData = stepContext.options;
-        stepContext.values.conversation = conversationData;
+        stepContext.values.conversationData = conversationData;
 
         const question = MessageFactory.suggestedActions(userOptions.whyOnSite, `What brought you to our career site today?`);
 
@@ -92,7 +92,7 @@ class BrowsingDialog extends ComponentDialog {
             return Dialog.EndOfTurn;
         default:
             // Set askQuestion in conversationData to true
-            const conversationData = stepContext.values.conversation;
+            const conversationData = stepContext.values.conversationData;
             conversationData.hasQuestion = true;
 
             // Return to mainDialog and pass the conversationData object
@@ -107,7 +107,7 @@ class BrowsingDialog extends ComponentDialog {
      */
     async redirectStep(stepContext) {
         // create the conversationData object
-        const conversationData = stepContext.values.conversation;
+        const conversationData = stepContext.values.conversationData;
 
         if (stepContext.result === userOptions.heardHiring[0] || stepContext.result === userOptions.lookingAround[0]) {
             // Set jobSearch in conversationData to true

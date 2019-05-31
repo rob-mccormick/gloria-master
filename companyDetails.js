@@ -2,7 +2,7 @@
 
 const company = {
     name: 'Monzo',
-    offices: ['London', 'Cardiff', 'Las Vegas'],
+    locations: ['London', 'Cardiff', 'Las Vegas'],
     privacyNotice: 'https://monzo.com/legal/privacy-policy/',
     categoryOne: [
         'Building the product',

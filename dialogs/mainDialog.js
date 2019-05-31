@@ -17,6 +17,8 @@ const BOOKING_DIALOG = 'bookingDialog';
 const { BrowsingDialog, BROWSING_DIALOG } = require('./browsingDialog');
 const { JobSearchDialog, JOB_SEARCH_DIALOG } = require('./jobSearchDialog');
 
+const { UserProfile } = require('../userProfile');
+
 const CONVERSATION_DATA_PROPERTY = 'conversationData';
 const USER_PROFILE_PROPERTY = 'userProfile';
 
@@ -103,6 +105,7 @@ class MainDialog extends ComponentDialog {
 
     /**
      * Save the result from the browsing dialog (if completed)
+     * Access or create the userProfile
      * Then either send the user to the job search dialog or continue
      * @param {*} stepContext
      */
@@ -115,11 +118,13 @@ class MainDialog extends ComponentDialog {
             await this.conversationData.set(stepContext.context, updatedConversation);
         }
 
+        // Access conversation and user data
         const conversationData = await this.conversationData.get(stepContext.context);
+        const userProfile = await this.userProfile.get(stepContext.context, new UserProfile());
 
         // Redirect user to job search if jobSearch is true
         if (conversationData.jobSearch) {
-            return await stepContext.beginDialog(JOB_SEARCH_DIALOG, conversationData);
+            return await stepContext.beginDialog(JOB_SEARCH_DIALOG, { conversationData, userProfile });
         }
 
         // Otherwise continue to the next step

@@ -11,16 +11,22 @@ const { LuisHelper } = require('./luisHelper');
 const { UserProfile } = require('../userProfile');
 const { userIntent } = require('../helperFunctions');
 
-const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
-const BOOKING_DIALOG = 'bookingDialog';
+const CONVERSATION_DATA_PROPERTY = 'conversationData';
 const USER_PROFILE_PROPERTY = 'userProfile';
 
+const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
+const BOOKING_DIALOG = 'bookingDialog';
+
 class MainDialog extends ComponentDialog {
-    constructor(userState, logger) {
+    constructor(conversationState, userState, logger) {
         super('MainDialog');
 
-        this.userState = userState;
+        // Create the state property accessors for the conversation data and user profile.
+        this.conversationData = conversationState.createProperty(CONVERSATION_DATA_PROPERTY);
         this.userProfile = userState.createProperty(USER_PROFILE_PROPERTY);
+
+        this.conversationState = conversationState;
+        this.userState = userState;
 
         if (!logger) {
             logger = console;
@@ -33,10 +39,10 @@ class MainDialog extends ComponentDialog {
         // This is a sample "book a flight" dialog.
         this.addDialog(new TextPrompt('TextPrompt'))
             .addDialog(new BookingDialog(BOOKING_DIALOG))
-            .addDialog(new BrowsingDialog(BROWSING_DIALOG))
-            .addDialog(new JobSearchDialog(JOB_SEARCH_DIALOG, this.userProfile, userState))
+            .addDialog(new BrowsingDialog())
+            .addDialog(new JobSearchDialog())
             .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
-                this.createUserProfileStep.bind(this),
+                this.createConversationAndUserDataStep.bind(this),
                 this.firstInteractionStep.bind(this),
                 this.introStep.bind(this),
                 this.actStep.bind(this),
@@ -63,29 +69,33 @@ class MainDialog extends ComponentDialog {
         }
     }
 
-    async createUserProfileStep(stepContext) {
-        // this.userState.userProfile = new UserProfile();
-        // console.log(`userState: ${ JSON.stringify(this.userState) }`);
-        // await this.userState.saveChanges(stepContext.context);
-        const user = await this.userProfile.get(stepContext.context, new UserProfile());
-        await this.userProfile.set(stepContext.context, user);
+    async createConversationAndUserDataStep(stepContext) {
+        // If there is no userProfile, create one
+        const userProfile = await this.userProfile.get(stepContext.context, new UserProfile());
+
+        // If there is no conversationDate, create it
+        const conversationData = await this.conversationData.get(stepContext.context, {
+            seenJobDisclaimer: false,
+            jobSearch: false,
+            hasQuestion: false,
+            finishedConversation: false
+        });
 
         return await stepContext.next();
     }
 
     async firstInteractionStep(stepContext) {
-        // Create a profile for the user to collect information within the dialog.
-        // const user = await this.userProfile.get(stepContext.context, new UserProfile());
-        // await this.userProfile.set(stepContext.context, user);
-        // console.log(`User profile from mainDialog ${ JSON.stringify(user) }`);
-        // console.log(`userState: ${ JSON.stringify(this.userState) }`);
-        // console.log(`User profile from mainDialog ${ JSON.stringify(user) }`);
+        // Check that data is being saved correctly
+        const userProfile = await this.userProfile.get(stepContext.context);
+        this.logger.log(`UserProfile from step2 mainDialog ${ JSON.stringify(userProfile) }`);
+        const conversationData = await this.conversationData.get(stepContext.context);
+        this.logger.log(`conversationData from step2 mainDialog ${ JSON.stringify(conversationData) }`);
 
         const text = stepContext.context.activity.text;
 
         if (text === userIntent.searchJobs) {
             await stepContext.context.sendActivity('This will help you find a job');
-            return await stepContext.beginDialog(JOB_SEARCH_DIALOG);
+            return await stepContext.beginDialog(JOB_SEARCH_DIALOG, userProfile);
         } else if (text === userIntent.browsing) {
             return await stepContext.beginDialog(BROWSING_DIALOG);
         }

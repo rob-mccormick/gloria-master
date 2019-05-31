@@ -12,11 +12,11 @@ const JOB_SEARCH_DIALOG = 'jobSearchDialog';
 const WATERFALL_DIALOG = 'waterfallDialog';
 
 class JobSearchDialog extends ComponentDialog {
-    constructor(userProfile, userState) {
+    constructor() {
         super(JOB_SEARCH_DIALOG);
 
-        this.userProfile = userProfile;
-        this.userState = userState;
+        // this.userProfile = userProfile;
+        // this.userState = userState;
 
         this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
             this.testStep.bind(this)
@@ -32,6 +32,8 @@ class JobSearchDialog extends ComponentDialog {
         // let user = await this.userProfile.get(stepContext.context);
         // console.log(`User profile from jobSearchDialog ${ JSON.stringify(user) }`);
         // console.log(`User profile from jobSearchDialog ${ JSON.stringify(this.userState.userProfile) }`);
+        let userProfile = stepContext.options;
+        console.log(`User profile from jobSearchDialog ${ JSON.stringify(userProfile) }`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1000);

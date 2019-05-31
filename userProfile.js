@@ -2,20 +2,19 @@
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
 class UserProfile {
-    constructor() {
+    constructor(name, email, location, categoryOne, categoryTwo) {
         // User's details
-        this.name = 'Rob';
-        this.email = '';
+        this.name = name;
+        this.email = email;
 
         // User's behaviour default values
         this.gdprAccepted = false;
-        this.seenJobDisclaimer = false;
         this.addToPipeline = false;
 
         // User's job search
-        this.location = '';
-        this.categoryOne = '';
-        this.categoryTwo = '';
+        this.location = location;
+        this.categoryOne = categoryOne;
+        this.categoryTwo = categoryTwo;
         this.jobs = [];
     }
 }

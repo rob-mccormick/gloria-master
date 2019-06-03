@@ -4,22 +4,19 @@
 const { ComponentDialog, WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
-const { company } = require('../companyDetails');
 const { delay } = require('../helperFunctions');
 
 // Import other dialogs
 const { GdprDialog, GDPR_DIALOG } = require('./gdprDialog');
+const { NameAndEmailDialog, NAME_AND_EMAIL_DIALOG } = require('./nameAndEmailDialog');
 
 const PIPELINE_DIALOG = 'pipelineDialog';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
 
 const userResponses = {
-    foundOneJob: 'I was',
-    foundManyJobs: 'I did',
-    foundNoJob: 'Unfortunately not',
-    pipelineYes: `That'd be great`,
-    pipelineNo: `It's ok, I'll just check back`
+    emailCorrect: 'Yes please',
+    emailWrong: `Actually I'd rather use a different email`
 };
 
 class PipelineDialog extends ComponentDialog {
@@ -27,6 +24,7 @@ class PipelineDialog extends ComponentDialog {
         super(PIPELINE_DIALOG);
 
         this.addDialog(new GdprDialog())
+            .addDialog(new NameAndEmailDialog())
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
                 this.checkGdprStatusStep.bind(this),
                 this.checkNameAndEmailStep.bind(this),
@@ -74,32 +72,51 @@ class PipelineDialog extends ComponentDialog {
             return await stepContext.endDialog(userProfile);
         }
 
-        // Present categoryOne options and ask user to select
-        return stepContext.next();
+        await stepContext.context.sendActivity('Excellent.');
+
+        // If we don't have the user's name and email, send to new dialog
+        if (!userProfile.name || !userProfile.email) {
+            return await stepContext.beginDialog(NAME_AND_EMAIL_DIALOG);
+        }
+
+        // If we have their details, check they're correct
+        const options = [userResponses.emailCorrect, userResponses.emailWrong];
+        const question = MessageFactory.suggestedActions(options, `Ok ${ userProfile.name }, just to make sure, I should send new jobs to ${ userProfile.email }?`);
+
+        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+        await delay(1500);
+        await stepContext.context.sendActivity(question);
+        return Dialog.EndOfTurn;
     }
 
     /**
-     * Update userProfile to be added to the pipeline (if relevant)
-     * In the conversationState, return the jobSearch to false
-     * Return the conversationData and userProfile to the mainDialog
+     * If went to nameAndEmailDialog - save the results
+     * Redirect the user if they want to use a different email
+     * Provide the user with a confirmation message
+     * Return the userProfile to the mainDialog
      */
     async endStep(stepContext) {
-        const conversationData = stepContext.values.conversationData;
         const userProfile = stepContext.values.userProfile;
 
-        // Check if the user wanted to be added to the pipeline
-        if (stepContext.result === userResponses.pipelineYes) {
-            userProfile.addToPipeline = true;
+        // Handle case where user's email is wrong
+        if (stepContext.result === userResponses.emailWrong) {
+            // Set email to empty string
+            userProfile.email = '';
+
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1500);
+            await stepContext.context.sendActivity('Alright, let me grab your details again.');
+
+            // Replace with this dialog
+            return await stepContext.beginDialog(PIPELINE_DIALOG, userProfile);
         }
 
-        // Reset the jobSearch to false in conversationData
-        conversationData.jobSearch = false;
+        // If correct, confirm with user the job's they'll be contacted for
+        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+        await delay(1500);
+        await stepContext.context.sendActivity(`Perfect, we'll let you know when any ${ userProfile.categoryTwo } jobs in ${ userProfile.location } come up.`);
 
-        console.log(`conversationData: ${ JSON.stringify(conversationData) }`);
-        console.log(`userProfile: ${ JSON.stringify(userProfile) }`);
-
-        // End the dialog and return the conversationData and userProfile
-        return await stepContext.endDialog({ conversationData, userProfile });
+        return await stepContext.endDialog(userProfile);
     }
 }
 

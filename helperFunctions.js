@@ -9,4 +9,19 @@ const userIntent = {
 // eslint-disable-next-line promise/param-names
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-module.exports = { userIntent, delay };
+// Validate name
+const validateName = (input) => {
+    const name = input && input.trim();
+    return name !== undefined
+        ? { success: true, name: name }
+        : { success: false, message: 'Please enter a name that contains at least one character.' };
+};
+
+const validateEmail = (input) => {
+    const name = input && input.trim();
+    return name !== undefined
+        ? { success: true, name: name }
+        : { success: false, message: 'Please enter a name that contains at least one character.' };
+};
+
+module.exports = { userIntent, delay, validateName, validateEmail };

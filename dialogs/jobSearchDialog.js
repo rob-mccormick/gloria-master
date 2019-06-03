@@ -216,8 +216,16 @@ class JobSearchDialog extends ComponentDialog {
             await stepContext.context.sendActivity('Sorry to hear that.');
         }
 
-        // If the user found a job move them to the next step
+        // If the user found a job, let them know the next steps
         if (stepContext.result === userResponses.foundOneJob || stepContext.result === userResponses.foundManyJobs) {
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(500);
+            await stepContext.context.sendActivity(`That's great 😀`);
+
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1500);
+            await stepContext.context.sendActivity(`Once you apply we ${ company.nextSteps }.`);
+
             return await stepContext.next();
         }
 

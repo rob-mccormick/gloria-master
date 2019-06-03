@@ -61,11 +61,11 @@ class GdprDialog extends ComponentDialog {
      */
     async endStep(stepContext) {
         // Set user consent to false as default
-        let userConsent = false;
+        let userConsent = -1;
 
         // Update consent to true if the user agreed to the GDPR notice
         if (stepContext.result === userResponses.yes) {
-            userConsent = true;
+            userConsent = 1;
         }
 
         // End the dialog and return the result

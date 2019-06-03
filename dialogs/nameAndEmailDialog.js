@@ -1,10 +1,11 @@
 // Copyright (c) Ideal Role Limited. All rights reserved.
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
+const validator = require('validator');
 
 const { ComponentDialog, WaterfallDialog, TextPrompt, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
-const { delay, validateName, validateEmail } = require('../helperFunctions');
+const { delay } = require('../helperFunctions');
 
 const NAME_AND_EMAIL_DIALOG = 'nameAndEmailDialog';
 const NAME_PROMPT = 'namePrompt';
@@ -21,8 +22,8 @@ class NameAndEmailDialog extends ComponentDialog {
     constructor() {
         super(NAME_AND_EMAIL_DIALOG);
 
-        this.addDialog(new TextPrompt(NAME_PROMPT))
-            .addDialog(new TextPrompt(EMAIL_PROMPT))
+        this.addDialog(new TextPrompt(NAME_PROMPT, this.nameValidator))
+            .addDialog(new TextPrompt(EMAIL_PROMPT, this.emailValidator))
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
                 this.getNameStep.bind(this),
                 this.getEmailStep.bind(this),
@@ -45,7 +46,10 @@ class NameAndEmailDialog extends ComponentDialog {
             return stepContext.next();
         }
 
-        const promptOptions = { prompt: 'Mind if I get your name?  You can type it below.' };
+        const promptOptions = {
+            prompt: 'Mind if I get your name?  You can type it below.',
+            retryPrompt: `I didn't quite get that - I was expecting your name to be between 2 and 20 characters.  \n\nCan you try again?`
+        };
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(500);
@@ -57,32 +61,28 @@ class NameAndEmailDialog extends ComponentDialog {
      * Ask the user's email
      */
     async getEmailStep(stepContext) {
-        let promptOptions;
+        let promptQuestion;
+        console.log(stepContext.result);
 
         // Check if retry step
         if (stepContext.values.retryEmail) {
             // Set the prompt question for the email
-            promptOptions = { prompt: `So what email is best?` };
+            promptQuestion = `So what email is best?`;
 
             // Reset the retryEmail value to false
             stepContext.values.retryEmail = false;
         } else {
-            // Check if the name is valid
-            const result = validateName(stepContext.result);
+            // Save the user's name
+            stepContext.values.name = stepContext.result;
 
-            if (result.success) {
-                // Save the user's name
-                stepContext.values.name = stepContext.result;
-
-                // Set the prompt question for the email
-                promptOptions = { prompt: `Thanks ${ stepContext.values.name }.  What's the best email to reach you on?` };
-            } else {
-                // If the input was not valid, ask for it again
-                await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-                await delay(1000);
-                await stepContext.context.sendActivity(`Something's not quite right`);
-            }
+            // Set the prompt question for the email
+            promptQuestion = `Thanks ${ stepContext.values.name }.  What's the best email to reach you on?`;
         }
+
+        const promptOptions = {
+            prompt: promptQuestion,
+            retryPrompt: `Hmm, I don't think that's a valid email 🤔  \n\n Can you try again?`
+        };
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1000);
@@ -94,18 +94,8 @@ class NameAndEmailDialog extends ComponentDialog {
      * Ask the user to confirm the email is correct
      */
     async confirmEmailStep(stepContext) {
-        // Check if the name is valid
-        const result = validateEmail(stepContext.result);
-
-        if (result.success) {
-            // Save the user's name
-            stepContext.values.email = stepContext.result;
-        } else {
-            // If the input was not valid, ask for it again
-            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-            await delay(1000);
-            await stepContext.context.sendActivity(`Something's not quite right`);
-        }
+        // Save the user's email
+        stepContext.values.email = stepContext.result;
 
         // Confirm the email is correct with the user
         const options = [userResponses.emailCorrect, userResponses.emailWrong];
@@ -130,16 +120,28 @@ class NameAndEmailDialog extends ComponentDialog {
         if (stepContext.result === userResponses.emailWrong) {
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);
-            await stepContext.context.sendActivity(`I'm not sure what happened there.`);
+            await stepContext.context.sendActivity(`Let's try that again.`);
 
             // Send back to the beginning of the dialog
-            console.log(JSON.stringify(userDetails));
             return await stepContext.beginDialog(NAME_AND_EMAIL_DIALOG, userDetails);
         }
 
         // If user has confirmed email - return the results
-        console.log(JSON.stringify(userDetails));
         return await stepContext.endDialog(userDetails);
+    }
+
+    // ======================================
+    // Validators
+    // ======================================
+
+    async nameValidator(promptContext) {
+        // Check if the name is greater than 2 characters, but less than 20
+        return promptContext.recognized.succeeded && promptContext.recognized.value.length > 1 && promptContext.recognized.value.length < 20;
+    }
+
+    async emailValidator(promptContext) {
+        // Check if it is a valid email using validator
+        return promptContext.recognized.succeeded && validator.isEmail(promptContext.recognized.value);
     }
 }
 

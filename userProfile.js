@@ -16,6 +16,9 @@ class UserProfile {
         this.categoryOne = categoryOne;
         this.categoryTwo = categoryTwo;
         this.jobs = [];
+
+        // User's questions
+        this.questions = [];
     }
 }
 

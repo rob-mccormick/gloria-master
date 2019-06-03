@@ -90,7 +90,7 @@ class BrowsingDialog extends ComponentDialog {
             await delay(2500);
             await stepContext.context.sendActivity(lookingQuestion);
             return Dialog.EndOfTurn;
-        default:
+        case userOptions.whyOnSite[2]:
             // Set askQuestion in conversationData to true
             const conversationData = stepContext.values.conversationData;
             conversationData.hasQuestion = true;

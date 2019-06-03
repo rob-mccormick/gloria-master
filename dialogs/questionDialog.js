@@ -1,7 +1,7 @@
 // Copyright (c) Ideal Role Limited. All rights reserved.
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
-const { ComponentDialog, WaterfallDialog, Dialog } = require('botbuilder-dialogs');
+const { ComponentDialog, WaterfallDialog, Dialog, TextPrompt } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { delay } = require('../helperFunctions');
@@ -10,24 +10,27 @@ const { delay } = require('../helperFunctions');
 const { GdprDialog, GDPR_DIALOG } = require('./gdprDialog');
 const { NameAndEmailDialog, NAME_AND_EMAIL_DIALOG } = require('./nameAndEmailDialog');
 
-const PIPELINE_DIALOG = 'pipelineDialog';
+const QUESTION_DIALOG = 'questionDialog';
+const QUESTION_PROMPT = 'questionPrompt';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
 
 const userResponses = {
-    emailCorrect: 'Yes please',
+    emailCorrect: `That's the one`,
     emailWrong: `Actually I'd rather use a different email`
 };
 
-class PipelineDialog extends ComponentDialog {
+class QuestionDialog extends ComponentDialog {
     constructor() {
-        super(PIPELINE_DIALOG);
+        super(QUESTION_DIALOG);
 
-        this.addDialog(new GdprDialog())
+        this.addDialog(new TextPrompt(QUESTION_PROMPT, this.questionValidator))
+            .addDialog(new GdprDialog())
             .addDialog(new NameAndEmailDialog())
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
                 this.checkGdprStatusStep.bind(this),
                 this.checkNameAndEmailStep.bind(this),
+                this.askQuestionStep.bind(this),
                 this.endStep.bind(this)
             ]));
 
@@ -42,6 +45,7 @@ class PipelineDialog extends ComponentDialog {
         // Save the userProfile passed from mainDialog
         const userProfile = stepContext.options;
         stepContext.values.userProfile = userProfile;
+        console.log(`userProfile form within question dialog: ${ JSON.stringify(userProfile) }`);
 
         // Redirect to GDPR dialog if has not given consent
         if (!userProfile.gdprAccepted) {
@@ -73,7 +77,7 @@ class PipelineDialog extends ComponentDialog {
             return await stepContext.endDialog(userProfile);
         }
 
-        await stepContext.context.sendActivity('Excellent.');
+        await stepContext.context.sendActivity('Great, I can have someone get back to you.');
 
         // If we don't have the user's name and email, send to new dialog
         if (!userProfile.name || !userProfile.email) {
@@ -82,7 +86,7 @@ class PipelineDialog extends ComponentDialog {
 
         // If we have their details, check they're correct
         const options = [userResponses.emailCorrect, userResponses.emailWrong];
-        const question = MessageFactory.suggestedActions(options, `Ok ${ userProfile.name }, just to make sure, I should send new jobs to ${ userProfile.email }?`);
+        const question = MessageFactory.suggestedActions(options, `Just to make sure, we can reach you at ${ userProfile.email }?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1500);
@@ -93,12 +97,10 @@ class PipelineDialog extends ComponentDialog {
     /**
      * If went to nameAndEmailDialog - save the results
      * Redirect the user if they want to use a different email
-     * Provide the user with a confirmation message
-     * Return the userProfile to the mainDialog
+     * Ask the user to leave their question
      */
-    async endStep(stepContext) {
+    async askQuestionStep(stepContext) {
         const userProfile = stepContext.values.userProfile;
-        console.log(`userProfile from last Pipeline step: ${ JSON.stringify(userProfile) }`);
 
         // Handle case where user's email is wrong
         if (stepContext.result === userResponses.emailWrong) {
@@ -110,22 +112,54 @@ class PipelineDialog extends ComponentDialog {
             await stepContext.context.sendActivity('Alright, let me grab your details again.');
 
             // Replace with this dialog
-            return await stepContext.beginDialog(PIPELINE_DIALOG, userProfile);
+            return await stepContext.beginDialog(QUESTION_DIALOG, userProfile);
         } else if (stepContext.result && stepContext.result !== userResponses.emailWrong && stepContext.result !== userResponses.emailCorrect) {
             // Save the results from the nameAndEmailDialog
             userProfile.name = stepContext.result.name;
             userProfile.email = stepContext.result.email;
-            // console.log(JSON.stringify(userProfile));
         }
+
+        const promptOptions = {
+            prompt: 'What would you like to know?',
+            retryPrompt: `I didn't quite get that - I was expecting a question between 10 and 256 characters.  \n\nCan you try again?`
+        };
+
+        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+        await delay(800);
+        return await stepContext.prompt(QUESTION_PROMPT, promptOptions);
+    }
+
+    /**
+     * If went to nameAndEmailDialog - save the results
+     * Redirect the user if they want to use a different email
+     * Provide the user with a confirmation message
+     * Return the userProfile to the mainDialog
+     */
+    async endStep(stepContext) {
+        const userProfile = stepContext.values.userProfile;
+
+        // Capture the user's question
+        userProfile.questions.push(stepContext.result);
+
+        console.log(JSON.stringify(userProfile));
 
         // If correct, confirm with user the job's they'll be contacted for
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1500);
-        await stepContext.context.sendActivity(`Perfect, we'll let you know when any ${ userProfile.categoryTwo } jobs in ${ userProfile.location } come up.`);
+        await stepContext.context.sendActivity(`Done! Someone will get back to you shortly.`);
 
         return await stepContext.endDialog(userProfile);
     }
+
+    // ======================================
+    // Validators
+    // ======================================
+
+    async questionValidator(promptContext) {
+        // Check if the name is greater than 2 characters, but less than 20
+        return promptContext.recognized.succeeded && promptContext.recognized.value.length > 10 && promptContext.recognized.value.length < 256;
+    }
 }
 
-module.exports.PipelineDialog = PipelineDialog;
-module.exports.PIPELINE_DIALOG = PIPELINE_DIALOG;
+module.exports.QuestionDialog = QuestionDialog;
+module.exports.QUESTION_DIALOG = QUESTION_DIALOG;

@@ -133,6 +133,9 @@ class PipelineDialog extends ComponentDialog {
         // Set userConfirmedEmail to true
         conversationData.userConfirmedEmail = true;
 
+        // Update addToPipeline to false
+        conversationData.addToPipeline = false;
+
         // If correct, confirm with user the job's they'll be contacted for
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1500);

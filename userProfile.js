@@ -7,15 +7,17 @@ class UserProfile {
         this.name = name;
         this.email = email;
 
-        // User's behaviour default values
+        // If the user has accepted GDPR disclaimer
         this.gdprAccepted = false;
-        this.addToPipeline = false;
 
         // User's job search
         this.location = location;
         this.categoryOne = categoryOne;
         this.categoryTwo = categoryTwo;
         this.jobs = [];
+
+        // User's pipeline
+        this.pipeline = [];
 
         // User's questions
         this.questions = [];

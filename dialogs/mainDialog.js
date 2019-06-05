@@ -115,6 +115,7 @@ class MainDialog extends ComponentDialog {
         const conversationData = await this.conversationData.get(stepContext.context, {
             seenJobDisclaimer: false,
             jobSearch: false,
+            addToPipeline: false,
             hasQuestion: false,
             userConfirmedEmail: false,
             finishedConversation: false
@@ -188,7 +189,7 @@ class MainDialog extends ComponentDialog {
         console.log(`userProfile from the pipeline step: ${ JSON.stringify(userProfile) }`);
 
         // Redirect user to pipeline if addToPipeline is true
-        if (userProfile.addToPipeline) {
+        if (conversationData.addToPipeline) {
             return await stepContext.beginDialog(PIPELINE_DIALOG, { conversationData, userProfile });
         }
 

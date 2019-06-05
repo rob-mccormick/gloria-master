@@ -250,7 +250,14 @@ class JobSearchDialog extends ComponentDialog {
 
         // Check if the user wanted to be added to the pipeline
         if (stepContext.result === userResponses.pipelineYes) {
-            userProfile.addToPipeline = true;
+            // Update the conversationData
+            conversationData.addToPipeline = true;
+
+            // Update the user profile
+            userProfile.pipeline.push({
+                categoryTwo: userProfile.categoryTwo,
+                location: userProfile.location
+            });
         }
 
         // Reset the jobSearch to false in conversationData

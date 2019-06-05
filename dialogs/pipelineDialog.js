@@ -39,8 +39,11 @@ class PipelineDialog extends ComponentDialog {
      * Redirect the user to the GDPR dialog if they have not consented previously
      */
     async checkGdprStatusStep(stepContext) {
-        // Save the userProfile passed from mainDialog
-        const userProfile = stepContext.options;
+        // Save the conversationData and userProfile passed from mainDialog
+        const conversationData = stepContext.options.conversationData;
+        stepContext.values.conversationData = conversationData;
+
+        const userProfile = stepContext.options.userProfile;
         stepContext.values.userProfile = userProfile;
 
         // Redirect to GDPR dialog if has not given consent
@@ -73,14 +76,22 @@ class PipelineDialog extends ComponentDialog {
             return await stepContext.endDialog(userProfile);
         }
 
-        await stepContext.context.sendActivity('Excellent.');
+        // Only use this next dialog if confirming email
+        if (!stepContext.values.conversationData.userConfirmedEmail) {
+            await stepContext.context.sendActivity('Excellent.');
+        }
 
         // If we don't have the user's name and email, send to new dialog
         if (!userProfile.name || !userProfile.email) {
             return await stepContext.beginDialog(NAME_AND_EMAIL_DIALOG);
         }
 
-        // If we have their details, check they're correct
+        // If we have their details, check if we've confirmed them this conversation
+        if (stepContext.values.conversationData.userConfirmedEmail) {
+            return stepContext.next();
+        }
+
+        // Otherwise, check if they're details are correct
         const options = [userResponses.emailCorrect, userResponses.emailWrong];
         const question = MessageFactory.suggestedActions(options, `Ok ${ userProfile.name }, just to make sure, I should send new jobs to ${ userProfile.email }?`);
 
@@ -97,6 +108,7 @@ class PipelineDialog extends ComponentDialog {
      * Return the userProfile to the mainDialog
      */
     async endStep(stepContext) {
+        const conversationData = stepContext.values.conversationData;
         const userProfile = stepContext.values.userProfile;
         console.log(`userProfile from last Pipeline step: ${ JSON.stringify(userProfile) }`);
 
@@ -110,7 +122,7 @@ class PipelineDialog extends ComponentDialog {
             await stepContext.context.sendActivity('Alright, let me grab your details again.');
 
             // Replace with this dialog
-            return await stepContext.beginDialog(PIPELINE_DIALOG, userProfile);
+            return await stepContext.beginDialog(PIPELINE_DIALOG, { conversationData, userProfile });
         } else if (stepContext.result && stepContext.result !== userResponses.emailWrong && stepContext.result !== userResponses.emailCorrect) {
             // Save the results from the nameAndEmailDialog
             userProfile.name = stepContext.result.name;
@@ -118,12 +130,15 @@ class PipelineDialog extends ComponentDialog {
             // console.log(JSON.stringify(userProfile));
         }
 
+        // Set userConfirmedEmail to true
+        conversationData.userConfirmedEmail = true;
+
         // If correct, confirm with user the job's they'll be contacted for
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1500);
         await stepContext.context.sendActivity(`Perfect, we'll let you know when any ${ userProfile.categoryTwo } jobs in ${ userProfile.location } come up.`);
 
-        return await stepContext.endDialog(userProfile);
+        return await stepContext.endDialog({ conversationData, userProfile });
     }
 }
 

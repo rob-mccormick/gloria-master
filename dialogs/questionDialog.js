@@ -42,8 +42,11 @@ class QuestionDialog extends ComponentDialog {
      * Redirect the user to the GDPR dialog if they have not consented previously
      */
     async checkGdprStatusStep(stepContext) {
-        // Save the userProfile passed from mainDialog
-        const userProfile = stepContext.options;
+        // Save the conversationData and userProfile passed from mainDialog
+        const conversationData = stepContext.options.conversationData;
+        stepContext.values.conversationData = conversationData;
+
+        const userProfile = stepContext.options.userProfile;
         stepContext.values.userProfile = userProfile;
         console.log(`userProfile form within question dialog: ${ JSON.stringify(userProfile) }`);
 
@@ -84,7 +87,12 @@ class QuestionDialog extends ComponentDialog {
             return await stepContext.beginDialog(NAME_AND_EMAIL_DIALOG);
         }
 
-        // If we have their details, check they're correct
+        // If we have their details, check if we've confirmed them this conversation
+        if (stepContext.values.conversationData.userConfirmedEmail) {
+            return stepContext.next();
+        }
+
+        // Otherwise, check if they're details are correct
         const options = [userResponses.emailCorrect, userResponses.emailWrong];
         const question = MessageFactory.suggestedActions(options, `Just to make sure, we can reach you at ${ userProfile.email }?`);
 
@@ -100,6 +108,7 @@ class QuestionDialog extends ComponentDialog {
      * Ask the user to leave their question
      */
     async askQuestionStep(stepContext) {
+        const conversationData = stepContext.values.conversationData;
         const userProfile = stepContext.values.userProfile;
 
         // Handle case where user's email is wrong
@@ -112,7 +121,7 @@ class QuestionDialog extends ComponentDialog {
             await stepContext.context.sendActivity('Alright, let me grab your details again.');
 
             // Replace with this dialog
-            return await stepContext.beginDialog(QUESTION_DIALOG, userProfile);
+            return await stepContext.beginDialog(QUESTION_DIALOG, { conversationData, userProfile });
         } else if (stepContext.result && stepContext.result !== userResponses.emailWrong && stepContext.result !== userResponses.emailCorrect) {
             // Save the results from the nameAndEmailDialog
             userProfile.name = stepContext.result.name;
@@ -136,19 +145,23 @@ class QuestionDialog extends ComponentDialog {
      * Return the userProfile to the mainDialog
      */
     async endStep(stepContext) {
+        const conversationData = stepContext.values.conversationData;
         const userProfile = stepContext.values.userProfile;
 
         // Capture the user's question
         userProfile.questions.push(stepContext.result);
 
+        // Set userConfirmedEmail to true
+        conversationData.userConfirmedEmail = true;
+
         console.log(JSON.stringify(userProfile));
 
-        // If correct, confirm with user the job's they'll be contacted for
+        // If correct, confirm with user someone will get back to them
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1500);
         await stepContext.context.sendActivity(`Done! Someone will get back to you shortly.`);
 
-        return await stepContext.endDialog(userProfile);
+        return await stepContext.endDialog({ conversationData, userProfile });
     }
 
     // ======================================

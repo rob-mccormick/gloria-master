@@ -116,6 +116,7 @@ class MainDialog extends ComponentDialog {
             seenJobDisclaimer: false,
             jobSearch: false,
             hasQuestion: false,
+            userConfirmedEmail: false,
             finishedConversation: false
         });
 
@@ -180,14 +181,15 @@ class MainDialog extends ComponentDialog {
             await this.userProfile.set(stepContext.context, updatedUser);
         }
 
-        // Access the user data
+        // Access the user and conversation data
+        const conversationData = await this.conversationData.get(stepContext.context);
         const userProfile = await this.userProfile.get(stepContext.context);
 
         console.log(`userProfile from the pipeline step: ${ JSON.stringify(userProfile) }`);
 
         // Redirect user to pipeline if addToPipeline is true
         if (userProfile.addToPipeline) {
-            return await stepContext.beginDialog(PIPELINE_DIALOG, userProfile);
+            return await stepContext.beginDialog(PIPELINE_DIALOG, { conversationData, userProfile });
         }
 
         // Otherwise continue to the next step
@@ -202,12 +204,14 @@ class MainDialog extends ComponentDialog {
      * @param {*} stepContext
      */
     async checkIfHasQuestionStep(stepContext) {
-        // If was added to the pipleine, capture the user data
+        // If was added to the pipleine, capture the conversation and user data
         if (stepContext.result) {
-            const updatedUser = stepContext.result;
+            const updatedConversation = stepContext.result.conversationData;
+            const updatedUser = stepContext.result.userProfile;
             console.log(`userProfile after pipeline step: ${ JSON.stringify(updatedUser) }`);
 
             // Set the new data
+            await this.conversationData.set(stepContext.context, updatedConversation);
             await this.userProfile.set(stepContext.context, updatedUser);
         }
 
@@ -247,14 +251,14 @@ class MainDialog extends ComponentDialog {
             // await this.conversationData.set(stepContext.context, updatedConversationData);
         }
 
-        // Access the user and conversation data
+        // Access the user profile
         const userProfile = await this.userProfile.get(stepContext.context);
         // const conversationData = await this.conversationData.get(stepContext.context);
         console.log(`conversationData from redirectToQuestionStep: ${ JSON.stringify(conversationData) }`);
         console.log(`userProfile from redirectToQuestionStep: ${ JSON.stringify(userProfile) }`);
         // Redirect user to ask a question if hasQuestion is true and hasn't finished the conversation
         if (conversationData.hasQuestion) {
-            return await stepContext.beginDialog(QUESTION_DIALOG, userProfile);
+            return await stepContext.beginDialog(QUESTION_DIALOG, { conversationData, userProfile });
         }
 
         // Otherwise continue to the next step
@@ -265,9 +269,11 @@ class MainDialog extends ComponentDialog {
     async endDialogStep(stepContext) {
         // If was provided a question, capture the user data
         if (stepContext.result) {
-            const updatedUser = stepContext.result;
+            const updatedConversation = stepContext.result.conversationData;
+            const updatedUser = stepContext.result.userProfile;
 
             // Set the new data
+            await this.conversationData.set(stepContext.context, updatedConversation);
             await this.userProfile.set(stepContext.context, updatedUser);
         }
 

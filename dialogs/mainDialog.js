@@ -162,7 +162,6 @@ class MainDialog extends ComponentDialog {
         }
 
         // Otherwise continue to the next step
-        await stepContext.context.sendActivity('placeholder - not going on job search');
         return await stepContext.next();
     }
 
@@ -195,7 +194,6 @@ class MainDialog extends ComponentDialog {
         }
 
         // Otherwise continue to the next step
-        await stepContext.context.sendActivity('placeholder - not going to pipeline');
         return await stepContext.next();
     }
 
@@ -223,11 +221,6 @@ class MainDialog extends ComponentDialog {
 
         console.log(`conversationData from the checkQuestion step: ${ JSON.stringify(conversationData) }`);
 
-        // // Check if the user previously said they have a question
-        // if (conversationData.hasQuestion || conversationData.finishedConversation) {
-        //     return await stepContext.next();
-        // }
-
         // If they completed the job search check if they have a question
         if (!conversationData.hasQuestion && conversationData.jobSearchComplete) {
             let options = [userResponses.noQuestion, userResponses.yesQuestion];
@@ -254,9 +247,6 @@ class MainDialog extends ComponentDialog {
         // If user said they have a question, update hasQuestion
         if (stepContext.result === userResponses.yesQuestion) {
             conversationData.hasQuestion = true;
-
-            // Set the new data
-            // await this.conversationData.set(stepContext.context, updatedConversationData);
         } else if (stepContext.result === userResponses.noQuestion) {
             // Set finishedConversation to true
             conversationData.finishedConversation = true;
@@ -264,15 +254,15 @@ class MainDialog extends ComponentDialog {
 
         // Access the user profile
         const userProfile = await this.userProfile.get(stepContext.context);
-        // const conversationData = await this.conversationData.get(stepContext.context);
+
         console.log(`conversationData from redirectToQuestionStep: ${ JSON.stringify(conversationData) }`);
         console.log(`userProfile from redirectToQuestionStep: ${ JSON.stringify(userProfile) }`);
+
         // Redirect user to ask a question if hasQuestion is true and hasn't finished the conversation
         if (conversationData.hasQuestion) {
             return await stepContext.beginDialog(QUESTION_DIALOG, { conversationData, userProfile });
         }
 
-        await stepContext.context.sendActivity('placeholder - no question');
         return await stepContext.next();
     }
 
@@ -310,7 +300,7 @@ class MainDialog extends ComponentDialog {
             return Dialog.EndOfTurn;
         }
 
-        // Otherwise, RESTART the conversation:
+        // Otherwise, RESET the conversation:
 
         // Reset all of the conversationData
         conversationData = {
@@ -323,7 +313,10 @@ class MainDialog extends ComponentDialog {
             finishedConversation: false
         };
 
-        // Ask the welcome message
+        // Set the new data
+        await this.conversationData.set(stepContext.context, conversationData);
+
+        // Ask the welcome message and end dialog
         const choices = [userIntent.searchJobs, userIntent.browsing];
         const question = MessageFactory.suggestedActions(choices, `Can I help you find a job at ${ company.name }?`);
 

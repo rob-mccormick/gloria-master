@@ -1,7 +1,7 @@
 // Copyright (c) Ideal Role Limited. All rights reserved.
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
-const { ComponentDialog, WaterfallDialog, Dialog } = require('botbuilder-dialogs');
+const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, CardFactory, AttachmentLayoutTypes, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');

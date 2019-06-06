@@ -2,7 +2,7 @@
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 const validator = require('validator');
 
-const { ComponentDialog, WaterfallDialog, TextPrompt, Dialog } = require('botbuilder-dialogs');
+const { WaterfallDialog, TextPrompt, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');

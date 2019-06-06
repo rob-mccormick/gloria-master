@@ -4,6 +4,7 @@
 // Import required pckages
 const path = require('path');
 const restify = require('restify');
+const sgMail = require('@sendgrid/mail');
 
 // Import required bot services. See https://aka.ms/bot-services to learn more about the different parts of a bot.
 const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState } = require('botbuilder');
@@ -64,6 +65,9 @@ const logger = console;
 const dialog = new MainDialog(conversationState, userState, logger);
 const bot = new DialogAndWelcomeBot(conversationState, userState, dialog, logger);
 
+// Add the SendGrid API key
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 // Create HTTP server
 let server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function() {
@@ -79,3 +83,12 @@ server.post('/api/messages', (req, res) => {
         await bot.run(turnContext);
     });
 });
+
+// // Create and export SendGrid API
+// const sendgridApiKey = process.env.SENDGRID_API_KEY;
+
+// // module.exports = {
+// //     sendgridApiKey
+// // };
+
+// module.exports.sendgridApiKey = sendgridApiKey;

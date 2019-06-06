@@ -6,6 +6,7 @@ const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay } = require('../helperFunctions');
+const { sendPipelineEmail } = require('../emails/notification');
 
 // Import other dialogs
 const { GdprDialog, GDPR_DIALOG } = require('./gdprDialog');
@@ -139,6 +140,9 @@ class PipelineDialog extends CancelAndHelpDialog {
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1500);
         await stepContext.context.sendActivity(`Perfect, we'll let you know when any ${ userProfile.categoryTwo } jobs in ${ userProfile.location } come up.`);
+
+        // Send email notification of new user to be added to pipeline
+        sendPipelineEmail(userProfile);
 
         return await stepContext.endDialog({ conversationData, userProfile });
     }

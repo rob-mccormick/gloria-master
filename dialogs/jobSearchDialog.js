@@ -117,7 +117,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
         // Present categoryTwo options and ask user to select
         const options = company.locations;
-        const question = MessageFactory.suggestedActions(options, `At which location?`);
+        const question = MessageFactory.suggestedActions(options, `In which location?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(500);

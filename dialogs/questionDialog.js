@@ -6,6 +6,7 @@ const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay } = require('../helperFunctions');
+const { sendQuestionEmail } = require('../emails/notification');
 
 // Import other dialogs
 const { GdprDialog, GDPR_DIALOG } = require('./gdprDialog');
@@ -154,6 +155,9 @@ class QuestionDialog extends CancelAndHelpDialog {
         // Set userConfirmedEmail & finishedConversation to true
         conversationData.userConfirmedEmail = true;
         conversationData.finishedConversation = true;
+
+        // Send a notification email to get the question answered
+        sendQuestionEmail(userProfile);
 
         // If correct, confirm with user someone will get back to them
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });

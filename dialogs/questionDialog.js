@@ -4,6 +4,7 @@
 const { ComponentDialog, WaterfallDialog, Dialog, TextPrompt } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
+const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay } = require('../helperFunctions');
 
 // Import other dialogs
@@ -20,7 +21,7 @@ const userResponses = {
     emailWrong: `Actually I'd rather use a different email`
 };
 
-class QuestionDialog extends ComponentDialog {
+class QuestionDialog extends CancelAndHelpDialog {
     constructor() {
         super(QUESTION_DIALOG);
 
@@ -151,8 +152,9 @@ class QuestionDialog extends ComponentDialog {
         // Capture the user's question
         userProfile.questions.push(stepContext.result);
 
-        // Set userConfirmedEmail to true
+        // Set userConfirmedEmail & finishedConversation to true
         conversationData.userConfirmedEmail = true;
+        conversationData.finishedConversation = true;
 
         console.log(JSON.stringify(userProfile));
 

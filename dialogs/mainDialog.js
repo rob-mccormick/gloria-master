@@ -21,7 +21,7 @@ const { PipelineDialog, PIPELINE_DIALOG } = require('./pipelineDialog');
 const { QuestionDialog, QUESTION_DIALOG } = require('./questionDialog');
 
 const { UserProfile } = require('../userProfile');
-
+const { company } = require('../companyDetails');
 const { delay } = require('../helperFunctions');
 
 const CONVERSATION_DATA_PROPERTY = 'conversationData';
@@ -115,6 +115,7 @@ class MainDialog extends ComponentDialog {
         const conversationData = await this.conversationData.get(stepContext.context, {
             seenJobDisclaimer: false,
             jobSearch: false,
+            jobSearchComplete: false,
             addToPipeline: false,
             hasQuestion: false,
             userConfirmedEmail: false,
@@ -216,24 +217,30 @@ class MainDialog extends ComponentDialog {
             await this.userProfile.set(stepContext.context, updatedUser);
         }
 
-        // Access the conversation data
+        // Access the conversation and user data
         const conversationData = await this.conversationData.get(stepContext.context);
+        // const userProfile = await this.userProfile.get(stepContext.context);
 
         console.log(`conversationData from the checkQuestion step: ${ JSON.stringify(conversationData) }`);
 
-        // Check if the user previously said they have a question
-        if (conversationData.hasQuestion || conversationData.finishedConversation) {
-            return await stepContext.next();
+        // // Check if the user previously said they have a question
+        // if (conversationData.hasQuestion || conversationData.finishedConversation) {
+        //     return await stepContext.next();
+        // }
+
+        // If they completed the job search check if they have a question
+        if (!conversationData.hasQuestion && conversationData.jobSearchComplete) {
+            let options = [userResponses.noQuestion, userResponses.yesQuestion];
+            let question = MessageFactory.suggestedActions(options, `Did you have any other questions?`);
+
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1500);
+            await stepContext.context.sendActivity(question);
+            return Dialog.EndOfTurn;
         }
 
-        // Otherwise check if they have a question
-        let options = [userResponses.noQuestion, userResponses.yesQuestion];
-        let question = MessageFactory.suggestedActions(options, `Did you have any other questions?`);
-
-        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(1500);
-        await stepContext.context.sendActivity(question);
-        return Dialog.EndOfTurn;
+        // Otherwise proceed to the next step
+        return await stepContext.next();
     }
 
     /**
@@ -250,6 +257,9 @@ class MainDialog extends ComponentDialog {
 
             // Set the new data
             // await this.conversationData.set(stepContext.context, updatedConversationData);
+        } else if (stepContext.result === userResponses.noQuestion) {
+            // Set finishedConversation to true
+            conversationData.finishedConversation = true;
         }
 
         // Access the user profile
@@ -262,7 +272,6 @@ class MainDialog extends ComponentDialog {
             return await stepContext.beginDialog(QUESTION_DIALOG, { conversationData, userProfile });
         }
 
-        // Otherwise continue to the next step
         await stepContext.context.sendActivity('placeholder - no question');
         return await stepContext.next();
     }
@@ -279,24 +288,47 @@ class MainDialog extends ComponentDialog {
         }
 
         // Reset the hasQuestion to false
-        const conversationData = await this.conversationData.get(stepContext.context);
+        let conversationData = await this.conversationData.get(stepContext.context);
         conversationData.hasQuestion = false;
 
         // console.log(`userProfile from the endDialog step: ${ JSON.stringify(updatedUser) }`);
         console.log(`conversationData from the endDialog step: ${ JSON.stringify(conversationData) }`);
 
-        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(1000);
-        await stepContext.context.sendActivity(`It's been good chatting with you 🙂`);
+        // If conversation finished, say good-bye
+        if (conversationData.finishedConversation) {
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1000);
+            await stepContext.context.sendActivity(`It's been good chatting with you 🙂`);
 
-        // Give the user a chance to restart the conversation
-        let options = [userResponses.jobSearch, userResponses.askQuestion];
-        let question = MessageFactory.suggestedActions(options, `Let me know if you need anything else.`);
+            // Give the user a chance to restart the conversation
+            let options = [userResponses.jobSearch, userResponses.askQuestion];
+            let question = MessageFactory.suggestedActions(options, `Let me know if you need anything else.`);
 
-        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(1500);
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1500);
+            await stepContext.context.sendActivity(question);
+            return Dialog.EndOfTurn;
+        }
+
+        // Otherwise, RESTART the conversation:
+
+        // Reset all of the conversationData
+        conversationData = {
+            seenJobDisclaimer: false,
+            jobSearch: false,
+            jobSearchComplete: false,
+            addToPipeline: false,
+            hasQuestion: false,
+            userConfirmedEmail: false,
+            finishedConversation: false
+        };
+
+        // Ask the welcome message
+        const choices = [userIntent.searchJobs, userIntent.browsing];
+        const question = MessageFactory.suggestedActions(choices, `Can I help you find a job at ${ company.name }?`);
+
         await stepContext.context.sendActivity(question);
-        return Dialog.EndOfTurn;
+        return await stepContext.endDialog();
     }
 
     async restartConversationStep(stepContext) {
@@ -309,6 +341,7 @@ class MainDialog extends ComponentDialog {
         // Update other conversationData properties based on user's choice
         if (stepContext.result === userResponses.jobSearch) {
             conversationData.jobSearch = true;
+            conversationData.jobSearchComplete = false;
             conversationData.hasQuestion = false;
         } else if (stepContext.result === userResponses.askQuestion) {
             conversationData.jobSearch = false;
@@ -323,6 +356,10 @@ class MainDialog extends ComponentDialog {
         // Restart the mainDialog with the updated conversationData
         return await stepContext.beginDialog(MAIN_WATERFALL_DIALOG, { conversationData, userProfile });
     }
+
+    /// ////////////////////////////////
+    // ORIGINAL DIALOGS FROM BASIC BOT
+    /// ////////////////////////////////
 
     /**
      * First step in the waterfall dialog. Prompts the user for a command.

@@ -4,6 +4,7 @@
 const { ComponentDialog, WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, CardFactory, AttachmentLayoutTypes, ActivityTypes } = require('botbuilder');
 
+const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { company } = require('../companyDetails');
 const { delay } = require('../helperFunctions');
 
@@ -19,7 +20,7 @@ const userResponses = {
     pipelineNo: `It's ok, I'll just check back`
 };
 
-class JobSearchDialog extends ComponentDialog {
+class JobSearchDialog extends CancelAndHelpDialog {
     constructor() {
         super(JOB_SEARCH_DIALOG);
 
@@ -98,7 +99,7 @@ class JobSearchDialog extends ComponentDialog {
         const options = company.categoryTwo[index];
 
         // Present categoryTwo options and ask user to select
-        const question = MessageFactory.suggestedActions(options, `Which area would you be working in?`);
+        const question = MessageFactory.suggestedActions(options, `And which area would you be working in?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1000);
@@ -116,7 +117,7 @@ class JobSearchDialog extends ComponentDialog {
 
         // Present categoryTwo options and ask user to select
         const options = company.locations;
-        const question = MessageFactory.suggestedActions(options, `And which location?`);
+        const question = MessageFactory.suggestedActions(options, `At which location?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(500);
@@ -134,6 +135,9 @@ class JobSearchDialog extends ComponentDialog {
         // Save user's categoryTwo selection
         stepContext.values.userProfile.location = stepContext.result;
         console.log(JSON.stringify(stepContext.values.userProfile));
+
+        // Set the jobSearchComplete to true
+        stepContext.values.conversationData.jobSearchComplete = true;
 
         // Find available jobs
         const availableJobs = this.findRelevantJobs(company.jobs, stepContext.values.userProfile);
@@ -262,6 +266,8 @@ class JobSearchDialog extends ComponentDialog {
 
         // Reset the jobSearch to false in conversationData
         conversationData.jobSearch = false;
+
+        await stepContext.context.sendActivity(`No worries`);
 
         // End the dialog and return the conversationData and userProfile
         return await stepContext.endDialog({ conversationData, userProfile });

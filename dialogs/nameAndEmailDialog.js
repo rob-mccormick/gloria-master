@@ -5,6 +5,7 @@ const validator = require('validator');
 const { ComponentDialog, WaterfallDialog, TextPrompt, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
+const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay } = require('../helperFunctions');
 
 const NAME_AND_EMAIL_DIALOG = 'nameAndEmailDialog';
@@ -18,7 +19,7 @@ const userResponses = {
     emailWrong: `That's not it`
 };
 
-class NameAndEmailDialog extends ComponentDialog {
+class NameAndEmailDialog extends CancelAndHelpDialog {
     constructor() {
         super(NAME_AND_EMAIL_DIALOG);
 

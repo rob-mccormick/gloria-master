@@ -4,6 +4,7 @@
 const { ComponentDialog, WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
+const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { company } = require('../companyDetails');
 const { delay } = require('../helperFunctions');
 
@@ -16,7 +17,7 @@ const userResponses = {
     no: `I'd rather not`
 };
 
-class GdprDialog extends ComponentDialog {
+class GdprDialog extends CancelAndHelpDialog {
     constructor() {
         super(GDPR_DIALOG);
 

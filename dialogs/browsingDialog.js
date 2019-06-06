@@ -4,6 +4,7 @@
 const { ComponentDialog, WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
+const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay } = require('../helperFunctions');
 
 const BROWSING_DIALOG = 'browsingDialog';
@@ -26,7 +27,7 @@ const userOptions = {
     ]
 };
 
-class BrowsingDialog extends ComponentDialog {
+class BrowsingDialog extends CancelAndHelpDialog {
     constructor() {
         super(BROWSING_DIALOG);
 

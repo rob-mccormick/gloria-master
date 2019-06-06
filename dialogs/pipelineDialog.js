@@ -4,6 +4,7 @@
 const { ComponentDialog, WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
+const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay } = require('../helperFunctions');
 
 // Import other dialogs
@@ -19,7 +20,7 @@ const userResponses = {
     emailWrong: `Actually I'd rather use a different email`
 };
 
-class PipelineDialog extends ComponentDialog {
+class PipelineDialog extends CancelAndHelpDialog {
     constructor() {
         super(PIPELINE_DIALOG);
 

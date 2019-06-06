@@ -49,7 +49,6 @@ class QuestionDialog extends CancelAndHelpDialog {
 
         const userProfile = stepContext.options.userProfile;
         stepContext.values.userProfile = userProfile;
-        console.log(`userProfile form within question dialog: ${ JSON.stringify(userProfile) }`);
 
         // Redirect to GDPR dialog if has not given consent
         if (!userProfile.gdprAccepted) {
@@ -155,8 +154,6 @@ class QuestionDialog extends CancelAndHelpDialog {
         // Set userConfirmedEmail & finishedConversation to true
         conversationData.userConfirmedEmail = true;
         conversationData.finishedConversation = true;
-
-        console.log(JSON.stringify(userProfile));
 
         // If correct, confirm with user someone will get back to them
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });

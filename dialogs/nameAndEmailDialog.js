@@ -63,7 +63,6 @@ class NameAndEmailDialog extends CancelAndHelpDialog {
      */
     async getEmailStep(stepContext) {
         let promptQuestion;
-        console.log(stepContext.result);
 
         // Check if retry step
         if (stepContext.values.retryEmail) {

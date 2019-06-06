@@ -111,7 +111,6 @@ class PipelineDialog extends CancelAndHelpDialog {
     async endStep(stepContext) {
         const conversationData = stepContext.values.conversationData;
         const userProfile = stepContext.values.userProfile;
-        console.log(`userProfile from last Pipeline step: ${ JSON.stringify(userProfile) }`);
 
         // Handle case where user's email is wrong
         if (stepContext.result === userResponses.emailWrong) {
@@ -128,7 +127,6 @@ class PipelineDialog extends CancelAndHelpDialog {
             // Save the results from the nameAndEmailDialog
             userProfile.name = stepContext.result.name;
             userProfile.email = stepContext.result.email;
-            // console.log(JSON.stringify(userProfile));
         }
 
         // Set userConfirmedEmail to true

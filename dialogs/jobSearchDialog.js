@@ -134,7 +134,6 @@ class JobSearchDialog extends CancelAndHelpDialog {
     async presentAvailableJobsStep(stepContext) {
         // Save user's categoryTwo selection
         stepContext.values.userProfile.location = stepContext.result;
-        console.log(JSON.stringify(stepContext.values.userProfile));
 
         // Set the jobSearchComplete to true
         stepContext.values.conversationData.jobSearchComplete = true;

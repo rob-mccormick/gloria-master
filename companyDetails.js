@@ -15,6 +15,7 @@ const company = {
         ['Compliance', 'People', 'Finance', 'Legal', 'Admin']
     ],
     nextSteps: `aim to get back to you in 2 working days`,
+    emailContacts: ['rob@idealrole.com'],
     jobs: [
         {
             id: 106,

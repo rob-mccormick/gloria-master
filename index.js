@@ -20,6 +20,9 @@ const { MainDialog } = require('./dialogs/mainDialog');
 const ENV_FILE = path.join(__dirname, '.env');
 require('dotenv').config({ path: ENV_FILE });
 
+// Add bot analytics middleware
+const dashbot = require('dashbot')(process.env.DASHBOT_API).microsoft;
+
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about adapters.
 const adapter = new BotFrameworkAdapter({
@@ -28,6 +31,9 @@ const adapter = new BotFrameworkAdapter({
     channelService: process.env.ChannelService,
     openIdMetadata: process.env.BotOpenIdMetadata
 });
+
+// Use the middleware
+adapter.use(dashbot.middleware());
 
 // Catch-all for errors.
 adapter.onTurnError = async (context, error) => {

@@ -261,12 +261,12 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 categoryTwo: userProfile.categoryTwo,
                 location: userProfile.location
             });
+        } else if (stepContext.result === userResponses.pipelineNo) {
+            await stepContext.context.sendActivity(`No worries`);
         }
 
         // Reset the jobSearch to false in conversationData
         conversationData.jobSearch = false;
-
-        await stepContext.context.sendActivity(`No worries`);
 
         // End the dialog and return the conversationData and userProfile
         return await stepContext.endDialog({ conversationData, userProfile });

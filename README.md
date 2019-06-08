@@ -60,6 +60,7 @@ This information needs to be kept up to date for the dialog to remain relevant. 
 - categoryOne - An array of the top level job categories.
 - categoryTwo - An array with arrays of the second level options for each category one option.
 - nextSteps - a string of the next steps a candidate can expect once they apply for a job
+- emailContacts - a list of email addresses for the people to receive email notifications
 - jobs - an array of job objects
 - privacyNotice - href to link to the companies privacy notice
 

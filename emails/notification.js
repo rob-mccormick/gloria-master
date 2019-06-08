@@ -9,7 +9,7 @@ const { company } = require('../companyDetails');
 const sendPipelineEmail = (userProfile) => {
     sgMail.send({
         to: `${ company.emailContacts }`,
-        from: 'rob@idealrole.com',
+        from: 'gloria@idealrole.com',
         subject: `${ company.name } Pipeline - New user to be added`,
         html: `<div style="font-size: 14px;">
                 <p>A user would like to join the ${ company.name } pipeline.</p>
@@ -37,7 +37,7 @@ const sendPipelineEmail = (userProfile) => {
 const sendQuestionEmail = (userProfile) => {
     sgMail.send({
         to: `${ company.emailContacts }`,
-        from: 'rob@idealrole.com',
+        from: 'gloria@idealrole.com',
         subject: `${ company.name } - New Question`,
         html: `<div style="font-size: 14px;">
                 <p>A user has a question for ${ company.name }.</p>

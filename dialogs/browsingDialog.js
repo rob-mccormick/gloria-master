@@ -121,7 +121,6 @@ class BrowsingDialog extends CancelAndHelpDialog {
             conversationData.finishedConversation = true;
 
             await stepContext.context.sendActivity(`No problem.`);
-            await stepContext.context.sendActivity('This will redirect user to final dialog');
 
             // Pass the conversationData object back to the mainDialog
             return await stepContext.endDialog(conversationData);

@@ -13,7 +13,7 @@ const { QuestionDialog, QUESTION_DIALOG } = require('./questionDialog');
 
 const { UserProfile } = require('../userProfile');
 const { company } = require('../companyDetails');
-const { delay, userIntent } = require('../helperFunctions');
+const { delay, userIntent, randomSentence } = require('../helperFunctions');
 
 const CONVERSATION_DATA_PROPERTY = 'conversationData';
 const USER_PROFILE_PROPERTY = 'userProfile';
@@ -272,9 +272,15 @@ class MainDialog extends ComponentDialog {
 
         // If conversation finished, say good-bye
         if (conversationData.finishedConversation) {
+            const responses = [
+                `It's been good chatting with you 🙂`,
+                `Good talking with you!`,
+                `I don't know about you, but I could literally chat all day long 😜`
+            ];
+
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);
-            await stepContext.context.sendActivity(`It's been good chatting with you 🙂`);
+            await stepContext.context.sendActivity(randomSentence(responses));
 
             // Give the user a chance to restart the conversation
             let options = [userResponses.jobSearch, userResponses.askQuestion];

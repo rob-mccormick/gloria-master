@@ -6,14 +6,14 @@ const { MessageFactory, CardFactory, AttachmentLayoutTypes, ActivityTypes } = re
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { company } = require('../companyDetails');
-const { delay } = require('../helperFunctions');
+const { delay, randomSentence } = require('../helperFunctions');
 
 const JOB_SEARCH_DIALOG = 'jobSearchDialog';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
 
 const userResponses = {
-    foundOneJob: 'I was',
+    foundOneJob: 'Yeah, it looks good',
     foundManyJobs: 'I did',
     foundNoJob: 'Unfortunately not',
     pipelineYes: `That'd be great`,
@@ -105,7 +105,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         }
 
         // Present categoryTwo options and ask user to select
-        const question = MessageFactory.suggestedActions(options, `And which area would you be working in?`);
+        const question = MessageFactory.suggestedActions(options, `And what area would you be working in?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1000);
@@ -202,10 +202,19 @@ class JobSearchDialog extends CancelAndHelpDialog {
             let question;
             if (stepContext.values.userProfile.jobs.length === 1) {
                 options = [userResponses.foundOneJob, userResponses.foundNoJob];
-                question = `Were you interested in the job?`;
+                const sentences = [
+                    `Were you interested in the job?`,
+                    `Is it what you're after?`,
+                    `Does it interest you?`,
+                    `Does it look good for you?`];
+                question = randomSentence(sentences);
             } else {
                 options = [userResponses.foundManyJobs, userResponses.foundNoJob];
-                question = `Did you find a job you're interested in?`;
+                const sentences = [
+                    `Did you find a job you're interested in?`,
+                    `Did you see one to apply for (or maybe more than one 😉)?`,
+                    `Did you find one that'd be a good fit for you?`];
+                question = randomSentence(sentences);
             }
 
             let message = MessageFactory.suggestedActions(options, question);
@@ -227,16 +236,26 @@ class JobSearchDialog extends CancelAndHelpDialog {
     async askToAddToPipelineStep(stepContext) {
         // If user didn't like the jobs found send them a sorry message
         if (stepContext.result === userResponses.foundNoJob) {
+            const responses = [
+                'Sorry to hear that.',
+                `That's a shame.`,
+                `That's no good.`];
+
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(500);
-            await stepContext.context.sendActivity('Sorry to hear that.');
+            await stepContext.context.sendActivity(randomSentence(responses));
         }
 
         // If the user found a job, let them know the next steps
         if (stepContext.result === userResponses.foundOneJob || stepContext.result === userResponses.foundManyJobs) {
+            const responses = [
+                `That's great 😀`,
+                `Fantastic`,
+                `Awesome!`];
+
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(500);
-            await stepContext.context.sendActivity(`That's great 😀`);
+            await stepContext.context.sendActivity(randomSentence(responses));
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);

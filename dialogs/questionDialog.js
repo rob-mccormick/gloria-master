@@ -5,7 +5,7 @@ const { WaterfallDialog, Dialog, TextPrompt } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
-const { delay } = require('../helperFunctions');
+const { delay, randomSentence } = require('../helperFunctions');
 const { sendQuestionEmail } = require('../emails/notification');
 
 // Import other dialogs
@@ -160,9 +160,15 @@ class QuestionDialog extends CancelAndHelpDialog {
         sendQuestionEmail(userProfile);
 
         // If correct, confirm with user someone will get back to them
+        const responses = [
+            `Done! Someone will get back to you shortly.`,
+            `All done - I'll make sure someone gets back to you asap!`,
+            `We're good to go. I'll get someone to get back to you v soon.`
+        ];
+
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1500);
-        await stepContext.context.sendActivity(`Done! Someone will get back to you shortly.`);
+        await stepContext.context.sendActivity(randomSentence(responses));
 
         return await stepContext.endDialog({ conversationData, userProfile });
     }

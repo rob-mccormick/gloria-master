@@ -17,7 +17,8 @@ const userResponses = {
     foundManyJobs: 'I did',
     foundNoJob: 'Unfortunately not',
     pipelineYes: `That'd be great`,
-    pipelineNo: `It's ok, I'll just check back`
+    pipelineNo: `It's ok, I'll just check back`,
+    back: 'Go back'
 };
 
 class JobSearchDialog extends CancelAndHelpDialog {
@@ -98,6 +99,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const index = company.categoryOne.indexOf(stepContext.result);
         const options = company.categoryTwo[index];
 
+        // Add the option to return to select categoryOne
+        if (options[(options.length - 1)] !== userResponses.back) {
+            options.push(userResponses.back);
+        }
+
         // Present categoryTwo options and ask user to select
         const question = MessageFactory.suggestedActions(options, `And which area would you be working in?`);
 
@@ -112,6 +118,13 @@ class JobSearchDialog extends CancelAndHelpDialog {
      * Ask the user to select which location they're interested in
      */
     async selectLocationStep(stepContext) {
+        // Send user back if they selected 'Go back'
+        if (stepContext.result === userResponses.back) {
+            const conversationData = stepContext.values.conversationData;
+            const userProfile = stepContext.values.userProfile;
+
+            return await stepContext.replaceDialog(JOB_SEARCH_DIALOG, { conversationData, userProfile });
+        }
         // Save user's categoryTwo selection
         stepContext.values.userProfile.categoryTwo = stepContext.result;
 

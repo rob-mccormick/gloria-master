@@ -204,7 +204,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 options = [userResponses.foundOneJob, userResponses.foundNoJob];
                 const sentences = [
                     `Were you interested in the job?`,
-                    `Is it what you're after?`,
+                    `Is this what you're after?`,
                     `Does it interest you?`,
                     `Does it look good for you?`];
                 question = randomSentence(sentences);
@@ -213,7 +213,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 const sentences = [
                     `Did you find a job you're interested in?`,
                     `Did you see one to apply for (or maybe more than one 😉)?`,
-                    `Did you find one that'd be a good fit for you?`];
+                    `Did you find one that'd be a good fit?`];
                 question = randomSentence(sentences);
             }
 

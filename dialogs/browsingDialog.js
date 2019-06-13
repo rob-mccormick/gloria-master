@@ -32,6 +32,7 @@ class BrowsingDialog extends CancelAndHelpDialog {
         super(BROWSING_DIALOG);
 
         this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
+            this.jobDisclaimerStep.bind(this),
             this.whyOnSiteStep.bind(this),
             this.getBackOnTrackStep.bind(this),
             this.redirectStep.bind(this)
@@ -41,20 +42,43 @@ class BrowsingDialog extends CancelAndHelpDialog {
     }
 
     /**
-     * Asks the user why they are on the career site
+     * Saves the conversation abd user data passed from the mainDialog
+     * Shows the disclaimer if the user hasn't seen it this conversation
      */
-    async whyOnSiteStep(stepContext) {
+    async jobDisclaimerStep(stepContext) {
+        // Save the conversationData passed from mainDialog
         const conversationData = stepContext.options;
         stepContext.values.conversationData = conversationData;
-
-        const question = MessageFactory.suggestedActions(userOptions.whyOnSite, `What brought you to our career site today?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(500);
         await stepContext.context.sendActivity('No worries.');
 
+        if (!stepContext.values.conversationData.seenJobDisclaimer) {
+            const disclaimer = MessageFactory.suggestedActions(['Good to know'], `If I had lips they'd be sealed!`);
+
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1000);
+            await stepContext.context.sendActivity(`Just so you know, our chat won't be linked to any job application.`);
+
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1500);
+            await stepContext.context.sendActivity(disclaimer);
+            return Dialog.EndOfTurn;
+        }
+
+        // If user has seen the disclaimer this conversation, go to next step
+        return stepContext.next();
+    }
+
+    /**
+     * Asks the user why they are on the career site
+     */
+    async whyOnSiteStep(stepContext) {
+        const question = MessageFactory.suggestedActions(userOptions.whyOnSite, `What brought you to our career site today?`);
+
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(1000);
+        await delay(500);
         await stepContext.context.sendActivity(question);
         return Dialog.EndOfTurn;
     }
@@ -66,7 +90,7 @@ class BrowsingDialog extends CancelAndHelpDialog {
     async getBackOnTrackStep(stepContext) {
         switch (stepContext.result) {
         case userOptions.whyOnSite[0]:
-            const hiringQuestion = MessageFactory.suggestedActions(userOptions.heardHiring, 'Are you happy looking around, or would you like me to find jobs just for you?');
+            const hiringQuestion = MessageFactory.suggestedActions(userOptions.heardHiring, 'Are you happy looking around, or would you like me to help you find jobs?');
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);

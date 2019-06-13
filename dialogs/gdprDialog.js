@@ -39,12 +39,12 @@ class GdprDialog extends CancelAndHelpDialog {
         const question = MessageFactory.suggestedActions(options, 'Is this ok with you?');
 
         // Provide the GDPR notice
-        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(500);
-        await stepContext.context.sendActivity(' Before we continue, I need to make sure everything is legit 😉');
+        // await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+        // await delay(500);
+        // await stepContext.context.sendActivity(' Before we continue, I need to make sure everything is legit 😉');
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(1000);
+        await delay(500);
         await stepContext.context.sendActivity(`To send you job updates I'll need your name and email address.
         \n\n We’ll store this information so we can pick up the conversation later, and to send you follow-up emails.
         \n\n You can see our privacy policy here: ${ company.privacyNotice }`);

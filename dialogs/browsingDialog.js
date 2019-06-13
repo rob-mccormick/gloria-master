@@ -75,6 +75,9 @@ class BrowsingDialog extends CancelAndHelpDialog {
      * Asks the user why they are on the career site
      */
     async whyOnSiteStep(stepContext) {
+        // Set seenJobDisclaimer to true
+        stepContext.values.conversationData.seenJobDisclaimer = true;
+
         const question = MessageFactory.suggestedActions(userOptions.whyOnSite, `What brought you to our career site today?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -90,7 +93,7 @@ class BrowsingDialog extends CancelAndHelpDialog {
     async getBackOnTrackStep(stepContext) {
         switch (stepContext.result) {
         case userOptions.whyOnSite[0]:
-            const hiringQuestion = MessageFactory.suggestedActions(userOptions.heardHiring, 'Are you happy looking around, or would you like me to help you find jobs?');
+            const hiringQuestion = MessageFactory.suggestedActions(userOptions.heardHiring, 'Are you happy looking around, or would you like some help?');
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);

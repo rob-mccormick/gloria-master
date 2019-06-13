@@ -45,7 +45,7 @@ class GdprDialog extends CancelAndHelpDialog {
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(500);
-        await stepContext.context.sendActivity(`To send you job updates I'll need your name and email address.
+        await stepContext.context.sendActivity(`To get back to you I'll need your name and email address.
         \n\n We’ll store this information so we can pick up the conversation later, and to send you follow-up emails.
         \n\n You can see our privacy policy here: ${ company.privacyNotice }`);
 

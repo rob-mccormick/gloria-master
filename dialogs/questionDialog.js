@@ -6,20 +6,24 @@ const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay, randomSentence } = require('../helperFunctions');
-const { sendQuestionEmail } = require('../emails/notification');
 
 // Import other dialogs
-const { GdprDialog, GDPR_DIALOG } = require('./gdprDialog');
-const { NameAndEmailDialog, NAME_AND_EMAIL_DIALOG } = require('./nameAndEmailDialog');
+const { InterviewDialog, INTERVIEW_DIALOG } = require('./questions/interviewDialog');
+const { FlexibleWorkingDialog, FLEXIBLE_WORKING_DIALOG } = require('./questions/flexibleWorkingDialog');
+const { LeaveQuestionDialog, LEAVE_QUESTION_DIALOG } = require('./questions/leaveQuestionDialog');
 
 const QUESTION_DIALOG = 'questionDialog';
 const QUESTION_PROMPT = 'questionPrompt';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
 
-const userResponses = {
-    emailCorrect: `That's the one`,
-    emailWrong: `Actually I'd rather use a different email`
+const responses = {
+    interview: `Interviews`,
+    flexibleWorking: `Working options`,
+    yesLeaveQuestion: `Yes please`,
+    noLeaveQuestion: `No need`,
+    noMoreQuestion: `No, all done`,
+    yesMoreQuestion: `I do`
 };
 
 class QuestionDialog extends CancelAndHelpDialog {
@@ -27,12 +31,14 @@ class QuestionDialog extends CancelAndHelpDialog {
         super(QUESTION_DIALOG);
 
         this.addDialog(new TextPrompt(QUESTION_PROMPT, this.questionValidator))
-            .addDialog(new GdprDialog())
-            .addDialog(new NameAndEmailDialog())
+            .addDialog(new InterviewDialog())
+            .addDialog(new FlexibleWorkingDialog())
+            .addDialog(new LeaveQuestionDialog())
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
-                this.checkGdprStatusStep.bind(this),
-                this.checkNameAndEmailStep.bind(this),
-                this.askQuestionStep.bind(this),
+                this.helpTopicsStep.bind(this),
+                this.redirectToDialogStep.bind(this),
+                this.checkDialogResultStep.bind(this),
+                this.anotherQuestionStep.bind(this),
                 this.endStep.bind(this)
             ]));
 
@@ -41,9 +47,9 @@ class QuestionDialog extends CancelAndHelpDialog {
 
     /**
      * Saves the conversation and user data passed from the mainDialog
-     * Redirect the user to the GDPR dialog if they have not consented previously
+     * Ask the user what information they'd like to know more about
      */
-    async checkGdprStatusStep(stepContext) {
+    async helpTopicsStep(stepContext) {
         // Save the conversationData and userProfile passed from mainDialog
         const conversationData = stepContext.options.conversationData;
         stepContext.values.conversationData = conversationData;
@@ -51,56 +57,28 @@ class QuestionDialog extends CancelAndHelpDialog {
         const userProfile = stepContext.options.userProfile;
         stepContext.values.userProfile = userProfile;
 
-        // Redirect to GDPR dialog if has not given consent
-        if (!userProfile.gdprAccepted) {
-            return await stepContext.beginDialog(GDPR_DIALOG);
-        }
+        // Check which topic they're interested in
+        const options = [responses.interview, responses.flexibleWorking];
+        const question = MessageFactory.suggestedActions(options, `What can I help you with?`);
 
-        // If user has consented to the GDPR notice, go to next step
-        return stepContext.next();
+        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+        await delay(500);
+        await stepContext.context.sendActivity(question);
+        return Dialog.EndOfTurn;
     }
 
     /**
-     * If the user went to the GDPR dialog - save the result
-     * If GDPR consent is not given, end the dialog
-     * Otherwise, check if already have the user's name and email
-     * - if no, send to new dialog
-     * - if yes, confirm email
+     * Based on the user's response, redirect them to the appropriate dialog
      */
-    async checkNameAndEmailStep(stepContext) {
-        const userProfile = stepContext.values.userProfile;
-
-        // If just asked about GDPR, save the answer
-        if (stepContext.result === 1) {
-            // userProfile.gdprAccepted = true;
-            stepContext.values.userProfile.gdprAccepted = true;
-        } else if (stepContext.result === -1) {
-            userProfile.gdprAccepted = false;
-
-            // As did not accept, end dialog
-            return await stepContext.endDialog(userProfile);
+    async redirectToDialogStep(stepContext) {
+        switch (stepContext.result) {
+        case responses.interview:
+            return await stepContext.beginDialog(INTERVIEW_DIALOG);
+        case responses.flexibleWorking:
+            return await stepContext.beginDialog(FLEXIBLE_WORKING_DIALOG);
+        default:
+            console.log('Something went wrong - no option selected');
         }
-
-        await stepContext.context.sendActivity('Great, I can have someone get back to you.');
-
-        // If we don't have the user's name and email, send to new dialog
-        if (!userProfile.name || !userProfile.email) {
-            return await stepContext.beginDialog(NAME_AND_EMAIL_DIALOG);
-        }
-
-        // If we have their details, check if we've confirmed them this conversation
-        if (stepContext.values.conversationData.userConfirmedEmail) {
-            return stepContext.next();
-        }
-
-        // Otherwise, check if they're details are correct
-        const options = [userResponses.emailCorrect, userResponses.emailWrong];
-        const question = MessageFactory.suggestedActions(options, `Just to make sure, we can reach you at ${ userProfile.email }?`);
-
-        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(1500);
-        await stepContext.context.sendActivity(question);
-        return Dialog.EndOfTurn;
     }
 
     /**
@@ -108,78 +86,73 @@ class QuestionDialog extends CancelAndHelpDialog {
      * Redirect the user if they want to use a different email
      * Ask the user to leave their question
      */
-    async askQuestionStep(stepContext) {
-        const conversationData = stepContext.values.conversationData;
-        const userProfile = stepContext.values.userProfile;
+    async checkDialogResultStep(stepContext) {
+        let options;
+        let question;
+        // If did not answer question, ask if want to leave a question
+        if (stepContext.result === -1) {
+            options = [responses.yesLeaveQuestion, responses.noLeaveQuestion];
+            question = MessageFactory.suggestedActions(options, `Can I take your question and have someone get back to you?`);
 
-        // Handle case where user's email is wrong
-        if (stepContext.result === userResponses.emailWrong) {
-            // Set email to empty string
-            userProfile.email = '';
-
+            // Apologise for not answering question
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-            await delay(1500);
-            await stepContext.context.sendActivity('Alright, let me grab your details again.');
-
-            // Replace with this dialog
-            return await stepContext.beginDialog(QUESTION_DIALOG, { conversationData, userProfile });
-        } else if (stepContext.result && stepContext.result !== userResponses.emailWrong && stepContext.result !== userResponses.emailCorrect) {
-            // Save the results from the nameAndEmailDialog
-            userProfile.name = stepContext.result.name;
-            userProfile.email = stepContext.result.email;
+            await delay(1000);
+            await stepContext.context.sendActivity('Sorry about that. My programmer has some work to do!');
+        } else if (stepContext.result === 1) {
+            options = [responses.noMoreQuestion, responses.yesMoreQuestion];
+            question = MessageFactory.suggestedActions(options, `Do you have another question?`);
         }
 
-        const promptOptions = {
-            prompt: 'What would you like to know?',
-            retryPrompt: `I didn't quite get that - I was expecting a question between 10 and 256 characters.  \n\nCan you try again?`
-        };
-
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(800);
-        return await stepContext.prompt(QUESTION_PROMPT, promptOptions);
+        await delay(2000);
+        await stepContext.context.sendActivity(question);
+        return Dialog.EndOfTurn;
     }
 
     /**
-     * If went to nameAndEmailDialog - save the results
-     * Redirect the user if they want to use a different email
-     * Provide the user with a confirmation message
-     * Return the userProfile to the mainDialog
+     * Process the responses from the previous step
+     * - Redirect to leaveQuestion dialog if user wants to leave a question
+     * - Restart dialog if user has another question
+     * - Otherwise go to final step
      */
-    async endStep(stepContext) {
+    async anotherQuestionStep(stepContext) {
         const conversationData = stepContext.values.conversationData;
         const userProfile = stepContext.values.userProfile;
 
-        // Capture the user's question
-        userProfile.questions.push(stepContext.result);
-
-        // Set userConfirmedEmail & finishedConversation to true
-        conversationData.userConfirmedEmail = true;
-        conversationData.finishedConversation = true;
-
-        // Send a notification email to get the question answered
-        sendQuestionEmail(userProfile);
-
-        // If correct, confirm with user someone will get back to them
-        const responses = [
-            `Done! Someone will get back to you shortly.`,
-            `All done - I'll make sure someone gets back to you asap!`,
-            `We're good to go. I'll get someone to get back to you v soon.`
-        ];
-
-        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(1500);
-        await stepContext.context.sendActivity(randomSentence(responses));
-
-        return await stepContext.endDialog({ conversationData, userProfile });
+        // Deal with each user response
+        switch (stepContext.result) {
+        case responses.yesLeaveQuestion:
+            return await stepContext.beginDialog(LEAVE_QUESTION_DIALOG, { conversationData, userProfile });
+        case responses.yesMoreQuestion:
+            return await stepContext.beginDialog(QUESTION_DIALOG, { conversationData, userProfile });
+        default:
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1000);
+            await stepContext.context.sendActivity(`Too easy`);
+            return stepContext.next();
+        }
     }
 
-    // ======================================
-    // Validators
-    // ======================================
+    /**
+     * Save the user data if returning from leaveQuestionDialog step
+     * Return to the mainDialog
+     */
+    async endStep(stepContext) {
+        let conversationData;
+        let userProfile;
 
-    async questionValidator(promptContext) {
-        // Check if the name is greater than 2 characters, but less than 20
-        return promptContext.recognized.succeeded && promptContext.recognized.value.length > 10 && promptContext.recognized.value.length < 256;
+        if (stepContext.result) {
+            conversationData = stepContext.result.conversationData;
+            userProfile = stepContext.result.userProfile;
+        } else {
+            conversationData = stepContext.values.conversationData;
+            userProfile = stepContext.values.userProfile;
+
+            // Set finishedConversation to true
+            conversationData.finishedConversation = true;
+        }
+
+        return await stepContext.endDialog({ conversationData, userProfile });
     }
 }
 

@@ -143,4 +143,31 @@ const company = {
     ]
 };
 
-module.exports = { company };
+const helpTopics = {
+    interviews: {
+        expect: `We want to get to know you.  Your previous positions and challenges. And what you're looking for in a career.
+            \n\nWe're also trying to assess how well you'll do in the job. So we may ask some competency questions. Along with some on how you approach problems and work in a team.`,
+        prepare: `Check out ${ company.name } beforehand, and get to know us and our industry. And how your strengths and experience would help you in the job your interviewing for.
+            \n\nAlso we'll have copies of your CV or portfolio, so no need to bring them.`,
+        wear: `What you have to say is important to us - not what you're wearing.
+            \n\nSo wear whatever makes you comfortable and confident!`
+    },
+    workingOptions: {
+        flexible: `We work hard to make our offices a hive of activity and collaboration. So while we prefer you work there when you can, we also want you to be your best.
+            \n\nTo help you we try to be as flexible as we can - in hours and location.
+            \n\nIf you need something permanent, best to ask when the recruiter contacts you. Otherwise you're team lead will be able to help when you need it.`,
+        remote: `Some of our roles are fully remote. I can help you find them 😉
+            \n\nFor other roles, we prefer you to be in the office when you can. But we're also flexible and you can work from home or remotely when you need to.`,
+        partTime: `While our jobs are normally full-time, we understand everyone needs something a little different.
+            \n\nWhere we can we'll do our best to accomodate part-time hours. Best to let the recruitment team know when they contact you.`,
+        annualLeave: `You can find the annual leave you'll get on the job description.  It can vary a bit depending on the location.
+            \n\nOn top of that, after 4 years you'll get an extra 6 weeks paid time off. A little thanks for your hard work!`,
+        parentalLeave: `We're proud to offer generous maternity and paternity leave.`,
+        visa: `Yep, ${ company.name } is a registered sponsor. But due to Home Office restrictions we can't sponsor all roles.
+            \n\nFeel free to apply for any jobs. We'll let you know if we're unable to sponsor any specific roles.`,
+        relocation: `For international hires we do!
+            \n\nIt varies a bit by role and requirements, but usually we'll give you cash to help you with the cost.`
+    }
+};
+
+module.exports = { company, helpTopics };

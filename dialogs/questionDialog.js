@@ -11,6 +11,8 @@ const { delay, randomSentence } = require('../helperFunctions');
 const { InterviewDialog, INTERVIEW_DIALOG } = require('./questions/interviewDialog');
 const { FlexibleWorkingDialog, FLEXIBLE_WORKING_DIALOG } = require('./questions/flexibleWorkingDialog');
 const { LeaveQuestionDialog, LEAVE_QUESTION_DIALOG } = require('./questions/leaveQuestionDialog');
+const { RecruitmentProcessDialog, RECRUITMENT_PROCESS_DIALOG } = require('./questions/recruitmentProcessDialog');
+const { StudentDialog, STUDENT_DIALOG } = require('./questions/studentDialog');
 
 const QUESTION_DIALOG = 'questionDialog';
 const QUESTION_PROMPT = 'questionPrompt';
@@ -20,6 +22,8 @@ const WATERFALL_DIALOG = 'waterfallDialog';
 const responses = {
     interview: `Interviews`,
     flexibleWorking: `Working options`,
+    recruitmentProcess: 'Your recruitment process',
+    student: `Internships and grad opportunities`,
     yesLeaveQuestion: `Yes please`,
     noLeaveQuestion: `No need`,
     noMoreQuestion: `No, all done`,
@@ -33,6 +37,8 @@ class QuestionDialog extends CancelAndHelpDialog {
         this.addDialog(new TextPrompt(QUESTION_PROMPT, this.questionValidator))
             .addDialog(new InterviewDialog())
             .addDialog(new FlexibleWorkingDialog())
+            .addDialog(new RecruitmentProcessDialog())
+            .addDialog(new StudentDialog())
             .addDialog(new LeaveQuestionDialog())
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
                 this.helpTopicsStep.bind(this),
@@ -58,7 +64,7 @@ class QuestionDialog extends CancelAndHelpDialog {
         stepContext.values.userProfile = userProfile;
 
         // Check which topic they're interested in
-        const options = [responses.interview, responses.flexibleWorking];
+        const options = [responses.interview, responses.flexibleWorking, responses.recruitmentProcess, responses.student];
         const question = MessageFactory.suggestedActions(options, `What can I help you with?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -76,8 +82,10 @@ class QuestionDialog extends CancelAndHelpDialog {
             return await stepContext.beginDialog(INTERVIEW_DIALOG);
         case responses.flexibleWorking:
             return await stepContext.beginDialog(FLEXIBLE_WORKING_DIALOG);
-        default:
-            console.log('Something went wrong - no option selected');
+        case responses.recruitmentProcess:
+            return await stepContext.beginDialog(RECRUITMENT_PROCESS_DIALOG);
+        case responses.student:
+            return await stepContext.beginDialog(STUDENT_DIALOG);
         }
     }
 

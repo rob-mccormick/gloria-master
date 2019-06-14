@@ -167,6 +167,26 @@ const helpTopics = {
             \n\nFeel free to apply for any jobs. We'll let you know if we're unable to sponsor any specific roles.`,
         relocation: `For international hires we do!
             \n\nIt varies a bit by role and requirements, but usually we'll give you cash to help you with the cost.`
+    },
+    recruitmentProcess: {
+        process: `The first step is to apply. You'll need your CV and to asnwer a few quick questions.
+            \n\nIf you seem like a good match, we'll get in touch to arrange a video or phone call. Depending on the role, you may be asked to complete a task at this point. There are no right or wrong answers - we want to see how you solve real world problems.
+            \n\nThen we'll be in touch to let you know the next steps for the specific role you applied for.`,
+        futureApplications: `The good news - we keep all applications for future roles.
+            \n\nThe bad news - our system isn't always great at matching people to the right roles.
+            \n\nTo be safe, you can let me know what job your after and I'll let you know every time we have a new one.`,
+        registerInterest: `I can help with that!
+            \n\nJust search for the job you want and leave your details. Then I'll let you know every time one of those jobs comes up.`,
+        afterApply: `After you apply we'll ${ company.nextSteps }.`,
+        hiringDecision: `It depends a bit on the job. The recruiter who contacted you will be able to give you an idea for the role you applied for.
+            \n\nWhatever the case, you should get an update from us within a week of your interview.`
+    },
+    students: {
+        internship: `Each year we run our Summer Internship Programme 🌞
+            \n\nYou'll be able to find details here on our career site from March each year.`,
+        workPlacement: `We don't offer work placements right now. We're growing fast and don't have the time we'd need to make it a great experience.  We'd love to in the future though!`,
+        gradScheme: `While we don't run a graduate program at the moment, some of our roles can be a great fit if you're just out of Uni.
+            \n\nHave a read through the job descriptions to find out more.`
     }
 };
 

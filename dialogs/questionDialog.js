@@ -103,15 +103,23 @@ class QuestionDialog extends CancelAndHelpDialog {
         // If did not answer question, ask if want to leave a question
         if (stepContext.result === -1) {
             options = [responses.yesLeaveQuestion, responses.noLeaveQuestion];
-            question = MessageFactory.suggestedActions(options, `Can I take your question and have someone get back to you?`);
+            question = `Can I take your question and have someone get back to you?`;
         } else if (stepContext.result === 1) {
             options = [responses.noMoreQuestion, responses.yesMoreQuestion];
-            question = MessageFactory.suggestedActions(options, `Do you have another question?`);
+            question = randomSentence([
+                `Do you have another question?`,
+                `Do you want to ask me something else?`,
+                `Have another question?`,
+                `Do you need more help?`,
+                `Do you need me for anything else?`
+            ]);
         }
+
+        const response = MessageFactory.suggestedActions(options, question);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(2000);
-        await stepContext.context.sendActivity(question);
+        await stepContext.context.sendActivity(response);
         return Dialog.EndOfTurn;
     }
 

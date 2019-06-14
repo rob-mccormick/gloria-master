@@ -16,4 +16,12 @@ const randomSentence = (sentencesArray) => {
     return sentencesArray[index];
 };
 
-module.exports = { userIntent, delay, randomSentence };
+// Options for confirming that the user's question was answered
+const questionAnswered = [
+    `Was that helpful?`,
+    `Did that answer your question?`,
+    `Did that help?`,
+    `Did I cover everything?`
+];
+
+module.exports = { userIntent, delay, randomSentence, questionAnswered };

@@ -4,7 +4,7 @@
 const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
-const { delay } = require('../../helperFunctions');
+const { delay, randomSentence, questionAnswered } = require('../../helperFunctions');
 const { helpTopics } = require('../../companyDetails');
 
 // Import other dialogs
@@ -52,10 +52,15 @@ class ApplyingDialog extends CancelAndHelpDialog {
         // Check which topic they're interested in
         const options = [responses.applicationRules, responses.prepareCv, responses.practicalDetails];
         const question = MessageFactory.suggestedActions(options, `What would you like to know more about?`);
+        const welcome = randomSentence([
+            `Very excited to hear your thinking of applying 😊`,
+            `That's awesome you're thinking of applying`,
+            `Brilliant - we love new applications 😍`
+        ]);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1000);
-        await stepContext.context.sendActivity(`Very excited to hear your thinking of applying 😊`);
+        await stepContext.context.sendActivity(welcome);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1000);
@@ -141,11 +146,12 @@ class ApplyingDialog extends CancelAndHelpDialog {
 
         // Ask if it answered their question
         const options = [responses.answered, responses.notAnswered];
-        const question = MessageFactory.suggestedActions(options, `Did that answer your question?`);
+        const question = randomSentence(questionAnswered);
+        const response = MessageFactory.suggestedActions(options, question);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(2000);
-        await stepContext.context.sendActivity(question);
+        await stepContext.context.sendActivity(response);
         return Dialog.EndOfTurn;
     }
 

@@ -4,7 +4,7 @@
 const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
-const { delay } = require('../../helperFunctions');
+const { delay, randomSentence, questionAnswered } = require('../../helperFunctions');
 const { helpTopics } = require('../../companyDetails');
 
 // Import other dialogs
@@ -77,11 +77,12 @@ class StudentDialog extends CancelAndHelpDialog {
 
         // Ask if it answered their question
         const options = [responses.answered, responses.notAnswered];
-        const question = MessageFactory.suggestedActions(options, `Did that answer your question?`);
+        const question = randomSentence(questionAnswered);
+        const response = MessageFactory.suggestedActions(options, question);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(2000);
-        await stepContext.context.sendActivity(question);
+        await stepContext.context.sendActivity(response);
         return Dialog.EndOfTurn;
     }
 

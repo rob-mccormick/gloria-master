@@ -144,6 +144,28 @@ const company = {
 };
 
 const helpTopics = {
+    applications: {
+        multipleJobs: `You can apply for multiple jobs at the same time -  but don't spray and pray!
+            \n\nIt's best to focus on the jobs that would be a good fit for you.`,
+        reapply: `You sure can.
+            \n\nSo you know, we'll look to see how you've addressed the reason you didn't get the job before.
+            \n\nIt's normal for this to take a time - maybe 6 to 12 months.`,
+        bestWay: `Ask me!
+            \n\nI can help you find jobs.  And if there's none you like at the moment, I can get back to you when there are new jobs you might like.
+            \n\nOr if you're old school, you can search our careers site. But we don't take email applications.`,
+        cvFormat: `Putting your CV in a .doc or .pdf file is best.`,
+        cvInfo: `We want to hear about what you've achieved, your strengths and skills.
+            \n\nWe also want to know how you can apply them to the job you're applying for.
+            \n\n☝️ And a tip - when talking about your past jobs focus on what you achieved. Not your duties.`,
+        cvLength: `As long as it needs to be... Seriously.
+            \n\nWe just ask you to keep it relevant. And to put your summaries on the first page.`,
+        coverLetter: `You're in luck - you don't need a cover letter!
+            \n\nEnjoy the time you've saved 😀`,
+        deadlines: `You'll normally find any deadlines on the job description.
+            \n\nAnd we won't complain if you apply early 🙂`,
+        csDegree: `You don't need a computer science degree to be an engineer at ${ company.name }.
+            \n\nWe're more interested in what you can do now.`
+    },
     interviews: {
         expect: `We want to get to know you.  Your previous positions and challenges. And what you're looking for in a career.
             \n\nWe're also trying to assess how well you'll do in the job. So we may ask some competency questions. Along with some on how you approach problems and work in a team.`,

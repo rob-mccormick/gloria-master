@@ -1,13 +1,14 @@
 // Copyright (c) Ideal Role Limited. All rights reserved.
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
-const { WaterfallDialog, Dialog, TextPrompt } = require('botbuilder-dialogs');
+const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay, randomSentence } = require('../helperFunctions');
 
 // Import other dialogs
+const { ApplyingDialog, APPLYING_DIALOG } = require('./questions/applyingDialog');
 const { InterviewDialog, INTERVIEW_DIALOG } = require('./questions/interviewDialog');
 const { FlexibleWorkingDialog, FLEXIBLE_WORKING_DIALOG } = require('./questions/flexibleWorkingDialog');
 const { LeaveQuestionDialog, LEAVE_QUESTION_DIALOG } = require('./questions/leaveQuestionDialog');
@@ -15,11 +16,11 @@ const { RecruitmentProcessDialog, RECRUITMENT_PROCESS_DIALOG } = require('./ques
 const { StudentDialog, STUDENT_DIALOG } = require('./questions/studentDialog');
 
 const QUESTION_DIALOG = 'questionDialog';
-const QUESTION_PROMPT = 'questionPrompt';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
 
 const responses = {
+    applying: 'How to apply',
     interview: `Interviews`,
     flexibleWorking: `Working options`,
     recruitmentProcess: 'Your recruitment process',
@@ -34,7 +35,7 @@ class QuestionDialog extends CancelAndHelpDialog {
     constructor() {
         super(QUESTION_DIALOG);
 
-        this.addDialog(new TextPrompt(QUESTION_PROMPT, this.questionValidator))
+        this.addDialog(new ApplyingDialog())
             .addDialog(new InterviewDialog())
             .addDialog(new FlexibleWorkingDialog())
             .addDialog(new RecruitmentProcessDialog())
@@ -64,7 +65,7 @@ class QuestionDialog extends CancelAndHelpDialog {
         stepContext.values.userProfile = userProfile;
 
         // Check which topic they're interested in
-        const options = [responses.interview, responses.flexibleWorking, responses.recruitmentProcess, responses.student];
+        const options = [responses.applying, responses.interview, responses.flexibleWorking, responses.recruitmentProcess, responses.student];
         const question = MessageFactory.suggestedActions(options, `What can I help you with?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -78,6 +79,8 @@ class QuestionDialog extends CancelAndHelpDialog {
      */
     async redirectToDialogStep(stepContext) {
         switch (stepContext.result) {
+        case responses.applying:
+            return await stepContext.beginDialog(APPLYING_DIALOG);
         case responses.interview:
             return await stepContext.beginDialog(INTERVIEW_DIALOG);
         case responses.flexibleWorking:

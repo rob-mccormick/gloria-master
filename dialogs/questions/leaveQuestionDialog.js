@@ -68,6 +68,7 @@ class LeaveQuestionDialog extends CancelAndHelpDialog {
      * - if yes, confirm email
      */
     async checkNameAndEmailStep(stepContext) {
+        const conversationData = stepContext.values.conversationData;
         const userProfile = stepContext.values.userProfile;
 
         // If just asked about GDPR, save the answer
@@ -77,8 +78,12 @@ class LeaveQuestionDialog extends CancelAndHelpDialog {
         } else if (stepContext.result === -1) {
             userProfile.gdprAccepted = false;
 
-            // As did not accept, end dialog
-            return await stepContext.endDialog(userProfile);
+            // As did not accept, update conversationData and end the dialog
+            conversationData.addToPipeline = false;
+            conversationData.hasQuestion = false;
+            conversationData.finishedConversation = true;
+
+            return await stepContext.endDialog({ conversationData, userProfile });
         }
 
         await stepContext.context.sendActivity('Great, I can have someone get back to you.');

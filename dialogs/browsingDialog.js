@@ -55,16 +55,10 @@ class BrowsingDialog extends CancelAndHelpDialog {
         await stepContext.context.sendActivity('No worries.');
 
         if (!stepContext.values.conversationData.seenJobDisclaimer) {
-            const disclaimer = MessageFactory.suggestedActions(['Good to know'], `If I had lips they'd be sealed!`);
-
+            // Send the disclaimer - no need to get confirmation as want to keep conversation flow
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);
             await stepContext.context.sendActivity(`Just so you know, our chat won't be linked to any job application.`);
-
-            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-            await delay(1500);
-            await stepContext.context.sendActivity(disclaimer);
-            return Dialog.EndOfTurn;
         }
 
         // If user has seen the disclaimer this conversation, go to next step

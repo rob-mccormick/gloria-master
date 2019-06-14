@@ -93,11 +93,6 @@ class QuestionDialog extends CancelAndHelpDialog {
         if (stepContext.result === -1) {
             options = [responses.yesLeaveQuestion, responses.noLeaveQuestion];
             question = MessageFactory.suggestedActions(options, `Can I take your question and have someone get back to you?`);
-
-            // Apologise for not answering question
-            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-            await delay(1000);
-            await stepContext.context.sendActivity('Sorry about that. My programmer has some work to do!');
         } else if (stepContext.result === 1) {
             options = [responses.noMoreQuestion, responses.yesMoreQuestion];
             question = MessageFactory.suggestedActions(options, `Do you have another question?`);
@@ -126,9 +121,6 @@ class QuestionDialog extends CancelAndHelpDialog {
         case responses.yesMoreQuestion:
             return await stepContext.beginDialog(QUESTION_DIALOG, { conversationData, userProfile });
         default:
-            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-            await delay(1000);
-            await stepContext.context.sendActivity(`Too easy`);
             return stepContext.next();
         }
     }

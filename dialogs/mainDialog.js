@@ -274,7 +274,7 @@ class MainDialog extends ComponentDialog {
         if (conversationData.finishedConversation) {
             const responses = [
                 `It's been good chatting with you 🙂`,
-                `Good talking with you!`,
+                `Well, it was good talking with you!`,
                 `I don't know about you, but I could literally chat all day long 😜`
             ];
 

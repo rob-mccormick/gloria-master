@@ -65,6 +65,7 @@ class PipelineDialog extends CancelAndHelpDialog {
      * - if yes, confirm email
      */
     async checkNameAndEmailStep(stepContext) {
+        const conversationData = stepContext.values.conversationData;
         const userProfile = stepContext.values.userProfile;
 
         // If just asked about GDPR, save the answer
@@ -74,8 +75,12 @@ class PipelineDialog extends CancelAndHelpDialog {
         } else if (stepContext.result === -1) {
             userProfile.gdprAccepted = false;
 
-            // As did not accept, end dialog
-            return await stepContext.endDialog(userProfile);
+            // As did not accept, update conversationData and end the dialog
+            conversationData.addToPipeline = false;
+            conversationData.hasQuestion = false;
+            conversationData.finishedConversation = true;
+
+            return await stepContext.endDialog({ conversationData, userProfile });
         }
 
         // Only use this next dialog if confirming email

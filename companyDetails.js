@@ -1,9 +1,9 @@
 // Company specific details to be used by the Bot
 
 const company = {
-    name: 'Monzo',
-    locations: ['London', 'Cardiff', 'Las Vegas'],
-    privacyNotice: 'https://monzo.com/legal/privacy-policy/',
+    name: 'PiedPiper',
+    locations: ['Silicon Valley', 'Oakland'],
+    privacyNotice: 'https://www.idealrole.com/privacy',
     categoryOne: [
         'Building the product',
         'Growing the business',
@@ -11,134 +11,196 @@ const company = {
     ],
     categoryTwo: [
         ['Design', 'Engineering', 'Product', 'Analytics'],
-        ['Sales', 'Marketing', 'Customer Success', 'Banking'],
+        ['Sales', 'Marketing', 'Customer Success'],
         ['Compliance', 'People', 'Finance', 'Legal', 'Admin']
     ],
     nextSteps: `aim to get back to you in 2 working days`,
     emailContacts: ['rob@idealrole.com'],
     jobs: [
         {
-            id: 106,
-            title: 'Customer Service Representative',
-            location: 'Cardiff',
-            cat1: 'Growing the business',
-            cat2: 'Customer Success',
-            intro: `We're looking for detail-oriented, empathetic problem solvers to join our Customer Operations (COps) team in our Cardiff office.`,
-            link: 'https://boards.greenhouse.io/monzo/jobs/1561897'
-        }, {
-            id: 107,
-            title: 'Team Leader',
-            location: 'Cardiff',
-            cat1: 'Growing the business',
-            cat2: 'Customer Success',
-            intro: `We’re looking for smart, people focused Team Leaders (internally known as Squad Captains) to lead our Customer Operations (COps) squads to continue delighting our customers.`,
-            link: 'https://boards.greenhouse.io/monzo/jobs/942141'
-        }, {
-            id: 108,
-            title: 'Customer Support Senior Manager',
-            location: 'Cardiff',
-            cat1: 'Growing the business',
-            cat2: 'Customer Success',
-            intro: `Internally known as Squad Captain Manager. We’re looking for an experienced senior customer support manager to be an empathetic leader for our Squad Captains and Customer Operations (COps) team.`,
-            link: 'https://boards.greenhouse.io/monzo/jobs/1545695'
-        }, {
-            id: 1,
+            id: 101,
             title: 'Design Director',
-            location: 'London',
+            location: 'Silicon Valley',
             cat1: 'Building the product',
             cat2: 'Design',
             intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-            link: '#href'
-        },
-        {
-            id: 2,
-            title: 'Backend Engineer',
-            location: 'London',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 102,
+            title: 'Back-end Engineer',
+            location: 'Silicon Valley',
             cat1: 'Building the product',
             cat2: 'Engineering',
             intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-            link: '#href'
-        },
-        {
-            id: 3,
-            title: 'Design of Product',
-            location: 'London',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 103,
+            title: 'iOS Developer',
+            location: 'Silicon Valley',
+            cat1: 'Building the product',
+            cat2: 'Engineering',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 104,
+            title: 'Android Developer',
+            location: 'Silicon Valley',
+            cat1: 'Building the product',
+            cat2: 'Engineering',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 105,
+            title: 'Full-stack Engineer',
+            location: 'Silicon Valley',
+            cat1: 'Building the product',
+            cat2: 'Engineering',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 106,
+            title: 'DevOps Engineer',
+            location: 'Silicon Valley',
+            cat1: 'Building the product',
+            cat2: 'Engineering',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 107,
+            title: 'Product Designer',
+            location: 'Silicon Valley',
             cat1: 'Building the product',
             cat2: 'Product',
             intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-            link: '#href'
-        },
-        {
-            id: 4,
-            title: 'Data Analyst, Operations',
-            location: 'London',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 108,
+            title: 'Product Manager',
+            location: 'Silicon Valley',
+            cat1: 'Building the product',
+            cat2: 'Product',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 109,
+            title: 'Data Scientist',
+            location: 'Silicon Valley',
             cat1: 'Building the product',
             cat2: 'Analytics',
             intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-            link: '#href'
-        },
-        {
-            id: 5,
-            title: 'Head of SEO',
-            location: 'London',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 110,
+            title: 'Data Analyst',
+            location: 'Silicon Valley',
+            cat1: 'Building the product',
+            cat2: 'Analytics',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 111,
+            title: 'Account Manager',
+            location: 'Silicon Valley',
+            cat1: 'Growing the business',
+            cat2: 'Sales',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 112,
+            title: 'Partner Sales Manager',
+            location: 'Silicon Valley',
+            cat1: 'Growing the business',
+            cat2: 'Sales',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 113,
+            title: 'Product Marketing Manager',
+            location: 'Silicon Valley',
             cat1: 'Growing the business',
             cat2: 'Marketing',
             intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-            link: '#href'
-        },
-        {
-            id: 6,
-            title: 'Customer Service Representative',
-            location: 'Las Vegas',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 114,
+            title: 'Social Media Manager',
+            location: 'Silicon Valley',
+            cat1: 'Growing the business',
+            cat2: 'Marketing',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 115,
+            title: 'Team Leader',
+            location: 'Oakland',
             cat1: 'Growing the business',
             cat2: 'Customer Success',
             intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-            link: '#href'
-        },
-        {
-            id: 7,
-            title: 'Lending Analyst',
-            location: 'London',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 116,
+            title: 'Customer Success Rep',
+            location: 'Oakland',
             cat1: 'Growing the business',
-            cat2: 'Banking',
+            cat2: 'Customer Success',
             intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-            link: '#href'
-        },
-        {
-            id: 8,
-            title: 'Head of Financial Crime',
-            location: 'London',
-            cat1: 'Running the company',
-            cat2: 'Compliance',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 117,
+            title: 'Customer Success Rep',
+            location: 'Oakland',
+            cat1: 'Growing the business',
+            cat2: 'Customer Success',
             intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-            link: '#href'
-        },
-        {
-            id: 9,
-            title: 'Diversity and Inclusion Lead',
-            location: 'London',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 118,
+            title: 'Customer Success Rep',
+            location: 'Oakland',
+            cat1: 'Growing the business',
+            cat2: 'Customer Success',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 119,
+            title: 'Recruiter',
+            location: 'Silicon Valley',
             cat1: 'Running the company',
             cat2: 'People',
             intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-            link: '#href'
-        },
-        {
-            id: 10,
-            title: 'Tax Analyst',
-            location: 'London',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 120,
+            title: 'Business Partner',
+            location: 'Silicon Valley',
+            cat1: 'Running the company',
+            cat2: 'People',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 121,
+            title: 'Accountant',
+            location: 'Silicon Valley',
             cat1: 'Running the company',
             cat2: 'Finance',
             intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-            link: '#href'
-        },
-        {
-            id: 11,
-            title: 'Executive Assistant',
-            location: 'London',
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 122,
+            title: 'Head of Legal',
+            location: 'Silicon Valley',
             cat1: 'Running the company',
-            cat2: 'Admin',
+            cat2: 'Legal',
             intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-            link: '#href'
+            link: 'https://gloria-demo.webflow.io/job-application'
+        }, {
+            id: 123,
+            title: 'Operations Manager',
+            location: 'Silicon Valley',
+            cat1: 'Running the company',
+            cat2: 'Operations',
+            intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
+            link: 'https://gloria-demo.webflow.io/job-application'
         }
     ]
 };

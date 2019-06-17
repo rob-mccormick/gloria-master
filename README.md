@@ -82,6 +82,15 @@ The job objects contain information to help the user decide if they want to lear
 - intro - a short introduction to the job to give the user an idea of what it is about (and entice them to see more)
 - link - href link to the job (string)
 
+# helpTopics Object
+The helpTopics object contains responses to frequently asked questions in the questionDialog.  Each answer is part of five top level help topics:
+
+- applications - Question about the application process and how to apply
+- inteviews - tips and what to expect at the interview stage
+- workingOptions - the different kinds of flexible working options available
+- recruitmentProcess - general questions about the recruitment process so the user knows what to expect
+- students - covers internships, work placement and graduate jobs offered by the company
+
 # Testing the bot using Bot Framework Emulator
 [Bot Framework Emulator][5] is a desktop application that allows bot developers to test and debug their bots on localhost or running remotely through a tunnel.
 

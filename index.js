@@ -10,8 +10,7 @@ const sgMail = require('@sendgrid/mail');
 const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState, TranscriptLoggerMiddleware } = require('botbuilder');
 
 // Import Azure storage
-const { AzureBlobTranscriptStore } = require('botbuilder-azure');
-// const { CosmosDbStorage } = require('botbuilder-azure');
+const { AzureBlobTranscriptStore, CosmosDbStorage } = require('botbuilder-azure');
 
 // This bot's main dialog.
 const { DialogAndWelcomeBot } = require('./bots/dialogAndWelcomeBot');
@@ -62,15 +61,15 @@ adapter.onTurnError = async (context, error) => {
 let conversationState, userState;
 
 // For local development, in-memory storage is used.
-const storage = new MemoryStorage();
+// const storage = new MemoryStorage();
 
 // For production create access to CosmosDb Storage.
-// const storage = new CosmosDbStorage({
-//     serviceEndpoint: process.env.DB_SERVICE_ENDPOINT,
-//     authKey: process.env.AUTH_KEY,
-//     databaseId: process.env.DATABASE,
-//     collectionId: process.env.COLLECTION
-// });
+const storage = new CosmosDbStorage({
+    serviceEndpoint: process.env.DB_SERVICE_ENDPOINT,
+    authKey: process.env.AUTH_KEY,
+    databaseId: process.env.DATABASE,
+    collectionId: process.env.COLLECTION
+});
 
 conversationState = new ConversationState(storage);
 userState = new UserState(storage);
@@ -100,12 +99,3 @@ server.post('/api/messages', (req, res) => {
         await bot.run(turnContext);
     });
 });
-
-// // Create and export SendGrid API
-// const sendgridApiKey = process.env.SENDGRID_API_KEY;
-
-// // module.exports = {
-// //     sendgridApiKey
-// // };
-
-// module.exports.sendgridApiKey = sendgridApiKey;

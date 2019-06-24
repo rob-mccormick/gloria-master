@@ -139,7 +139,7 @@ const company = {
             link: 'https://gloria-demo.webflow.io/job-application'
         }, {
             id: 116,
-            title: 'Customer Success Rep',
+            title: 'Customer Success Manager',
             location: 'Oakland',
             cat1: 'Growing the business',
             cat2: 'Customer Success',
@@ -147,7 +147,7 @@ const company = {
             link: 'https://gloria-demo.webflow.io/job-application'
         }, {
             id: 117,
-            title: 'Customer Success Rep',
+            title: 'Customer Success Manager',
             location: 'Oakland',
             cat1: 'Growing the business',
             cat2: 'Customer Success',
@@ -155,7 +155,7 @@ const company = {
             link: 'https://gloria-demo.webflow.io/job-application'
         }, {
             id: 118,
-            title: 'Customer Success Rep',
+            title: 'Customer Success Manager',
             location: 'Oakland',
             cat1: 'Growing the business',
             cat2: 'Customer Success',
@@ -240,8 +240,8 @@ const helpTopics = {
         flexible: `We work hard to make our offices a hive of activity and collaboration. So while we prefer you work there when you can, we also want you to be your best.
             \n\nTo help you we try to be as flexible as we can - in hours and location.
             \n\nIf you need something permanent, best to ask when the recruiter contacts you. Otherwise you're team lead will be able to help when you need it.`,
-        remote: `Some of our roles are fully remote. I can help you find them 😉
-            \n\nFor other roles, we prefer you to be in the office when you can. But we're also flexible and you can work from home or remotely when you need to.`,
+        remote: `We prefer you to be in the office when you can. But we're also flexible and you can work from home or remotely when you need to.
+            \n\nAnd for some of our roles we're open to you working remotely. Just let one of our recruiters know if this is what you're looking for.`,
         partTime: `While our jobs are normally full-time, we understand everyone needs something a little different.
             \n\nWhere we can we'll do our best to accomodate part-time hours. Best to let the recruitment team know when they contact you.`,
         annualLeave: `You can find the annual leave you'll get on the job description.  It can vary a bit depending on the location.

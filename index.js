@@ -10,7 +10,7 @@ const sgMail = require('@sendgrid/mail');
 const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState, TranscriptLoggerMiddleware } = require('botbuilder');
 
 // Import Azure storage
-const { AzureBlobTranscriptStore, CosmosDbStorage } = require('botbuilder-azure');
+const { AzureBlobTranscriptStore, BlobStorage } = require('botbuilder-azure');
 
 // This bot's main dialog.
 const { DialogAndWelcomeBot } = require('./bots/dialogAndWelcomeBot');
@@ -25,7 +25,7 @@ const dashbot = require('dashbot')(process.env.DASHBOT_API).microsoft;
 
 // Add transcript storage
 let transcriptStore = new AzureBlobTranscriptStore({
-    containerName: process.env.BLOB_NAME,
+    containerName: process.env.BLOB_NAME_TRANSCRIPTS,
     storageAccountOrConnectionString: process.env.BLOB_STRING
 });
 
@@ -61,15 +61,13 @@ adapter.onTurnError = async (context, error) => {
 let conversationState, userState;
 
 // For local development, in-memory storage is used.
-const storage = new MemoryStorage();
+// const storage = new MemoryStorage();
 
-// For production create access to CosmosDb Storage.
-// const storage = new CosmosDbStorage({
-//     serviceEndpoint: process.env.DB_SERVICE_ENDPOINT,
-//     authKey: process.env.AUTH_KEY,
-//     databaseId: process.env.DATABASE,
-//     collectionId: process.env.COLLECTION
-// });
+// For production create access to Blob Storage
+const storage = new BlobStorage({
+    containerName: process.env.BLOB_NAME_STATE,
+    storageAccountOrConnectionString: process.env.BLOB_STRING
+});
 
 conversationState = new ConversationState(storage);
 userState = new UserState(storage);

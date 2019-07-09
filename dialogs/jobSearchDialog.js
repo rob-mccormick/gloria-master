@@ -13,12 +13,15 @@ const JOB_SEARCH_DIALOG = 'jobSearchDialog';
 const WATERFALL_DIALOG = 'waterfallDialog';
 
 const userResponses = {
+    back: 'Go back',
+    allLocations: 'Show me all locations',
+    yearsExperience: ['0', '1', '2', '3', '4', '5', '6', '7+'],
+    allExperience: 'All jobs please',
     foundOneJob: 'Yeah, it looks good',
     foundManyJobs: 'I did',
     foundNoJob: 'Unfortunately not',
     pipelineYes: `That'd be great`,
-    pipelineNo: `It's ok, I'll just check back`,
-    back: 'Go back'
+    pipelineNo: `It's ok, I'll just check back`
 };
 
 class JobSearchDialog extends CancelAndHelpDialog {
@@ -30,6 +33,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             this.selectCategoryOneStep.bind(this),
             this.selectCategoryTwoStep.bind(this),
             this.selectLocationStep.bind(this),
+            this.experienceStep.bind(this),
             this.presentAvailableJobsStep.bind(this),
             this.checkIfFoundJobStep.bind(this),
             this.askToAddToPipelineStep.bind(this),
@@ -125,8 +129,13 @@ class JobSearchDialog extends CancelAndHelpDialog {
         // Save user's categoryTwo selection
         stepContext.values.userProfile.categoryTwo = stepContext.result;
 
-        // Present categoryTwo options and ask user to select
+        // Present location options and ask user to select
         const options = company.locations;
+        // Add option to select all locations
+        if (options[(options.length - 1)] !== userResponses.allLocations) {
+            options.push(userResponses.allLocations);
+        }
+
         const question = MessageFactory.suggestedActions(options, `In which location?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -137,13 +146,44 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
     /**
      * Save the user's location selection
+     * Ask the user to share how much experience they have to narrow down the job search
+     */
+    async experienceStep(stepContext) {
+        // Save user's location selection
+        if (stepContext.result === userResponses.allLocations) {
+            stepContext.values.userProfile.location = 'all';
+        } else {
+            stepContext.values.userProfile.location = stepContext.result;
+        }
+
+        // Present years experience for the user to select
+        const options = userResponses.yearsExperience;
+        // Add option to select all experience levels
+        if (options[(options.length - 1)] !== userResponses.allExperience) {
+            options.push(userResponses.allExperience);
+        }
+
+        const question = MessageFactory.suggestedActions(options, `And how many years experience do you have?`);
+
+        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+        await delay(500);
+        await stepContext.context.sendActivity(question);
+        return Dialog.EndOfTurn;
+    }
+
+    /**
+     * Save the user's experience selection
      * If there are available jobs:
      * - Save them to the userProfile
      * - Present them to the user
      */
     async presentAvailableJobsStep(stepContext) {
-        // Save user's categoryTwo selection
-        stepContext.values.userProfile.location = stepContext.result;
+        // Save user's experience selection
+        if (stepContext.result === userResponses.allExperience) {
+            stepContext.values.userProfile.experience = 'all';
+        } else {
+            stepContext.values.userProfile.experience = parseInt(stepContext.result, 10);
+        }
 
         // Set the jobSearchComplete to true
         stepContext.values.conversationData.jobSearchComplete = true;
@@ -160,10 +200,20 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
             // Generate the message response
             const jobPlural = (availableJobs.length > 1) ? 'jobs' : 'job';
-            response = `Perfect! We have ${ availableJobs.length } ${ jobPlural } you may be interested in.`;
+            response = `Perfect! We have ${ availableJobs.length } ${ jobPlural } for you.`;
+        // } else if (!availableJobs.length && stepContext.values.userProfle.location === 'all' && stepContext.values.userProfile.experience !== 'all') {
+        //     response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs for you at the moment.`;
+        // } else if (!availableJobs.length && stepContext.values.userProfile.location === 'all') {
+        //     response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs at the moment.`;
         } else {
             stepContext.values.userProfile.jobs = [];
-            response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs in ${ stepContext.values.userProfile.location } at the moment.`;
+            if (stepContext.values.userProfile.location === 'all' && stepContext.values.userProfile.experience !== 'all') {
+                response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs for you at the moment.`;
+            } else if (stepContext.values.userProfile.location === 'all') {
+                response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs at the moment.`;
+            } else {
+                response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs in ${ stepContext.values.userProfile.location } for you at the moment.`;
+            }
         }
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -307,11 +357,44 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
     findRelevantJobs(jobList, user) {
         let relevantJobs = [];
+        const cat1 = user.categoryOne;
+        const cat2 = user.categoryTwo;
+        const loc = user.location;
+        const exp = user.experience;
 
-        // Iterate over the items in the list and find those with correct cat1 & cat2
+        // Iterate over the items in the list and find those with correct values
+        // for (var i = 0; i < jobList.length; i++) {
+        //     // User entered all variables
+        //     if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].location === loc && jobList[i].minExperience === exp) {
+        //         relevantJobs.push(jobList[i]);
+        //     // User provided location, experience is 'all'
+        //     } else if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].location === loc) {
+        //         relevantJobs.push(jobList[i]);
+        //     // Location is 'all', but user provided experience
+        //     } else if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].minExperience === exp) {
+        //         relevantJobs.push(jobList[i]);
+        //     // Location and experience are 'all'
+        //     } else if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2) {
+        //         relevantJobs.push(jobList[i]);
+        //     }
+        // }
         for (var i = 0; i < jobList.length; i++) {
-            if (jobList[i].cat1 === user.categoryOne && jobList[i].cat2 === user.categoryTwo && jobList[i].location === user.location) {
-                relevantJobs.push(jobList[i]);
+            if (loc === 'all' && exp === 'all') {
+                if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2) {
+                    relevantJobs.push(jobList[i]);
+                }
+            } else if (loc === 'all' && exp !== 'all') {
+                if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].minExperience <= exp) {
+                    relevantJobs.push(jobList[i]);
+                }
+            } else if (loc !== 'all' && exp === 'all') {
+                if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].location === loc) {
+                    relevantJobs.push(jobList[i]);
+                }
+            } else if (loc !== 'all' && exp !== 'all') {
+                if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].location === loc && jobList[i].minExperience <= exp) {
+                    relevantJobs.push(jobList[i]);
+                }
             }
         }
         return relevantJobs;

@@ -25,184 +25,207 @@ const jobs = [
         location: 'Silicon Valley',
         cat1: 'Building the product',
         cat2: 'Design',
+        minExperience: 7,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 102,
         title: 'Back-end Engineer',
         location: 'Silicon Valley',
         cat1: 'Building the product',
         cat2: 'Engineering',
+        minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 103,
         title: 'iOS Developer',
         location: 'Silicon Valley',
         cat1: 'Building the product',
         cat2: 'Engineering',
+        minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 104,
         title: 'Android Developer',
         location: 'Silicon Valley',
         cat1: 'Building the product',
         cat2: 'Engineering',
+        minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 105,
         title: 'Full-stack Engineer',
         location: 'Silicon Valley',
         cat1: 'Building the product',
         cat2: 'Engineering',
+        minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 106,
         title: 'DevOps Engineer',
         location: 'Silicon Valley',
         cat1: 'Building the product',
         cat2: 'Engineering',
+        minExperience: 4,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 107,
         title: 'Product Designer',
         location: 'Silicon Valley',
         cat1: 'Building the product',
         cat2: 'Product',
+        minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 108,
         title: 'Product Manager',
         location: 'Silicon Valley',
         cat1: 'Building the product',
         cat2: 'Product',
+        minExperience: 5,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 109,
         title: 'Data Scientist',
         location: 'Silicon Valley',
         cat1: 'Building the product',
         cat2: 'Analytics',
+        minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 110,
         title: 'Data Analyst',
         location: 'Silicon Valley',
         cat1: 'Building the product',
         cat2: 'Analytics',
+        minExperience: 1,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 111,
         title: 'Account Manager',
         location: 'Silicon Valley',
         cat1: 'Growing the business',
         cat2: 'Sales',
+        minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 112,
         title: 'Partner Sales Manager',
         location: 'Silicon Valley',
         cat1: 'Growing the business',
         cat2: 'Sales',
+        minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 113,
         title: 'Product Marketing Manager',
         location: 'Silicon Valley',
         cat1: 'Growing the business',
         cat2: 'Marketing',
+        minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 114,
         title: 'Social Media Manager',
         location: 'Silicon Valley',
         cat1: 'Growing the business',
         cat2: 'Marketing',
+        minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 115,
         title: 'Team Leader',
         location: 'Oakland',
         cat1: 'Growing the business',
         cat2: 'Customer Success',
+        minExperience: 4,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 116,
         title: 'Customer Success Manager',
         location: 'Oakland',
         cat1: 'Growing the business',
         cat2: 'Customer Success',
+        minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 117,
         title: 'Customer Success Manager',
         location: 'Oakland',
         cat1: 'Growing the business',
         cat2: 'Customer Success',
+        minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 118,
         title: 'Customer Success Manager',
         location: 'Oakland',
         cat1: 'Growing the business',
         cat2: 'Customer Success',
+        minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 119,
         title: 'Recruiter',
         location: 'Silicon Valley',
         cat1: 'Running the company',
         cat2: 'People',
+        minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 120,
         title: 'Business Partner',
         location: 'Silicon Valley',
         cat1: 'Running the company',
         cat2: 'People',
+        minExperience: 5,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 121,
         title: 'Accountant',
         location: 'Silicon Valley',
         cat1: 'Running the company',
         cat2: 'Finance',
+        minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 122,
         title: 'Head of Legal',
         location: 'Silicon Valley',
         cat1: 'Running the company',
         cat2: 'Legal',
+        minExperience: 7,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }, {
         id: 123,
         title: 'Operations Manager',
         location: 'Silicon Valley',
         cat1: 'Running the company',
         cat2: 'Operations',
+        minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://gloria-demo.webflow.io/job-application'
+        link: 'https://www.idealrole.com/demo/job-application'
     }
 ];
 

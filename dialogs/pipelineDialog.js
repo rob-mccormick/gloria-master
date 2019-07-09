@@ -117,6 +117,7 @@ class PipelineDialog extends CancelAndHelpDialog {
     async endStep(stepContext) {
         const conversationData = stepContext.values.conversationData;
         const userProfile = stepContext.values.userProfile;
+        let message;
 
         // Handle case where user's email is wrong
         if (stepContext.result === userResponses.emailWrong) {
@@ -144,7 +145,15 @@ class PipelineDialog extends CancelAndHelpDialog {
         // If correct, confirm with user the job's they'll be contacted for
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1500);
-        await stepContext.context.sendActivity(`Perfect, we'll let you know when any ${ userProfile.categoryTwo } jobs in ${ userProfile.location } come up.`);
+        
+        // Set message based on whether want to see all locations or a specific one
+        if (userProfile.location === 'all') {
+            message = `Perfect, we'll let you know when any ${ userProfile.categoryTwo } jobs come up.`;
+        } else {
+            message = `Perfect, we'll let you know when any ${ userProfile.categoryTwo } jobs in ${ userProfile.location } come up.`;
+        }
+
+        await stepContext.context.sendActivity(message);
 
         // Send email notification of new user to be added to pipeline
         sendPipelineEmail(userProfile);

@@ -27,8 +27,8 @@ const responses = {
     student: `Internships and grad opportunities`,
     yesLeaveQuestion: `Yes please`,
     noLeaveQuestion: `No need`,
-    noMoreQuestion: `No, all done`,
-    yesMoreQuestion: `I do`
+    noMoreQuestion: `No thanks`,
+    yesMoreQuestion: `Yes please`
 };
 
 class QuestionDialog extends CancelAndHelpDialog {
@@ -107,11 +107,8 @@ class QuestionDialog extends CancelAndHelpDialog {
         } else if (stepContext.result === 1) {
             options = [responses.noMoreQuestion, responses.yesMoreQuestion];
             question = randomSentence([
-                `Do you have another question?`,
-                `Do you want to ask me something else?`,
-                `Have another question?`,
-                `Do you need more help?`,
-                `Do you need me for anything else?`
+                `Would you like to ask another question?`,
+                `Can I help you with another question?`
             ]);
         }
 

@@ -61,15 +61,15 @@ adapter.onTurnError = async (context, error) => {
 let conversationState, userState;
 
 // For local development, in-memory storage is used.
-// const storage = new MemoryStorage();
+const storage = new MemoryStorage();
 
 // For production create access to CosmosDb Storage.
-const storage = new CosmosDbStorage({
-    serviceEndpoint: process.env.DB_SERVICE_ENDPOINT,
-    authKey: process.env.AUTH_KEY,
-    databaseId: process.env.DATABASE,
-    collectionId: process.env.COLLECTION
-});
+// const storage = new CosmosDbStorage({
+//     serviceEndpoint: process.env.DB_SERVICE_ENDPOINT,
+//     authKey: process.env.AUTH_KEY,
+//     databaseId: process.env.DATABASE,
+//     collectionId: process.env.COLLECTION
+// });
 
 conversationState = new ConversationState(storage);
 userState = new UserState(storage);

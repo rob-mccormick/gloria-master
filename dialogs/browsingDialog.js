@@ -6,6 +6,7 @@ const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay } = require('../helperFunctions');
+const { company } = require('../companyDetails');
 
 const BROWSING_DIALOG = 'browsingDialog';
 
@@ -13,7 +14,7 @@ const WATERFALL_DIALOG = 'waterfallDialog';
 
 const userOptions = {
     whyOnSite: [
-        `I'd heard you were hiring and wanted to learn more`,
+        `I wanted learn more about ${ company.name }`,
         `I'm looking at places I might like to work`,
         `I wanted to ask a question`
     ],

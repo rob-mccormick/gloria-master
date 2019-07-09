@@ -210,7 +210,7 @@ class MainDialog extends ComponentDialog {
         // If they completed the job search check if they have a question
         if (!conversationData.hasQuestion && conversationData.jobSearchComplete) {
             let options = [userResponses.noQuestion, userResponses.yesQuestion];
-            let question = MessageFactory.suggestedActions(options, `Did you have any other questions?`);
+            let question = MessageFactory.suggestedActions(options, `Do you have any questions about ${ company.name } or our application process?`);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);

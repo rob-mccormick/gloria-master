@@ -5,7 +5,7 @@ const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, CardFactory, AttachmentLayoutTypes, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
-const { company } = require('../companyDetails');
+const { company, jobs } = require('../companyDetails');
 const { delay, randomSentence } = require('../helperFunctions');
 
 const JOB_SEARCH_DIALOG = 'jobSearchDialog';
@@ -53,16 +53,13 @@ class JobSearchDialog extends CancelAndHelpDialog {
         stepContext.values.userProfile = userProfile;
 
         if (!stepContext.values.conversationData.seenJobDisclaimer) {
-            const disclaimer = MessageFactory.suggestedActions(['Good to know'], `If I had lips they'd be sealed!`);
-
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(500);
             await stepContext.context.sendActivity(`Excellent. Just so you know, our chat won't be linked to any job application.`);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);
-            await stepContext.context.sendActivity(disclaimer);
-            return Dialog.EndOfTurn;
+            await stepContext.context.sendActivity(`If I had lips they'd be sealed!`);
         }
 
         // If user has seen the disclaimer this conversation, go to next step
@@ -152,7 +149,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         stepContext.values.conversationData.jobSearchComplete = true;
 
         // Find available jobs
-        const availableJobs = this.findRelevantJobs(company.jobs, stepContext.values.userProfile);
+        const availableJobs = this.findRelevantJobs(jobs, stepContext.values.userProfile);
 
         // Send the user a message on the job search results
         let response;
@@ -163,7 +160,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
             // Generate the message response
             const jobPlural = (availableJobs.length > 1) ? 'jobs' : 'job';
-            response = `Perfect! We have ${ availableJobs.length } ${ jobPlural } available.`;
+            response = `Perfect! We have ${ availableJobs.length } ${ jobPlural } you may be interested in.`;
         } else {
             stepContext.values.userProfile.jobs = [];
             response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs in ${ stepContext.values.userProfile.location } at the moment.`;

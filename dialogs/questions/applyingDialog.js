@@ -84,7 +84,7 @@ class ApplyingDialog extends CancelAndHelpDialog {
             break;
         case responses.prepareCv:
             options = [responses.cvInfo, responses.cvFormat, responses.cvLength];
-            questionText = `Good choice. What would you like to know?`;
+            questionText = `Sure, what would you like to know?`;
             break;
         case responses.practicalDetails:
             options = [responses.coverLetter, responses.deadlines, responses.csDegree];

@@ -15,6 +15,8 @@ const company = {
         ['Compliance', 'People', 'Finance', 'Legal', 'Admin']
     ],
     nextSteps: `aim to get back to you in 2 working days`,
+    companyVideo: '',
+    benefits: {},
     emailContacts: ['rob@idealrole.com']
 };
 
@@ -106,7 +108,8 @@ const jobs = [
         specialism: 'Sales',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://www.youtube.com/watch?v=l49MHwooaVQ'
     }, {
         id: 112,
         title: 'Partner Sales Manager',

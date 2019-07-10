@@ -145,7 +145,7 @@ class PipelineDialog extends CancelAndHelpDialog {
         // If correct, confirm with user the job's they'll be contacted for
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1500);
-        
+
         // Set message based on whether want to see all locations or a specific one
         if (userProfile.location === 'all') {
             message = `Perfect, we'll let you know when any ${ userProfile.categoryTwo } jobs come up.`;

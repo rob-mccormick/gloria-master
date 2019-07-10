@@ -2,7 +2,7 @@
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
 class UserProfile {
-    constructor(name, email, location, categoryOne, categoryTwo, experience) {
+    constructor(name, email, location, specialism, experience) {
         // User's details
         this.name = name;
         this.email = email;
@@ -12,8 +12,7 @@ class UserProfile {
 
         // User's job search
         this.location = location;
-        this.categoryOne = categoryOne;
-        this.categoryTwo = categoryTwo;
+        this.specialism = specialism;
         this.experience = experience;
         this.jobs = [];
 

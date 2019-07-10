@@ -17,6 +17,8 @@ const userResponses = {
     allLocations: 'Show me all locations',
     yearsExperience: ['0', '1', '2', '3', '4', '5', '6', '7+'],
     allExperience: 'All jobs please',
+    moreInfoYes: 'Go on',
+    moreInfoNo: 'No thanks',
     foundOneJob: 'Yeah, it looks good',
     foundManyJobs: 'I did',
     foundNoJob: 'Unfortunately not',
@@ -35,6 +37,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             this.selectLocationStep.bind(this),
             this.experienceStep.bind(this),
             this.presentAvailableJobsStep.bind(this),
+            this.seeMoreInfoStep.bind(this),
             this.checkIfFoundJobStep.bind(this),
             this.askToAddToPipelineStep.bind(this),
             this.endStep.bind(this)
@@ -221,6 +224,14 @@ class JobSearchDialog extends CancelAndHelpDialog {
             // Create thumbnail cards to display the results
             availableJobs.forEach(el => jobsToDisplay.push(this.createThumbnailCard(el)));
 
+            // availableJobs.forEach(el => {
+            //     if (el.video) {
+            //         jobsToDisplay.push(this.createThumbnailCardTwoButtons(el));
+            //     } else {
+            //         jobsToDisplay.push(this.createThumbnailCard(el));
+            //     }
+            // });
+
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);
             await stepContext.context.sendActivity({
@@ -230,6 +241,46 @@ class JobSearchDialog extends CancelAndHelpDialog {
         }
 
         // Not expecting a response from the user - move to the next step
+        return stepContext.next();
+    }
+
+    /**
+     * If jobs were presented, check:
+     * - do any of them have extra info (video)
+     * - If so, ask if the user wants to see it
+     * - otherwise, continue to next step
+     */
+    async seeMoreInfoStep(stepContext) {
+        if (stepContext.values.userProfile.jobs.length > 0) {
+            let moreInfoJobs = [];
+            // Check if there is more info - if so add to new list
+            stepContext.values.userProfile.jobs.forEach(el => {
+                if (el.video) {
+                    moreInfoJobs.push(el);
+                }
+            });
+
+            // If there is more info to display - ask if would like to see it
+            if (moreInfoJobs.length > 0) {
+                let question;
+
+                if (moreInfoJobs.length === 1) {
+                    question = `If you're interested, I can give you an insider tip.`;
+                } else {
+                    question = `If you're interested, I can give you insider tips on some of the roles.`;
+                }
+
+                const options = [userResponses.moreInfoYes, userResponses.moreInfoNo];
+                const message = MessageFactory.suggestedActions(options, question);
+
+                await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+                await delay(3000);
+                await stepContext.context.sendActivity(message);
+                return Dialog.EndOfTurn;
+            }
+        }
+
+        // Otherwise, pass to the next step
         return stepContext.next();
     }
 
@@ -331,7 +382,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
             // Update the user profile
             userProfile.pipeline.push({
-                categoryTwo: userProfile.categoryTwo,
+                specialism: userProfile.specialism,
                 location: userProfile.location
             });
         } else if (stepContext.result === userResponses.pipelineNo) {
@@ -399,13 +450,41 @@ class JobSearchDialog extends CancelAndHelpDialog {
             [{ url: '' }],
             [{
                 type: 'openUrl',
-                title: 'Learn more',
+                title: 'See job description',
                 value: `${ jobObj.link }`
             }],
             {
                 subtitle: `${ jobObj.location }`,
                 text: `${ jobObj.intro }`
             }
+        );
+    }
+
+    createThumbnailCardTwoButtons(jobObj) {
+        return CardFactory.thumbnailCard(
+            `${ jobObj.title }`,
+            [{ url: '' }],
+            [{
+                type: 'openUrl',
+                title: 'See job description',
+                value: `${ jobObj.link }`
+            }, {
+                type: 'postBack',
+                title: 'Learn more',
+                // value: `Tell me more about ${ jobObj.title }`
+                value: `testing`
+            }],
+            {
+                subtitle: `${ jobObj.location }`,
+                text: `${ jobObj.intro }`
+            }
+        );
+    }
+
+    createVideoYouTube() {
+        return MessageFactory.contentUrl(
+            'https://www.youtube.com/watch?v=Vm4tx1O9GAc',
+            'video/mp4'
         );
     }
 }

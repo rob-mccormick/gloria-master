@@ -1,7 +1,7 @@
 // Copyright (c) Ideal Role Limited. All rights reserved.
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
-// Import required pckages
+// Import required packages
 const path = require('path');
 const restify = require('restify');
 const sgMail = require('@sendgrid/mail');
@@ -23,14 +23,16 @@ require('dotenv').config({ path: ENV_FILE });
 // Add bot analytics middleware
 const dashbot = require('dashbot')(process.env.DASHBOT_API).microsoft;
 
+// NOT USING TRANSCRIPT STORAGE until have better way to analyse
+
 // Add transcript storage
-let transcriptStore = new AzureBlobTranscriptStore({
-    containerName: process.env.BLOB_NAME_TRANSCRIPTS,
-    storageAccountOrConnectionString: process.env.BLOB_STRING
-});
+// let transcriptStore = new AzureBlobTranscriptStore({
+//     containerName: process.env.BLOB_NAME_TRANSCRIPTS,
+//     storageAccountOrConnectionString: process.env.BLOB_STRING
+// });
 
 // Create the middleware layer to log incoming and outgoing activities to the transcript store
-const transcriptMiddleware = new TranscriptLoggerMiddleware(transcriptStore);
+// const transcriptMiddleware = new TranscriptLoggerMiddleware(transcriptStore);
 
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about adapters.
@@ -41,9 +43,9 @@ const adapter = new BotFrameworkAdapter({
     openIdMetadata: process.env.BotOpenIdMetadata
 });
 
-// Use the middleware for analytics and storing transcripts
+// Use the middleware for analytics [and storing transcripts]
 adapter.use(dashbot.middleware());
-adapter.use(transcriptMiddleware);
+// adapter.use(transcriptMiddleware);
 
 // Catch-all for errors.
 adapter.onTurnError = async (context, error) => {

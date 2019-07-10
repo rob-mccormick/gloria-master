@@ -9,7 +9,7 @@ const company = {
         'Growing the business',
         'Running the company'
     ],
-    categoryTwo: [
+    specialism: [
         ['Design', 'Engineering', 'Product', 'Analytics'],
         ['Sales', 'Marketing', 'Customer Success'],
         ['Compliance', 'People', 'Finance', 'Legal', 'Admin']
@@ -23,8 +23,7 @@ const jobs = [
         id: 101,
         title: 'Design Director',
         location: 'Silicon Valley',
-        cat1: 'Building the product',
-        cat2: 'Design',
+        specialism: 'Design',
         minExperience: 7,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -32,8 +31,7 @@ const jobs = [
         id: 102,
         title: 'Back-end Engineer',
         location: 'Silicon Valley',
-        cat1: 'Building the product',
-        cat2: 'Engineering',
+        specialism: 'Engineering',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -41,8 +39,7 @@ const jobs = [
         id: 103,
         title: 'iOS Developer',
         location: 'Silicon Valley',
-        cat1: 'Building the product',
-        cat2: 'Engineering',
+        specialism: 'Engineering',
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -50,8 +47,7 @@ const jobs = [
         id: 104,
         title: 'Android Developer',
         location: 'Silicon Valley',
-        cat1: 'Building the product',
-        cat2: 'Engineering',
+        specialism: 'Engineering',
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -59,8 +55,7 @@ const jobs = [
         id: 105,
         title: 'Full-stack Engineer',
         location: 'Silicon Valley',
-        cat1: 'Building the product',
-        cat2: 'Engineering',
+        specialism: 'Engineering',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -68,8 +63,7 @@ const jobs = [
         id: 106,
         title: 'DevOps Engineer',
         location: 'Silicon Valley',
-        cat1: 'Building the product',
-        cat2: 'Engineering',
+        specialism: 'Engineering',
         minExperience: 4,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -77,8 +71,7 @@ const jobs = [
         id: 107,
         title: 'Product Designer',
         location: 'Silicon Valley',
-        cat1: 'Building the product',
-        cat2: 'Product',
+        specialism: 'Product',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -86,8 +79,7 @@ const jobs = [
         id: 108,
         title: 'Product Manager',
         location: 'Silicon Valley',
-        cat1: 'Building the product',
-        cat2: 'Product',
+        specialism: 'Product',
         minExperience: 5,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -95,8 +87,7 @@ const jobs = [
         id: 109,
         title: 'Data Scientist',
         location: 'Silicon Valley',
-        cat1: 'Building the product',
-        cat2: 'Analytics',
+        specialism: 'Analytics',
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -104,8 +95,7 @@ const jobs = [
         id: 110,
         title: 'Data Analyst',
         location: 'Silicon Valley',
-        cat1: 'Building the product',
-        cat2: 'Analytics',
+        specialism: 'Analytics',
         minExperience: 1,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -113,8 +103,7 @@ const jobs = [
         id: 111,
         title: 'Account Manager',
         location: 'Silicon Valley',
-        cat1: 'Growing the business',
-        cat2: 'Sales',
+        specialism: 'Sales',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -122,8 +111,7 @@ const jobs = [
         id: 112,
         title: 'Partner Sales Manager',
         location: 'Silicon Valley',
-        cat1: 'Growing the business',
-        cat2: 'Sales',
+        specialism: 'Sales',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -131,8 +119,7 @@ const jobs = [
         id: 113,
         title: 'Product Marketing Manager',
         location: 'Silicon Valley',
-        cat1: 'Growing the business',
-        cat2: 'Marketing',
+        specialism: 'Marketing',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -140,8 +127,7 @@ const jobs = [
         id: 114,
         title: 'Social Media Manager',
         location: 'Silicon Valley',
-        cat1: 'Growing the business',
-        cat2: 'Marketing',
+        specialism: 'Marketing',
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -149,8 +135,7 @@ const jobs = [
         id: 115,
         title: 'Team Leader',
         location: 'Oakland',
-        cat1: 'Growing the business',
-        cat2: 'Customer Success',
+        specialism: 'Customer Success',
         minExperience: 4,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -158,8 +143,7 @@ const jobs = [
         id: 116,
         title: 'Customer Success Manager',
         location: 'Oakland',
-        cat1: 'Growing the business',
-        cat2: 'Customer Success',
+        specialism: 'Customer Success',
         minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -167,8 +151,7 @@ const jobs = [
         id: 117,
         title: 'Customer Success Manager',
         location: 'Oakland',
-        cat1: 'Growing the business',
-        cat2: 'Customer Success',
+        specialism: 'Customer Success',
         minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -176,8 +159,7 @@ const jobs = [
         id: 118,
         title: 'Customer Success Manager',
         location: 'Oakland',
-        cat1: 'Growing the business',
-        cat2: 'Customer Success',
+        specialism: 'Customer Success',
         minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -185,8 +167,7 @@ const jobs = [
         id: 119,
         title: 'Recruiter',
         location: 'Silicon Valley',
-        cat1: 'Running the company',
-        cat2: 'People',
+        specialism: 'People',
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -194,8 +175,7 @@ const jobs = [
         id: 120,
         title: 'Business Partner',
         location: 'Silicon Valley',
-        cat1: 'Running the company',
-        cat2: 'People',
+        specialism: 'People',
         minExperience: 5,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -203,8 +183,7 @@ const jobs = [
         id: 121,
         title: 'Accountant',
         location: 'Silicon Valley',
-        cat1: 'Running the company',
-        cat2: 'Finance',
+        specialism: 'Finance',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -212,8 +191,7 @@ const jobs = [
         id: 122,
         title: 'Head of Legal',
         location: 'Silicon Valley',
-        cat1: 'Running the company',
-        cat2: 'Legal',
+        specialism: 'Legal',
         minExperience: 7,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'
@@ -221,8 +199,7 @@ const jobs = [
         id: 123,
         title: 'Operations Manager',
         location: 'Silicon Valley',
-        cat1: 'Running the company',
-        cat2: 'Operations',
+        specialism: 'Operations',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application'

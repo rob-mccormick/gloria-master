@@ -89,23 +89,19 @@ class JobSearchDialog extends CancelAndHelpDialog {
     }
 
     /**
-     * Save the user's categoryOne selection
      * Ask the user to select from the avaiable category two options
      */
     async selectCategoryTwoStep(stepContext) {
-        // Save user's categoryOne selection
-        stepContext.values.userProfile.categoryOne = stepContext.result;
-
         // Get the correct options to present to the user
         const index = company.categoryOne.indexOf(stepContext.result);
-        const options = company.categoryTwo[index];
+        const options = company.specialism[index];
 
         // Add the option to return to select categoryOne
         if (options[(options.length - 1)] !== userResponses.back) {
             options.push(userResponses.back);
         }
 
-        // Present categoryTwo options and ask user to select
+        // Present specialism options and ask user to select
         const question = MessageFactory.suggestedActions(options, `And what area would you be working in?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -115,7 +111,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
     }
 
     /**
-     * Save the user's categoryTwo selection
+     * Save the user's specialsim selection
      * Ask the user to select which location they're interested in
      */
     async selectLocationStep(stepContext) {
@@ -127,10 +123,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
             return await stepContext.replaceDialog(JOB_SEARCH_DIALOG, { conversationData, userProfile });
         }
         // Save user's categoryTwo selection
-        stepContext.values.userProfile.categoryTwo = stepContext.result;
+        stepContext.values.userProfile.specialism = stepContext.result;
 
         // Present location options and ask user to select
         const options = company.locations;
+
         // Add option to select all locations
         if (options[(options.length - 1)] !== userResponses.allLocations) {
             options.push(userResponses.allLocations);
@@ -158,6 +155,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
         // Present years experience for the user to select
         const options = userResponses.yearsExperience;
+
         // Add option to select all experience levels
         if (options[(options.length - 1)] !== userResponses.allExperience) {
             options.push(userResponses.allExperience);
@@ -201,10 +199,6 @@ class JobSearchDialog extends CancelAndHelpDialog {
             // Generate the message response
             const jobPlural = (availableJobs.length > 1) ? 'jobs' : 'job';
             response = `Perfect! We have ${ availableJobs.length } ${ jobPlural } for you.`;
-        // } else if (!availableJobs.length && stepContext.values.userProfle.location === 'all' && stepContext.values.userProfile.experience !== 'all') {
-        //     response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs for you at the moment.`;
-        // } else if (!availableJobs.length && stepContext.values.userProfile.location === 'all') {
-        //     response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs at the moment.`;
         } else {
             stepContext.values.userProfile.jobs = [];
             if (stepContext.values.userProfile.location === 'all' && stepContext.values.userProfile.experience !== 'all') {
@@ -357,8 +351,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
     findRelevantJobs(jobList, user) {
         let relevantJobs = [];
-        const cat1 = user.categoryOne;
-        const cat2 = user.categoryTwo;
+        const spec = user.specialism;
         const loc = user.location;
         const exp = user.experience;
 
@@ -380,19 +373,19 @@ class JobSearchDialog extends CancelAndHelpDialog {
         // }
         for (var i = 0; i < jobList.length; i++) {
             if (loc === 'all' && exp === 'all') {
-                if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2) {
+                if (jobList[i].specialism === spec) {
                     relevantJobs.push(jobList[i]);
                 }
             } else if (loc === 'all' && exp !== 'all') {
-                if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].minExperience <= exp) {
+                if (jobList[i].specialism === spec && jobList[i].minExperience <= exp) {
                     relevantJobs.push(jobList[i]);
                 }
             } else if (loc !== 'all' && exp === 'all') {
-                if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].location === loc) {
+                if (jobList[i].specialism === spec && jobList[i].location === loc) {
                     relevantJobs.push(jobList[i]);
                 }
             } else if (loc !== 'all' && exp !== 'all') {
-                if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].location === loc && jobList[i].minExperience <= exp) {
+                if (jobList[i].specialism === spec && jobList[i].location === loc && jobList[i].minExperience <= exp) {
                     relevantJobs.push(jobList[i]);
                 }
             }

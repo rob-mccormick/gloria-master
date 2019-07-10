@@ -8,6 +8,9 @@ const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { company, jobs } = require('../companyDetails');
 const { delay, randomSentence } = require('../helperFunctions');
 
+// Import job more info dialog
+const { JobMoreInfoDialog, JOB_MORE_INFO_DIALOG } = require('./jobMoreInfoDialog');
+
 const JOB_SEARCH_DIALOG = 'jobSearchDialog';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
@@ -30,18 +33,20 @@ class JobSearchDialog extends CancelAndHelpDialog {
     constructor() {
         super(JOB_SEARCH_DIALOG);
 
-        this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
-            this.jobDisclaimerStep.bind(this),
-            this.selectCategoryOneStep.bind(this),
-            this.selectCategoryTwoStep.bind(this),
-            this.selectLocationStep.bind(this),
-            this.experienceStep.bind(this),
-            this.presentAvailableJobsStep.bind(this),
-            this.seeMoreInfoStep.bind(this),
-            this.checkIfFoundJobStep.bind(this),
-            this.askToAddToPipelineStep.bind(this),
-            this.endStep.bind(this)
-        ]));
+        this.addDialog(new JobMoreInfoDialog())
+            .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
+                this.jobDisclaimerStep.bind(this),
+                this.selectCategoryOneStep.bind(this),
+                this.selectCategoryTwoStep.bind(this),
+                this.selectLocationStep.bind(this),
+                this.experienceStep.bind(this),
+                this.presentAvailableJobsStep.bind(this),
+                this.seeMoreInfoStep.bind(this),
+                this.redirectForMoreInfoStep.bind(this),
+                this.checkIfFoundJobStep.bind(this),
+                this.askToAddToPipelineStep.bind(this),
+                this.endStep.bind(this)
+            ]));
 
         this.initialDialogId = WATERFALL_DIALOG;
     }
@@ -260,14 +265,17 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 }
             });
 
-            // If there is more info to display - ask if would like to see it
+            // If there is more info to display - save it and ask if would like to see it
             if (moreInfoJobs.length > 0) {
+                // Save moreInfoJobs
+                stepContext.values.moreInfoJobs = moreInfoJobs;
+
                 let question;
 
                 if (moreInfoJobs.length === 1) {
                     question = `If you're interested, I can give you an insider tip.`;
                 } else {
-                    question = `If you're interested, I can give you insider tips on some of the roles.`;
+                    question = `If you're interested, I can give you insider tips.`;
                 }
 
                 const options = [userResponses.moreInfoYes, userResponses.moreInfoNo];
@@ -285,9 +293,26 @@ class JobSearchDialog extends CancelAndHelpDialog {
     }
 
     /**
+     * Redirect user if they want to see more info
+     *
+     */
+    async redirectForMoreInfoStep(stepContext) {
+        if (stepContext.result === userResponses.moreInfoYes) {
+            // Save jobs to new object
+            const moreInfoJobs = stepContext.values.moreInfoJobs;
+
+            return await stepContext.beginDialog(JOB_MORE_INFO_DIALOG, { moreInfoJobs });
+        }
+
+        // Otherwise, pass to the next step
+        return stepContext.next();
+    }
+
+    /**
      * Check if the user found a job they like
      * If there are no available jobs, go to the next step
      */
+
     async checkIfFoundJobStep(stepContext) {
         if (stepContext.values.userProfile.jobs.length > 0) {
             let options;
@@ -296,23 +321,23 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 options = [userResponses.foundOneJob, userResponses.foundNoJob];
                 const sentences = [
                     `Were you interested in the job?`,
-                    `Is this what you're after?`,
-                    `Does it interest you?`,
-                    `Does it look good for you?`];
+                    `Does the job interest you?`];
                 question = randomSentence(sentences);
             } else {
                 options = [userResponses.foundManyJobs, userResponses.foundNoJob];
                 const sentences = [
-                    `Did you find a job you're interested in?`,
-                    `Did you see one to apply for (or maybe more than one 😉)?`,
-                    `Did you find one that'd be a good fit?`];
+                    `Did you find a job you like?`];
                 question = randomSentence(sentences);
             }
 
             let message = MessageFactory.suggestedActions(options, question);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-            await delay(3000);
+            if (stepContext.result) {
+                await delay(1000);
+            } else {
+                await delay(3000);
+            }
             await stepContext.context.sendActivity(message);
             return Dialog.EndOfTurn;
         }
@@ -320,6 +345,43 @@ class JobSearchDialog extends CancelAndHelpDialog {
         // If no jobs were displayed, pass to the next step
         return stepContext.next();
     }
+
+    /**
+     * Check if the user found a job they like
+     * If there are no available jobs, go to the next step
+     */
+    // async checkIfFoundJobStep(stepContext) {
+    //     if (stepContext.values.userProfile.jobs.length > 0) {
+    //         let options;
+    //         let question;
+    //         if (stepContext.values.userProfile.jobs.length === 1) {
+    //             options = [userResponses.foundOneJob, userResponses.foundNoJob];
+    //             const sentences = [
+    //                 `Were you interested in the job?`,
+    //                 `Is this what you're after?`,
+    //                 `Does it interest you?`,
+    //                 `Does it look good for you?`];
+    //             question = randomSentence(sentences);
+    //         } else {
+    //             options = [userResponses.foundManyJobs, userResponses.foundNoJob];
+    //             const sentences = [
+    //                 `Did you find a job you're interested in?`,
+    //                 `Did you see one to apply for (or maybe more than one 😉)?`,
+    //                 `Did you find one that'd be a good fit?`];
+    //             question = randomSentence(sentences);
+    //         }
+
+    //         let message = MessageFactory.suggestedActions(options, question);
+
+    //         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+    //         await delay(3000);
+    //         await stepContext.context.sendActivity(message);
+    //         return Dialog.EndOfTurn;
+    //     }
+
+    //     // If no jobs were displayed, pass to the next step
+    //     return stepContext.next();
+    // }
 
     /**
      * If there were no jobs, or the user didn't like the jobs found:

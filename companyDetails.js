@@ -125,7 +125,8 @@ const jobs = [
         specialism: 'Marketing',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://www.youtube.com/watch?v=l49MHwooaVQ'
     }, {
         id: 114,
         title: 'Social Media Manager',
@@ -133,7 +134,8 @@ const jobs = [
         specialism: 'Marketing',
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://www.youtube.com/watch?v=l49MHwooaVQ'
     }, {
         id: 115,
         title: 'Team Leader',

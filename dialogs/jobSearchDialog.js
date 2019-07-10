@@ -275,7 +275,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 if (moreInfoJobs.length === 1) {
                     question = `If you're interested, I can give you an insider tip.`;
                 } else {
-                    question = `If you're interested, I can give you insider tips.`;
+                    question = `If you're interested, I can give you insider tips...`;
                 }
 
                 const options = [userResponses.moreInfoYes, userResponses.moreInfoNo];
@@ -300,8 +300,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
         if (stepContext.result === userResponses.moreInfoYes) {
             // Save jobs to new object
             const moreInfoJobs = stepContext.values.moreInfoJobs;
+            const firstTime = true;
 
-            return await stepContext.beginDialog(JOB_MORE_INFO_DIALOG, { moreInfoJobs });
+            return await stepContext.beginDialog(JOB_MORE_INFO_DIALOG, { moreInfoJobs, firstTime });
         }
 
         // Otherwise, pass to the next step

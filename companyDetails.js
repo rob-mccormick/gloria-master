@@ -15,7 +15,7 @@ const company = {
         ['Compliance', 'People', 'Finance', 'Legal', 'Admin']
     ],
     nextSteps: `aim to get back to you in 2 working days`,
-    ceoVideo: 'https://www.youtube.com/watch?v=l49MHwooaVQ',
+    companyVideo: 'https://www.youtube.com/watch?v=l49MHwooaVQ',
     benefits: {
         siteLink: 'https://www.idealrole.com/demo',
         message: 'Along with awesome colleagues, engaging work, and the opportunity to help us build the new internet, we offer a number of beneifts.\n\nYou can find them on our careers site - about halfway down.'

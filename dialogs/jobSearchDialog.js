@@ -368,6 +368,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
         // If the user found a job, ask if they'd like to see the benefits
         if (stepContext.result === userResponses.foundOneJob || stepContext.result === userResponses.foundManyJobs) {
+            // Save that user found a job
+            stepContext.values.foundJob = true;
+
             const response = randomSentence([
                 `That's great 😀`,
                 `Fantastic`,
@@ -403,21 +406,25 @@ class JobSearchDialog extends CancelAndHelpDialog {
      */
 
     async redirectToBenefitsStep(stepContext) {
+        let benefits;
+        let video;
+        const firstTime = true;
+
         // Check if the user wants to see the benefits
         if (stepContext.result === userResponses.seeBenefitsYes) {
             // Set the values for the next step
-            const benefits = true;
-            const video = false;
+            benefits = true;
+            video = false;
 
             // Redirect to benefits dialog
-            return await stepContext.beginDialog(COMPANY_BENEFITS_DIALOG, { benefits, video });
+            return await stepContext.beginDialog(COMPANY_BENEFITS_DIALOG, { benefits, video, firstTime });
         } else if (stepContext.result === userResponses.seeVideo) {
             // Set the values for the next step
-            const benefits = false;
-            const video = true;
+            benefits = false;
+            video = true;
 
             // Redirect to benefits dialog
-            return await stepContext.beginDialog(COMPANY_BENEFITS_DIALOG, { benefits, video });
+            return await stepContext.beginDialog(COMPANY_BENEFITS_DIALOG, { benefits, video, firstTime });
         } else if (stepContext.result === userResponses.seeBenefitsNo) {
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);
@@ -451,10 +458,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const userProfile = stepContext.values.userProfile;
 
         // If the user found a job they like, tell them the next steps
-        // NEED A WAY TO KNOW THEY FOUND A JOB
-        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(2500);
-        await stepContext.context.sendActivity(`And once you apply we ${ company.nextSteps }.`);
+        if (stepContext.values.foundJob) {
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(2500);
+            await stepContext.context.sendActivity(`And when you apply we ${ company.nextSteps }.`);
+        }
 
         // Reset the jobSearch to false in conversationData
         conversationData.jobSearch = false;

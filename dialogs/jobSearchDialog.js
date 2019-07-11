@@ -26,8 +26,8 @@ const userResponses = {
     foundOneJob: 'Yeah, it looks good',
     foundManyJobs: 'I did',
     foundNoJob: 'Unfortunately not',
-    clearFiltersYes: 'Yes',
-    clearFiltersNo: 'No',
+    clearFiltersYes: `If you wouldn't mind`,
+    clearFiltersNo: `No, it's fine`,
     seeBenefitsYes: `I'd like to see your benefits`,
     seeVideo: `The video please`,
     seeBenefitsNo: 'Not right now',
@@ -321,8 +321,19 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const jobsLength = stepContext.values.userProfile.jobs.length;
 
         if (jobsLength === 0 && (location !== 'all' || experience !== 'all')) {
+            let question;
             const options = [userResponses.clearFiltersYes, userResponses.clearFiltersNo];
-            const message = MessageFactory.suggestedActions(options, `Would you like to clear the filters and retry the job search?`);
+
+            // Change the question depending on the persons selections
+            if (location !== 'all' && experience !== 'all') {
+                question = `Would you like me to check for ${ stepContext.values.userProfile.specialism } jobs in all locations and for all levels of experience?`;
+            } else if (experience !== 'all') {
+                question = `Would you like me to check for all levels of experience?`;
+            } else {
+                question = `Would you like me to check for ${ stepContext.values.userProfile.specialism } jobs in all locations?`;
+            }
+
+            const message = MessageFactory.suggestedActions(options, question);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);
@@ -375,6 +386,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
             // Restart the dialog
             return await stepContext.replaceDialog(JOB_SEARCH_DIALOG, { conversationData, userProfile });
         } else if (stepContext.result === userResponses.clearFiltersNo) {
+            // Save that user didn't want to do another search
+            stepContext.values.noResearch = true;
+
             // Send a message confirming end
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);
@@ -463,12 +477,21 @@ class JobSearchDialog extends CancelAndHelpDialog {
         }
 
         // Otherwise ask user if they want to join the pipeline
-        let options = [userResponses.pipelineYes, userResponses.pipelineNo];
-        let question = MessageFactory.suggestedActions(options, `But we have new jobs opening all the time.\n\nWould you like me to let you know when new ones come up?`);
+        const options = [userResponses.pipelineYes, userResponses.pipelineNo];
+        let question;
+
+        // Vary the question depending on whether the user had filters
+        if (stepContext.values.noResearch) {
+            question = `We have new jobs opening all the time.\n\nWould you like me to let you know when new ones come up?`;
+        } else {
+            question = `But we have new jobs opening all the time.\n\nWould you like me to let you know when new ones come up?`;
+        }
+
+        const message = MessageFactory.suggestedActions(options, question);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1000);
-        await stepContext.context.sendActivity(question);
+        await stepContext.context.sendActivity(message);
         return Dialog.EndOfTurn;
     }
 

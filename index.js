@@ -63,13 +63,13 @@ adapter.onTurnError = async (context, error) => {
 let conversationState, userState;
 
 // For local development, in-memory storage is used.
-const storage = new MemoryStorage();
+// const storage = new MemoryStorage();
 
 // For production create access to Blob Storage
-// const storage = new BlobStorage({
-//     containerName: process.env.BLOB_NAME_STATE,
-//     storageAccountOrConnectionString: process.env.BLOB_STRING
-// });
+const storage = new BlobStorage({
+    containerName: process.env.BLOB_NAME_STATE,
+    storageAccountOrConnectionString: process.env.BLOB_STRING
+});
 
 conversationState = new ConversationState(storage);
 userState = new UserState(storage);

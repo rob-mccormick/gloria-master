@@ -8,8 +8,9 @@ const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { company, jobs } = require('../companyDetails');
 const { delay, randomSentence } = require('../helperFunctions');
 
-// Import job more info dialog
+// Import other dialogs
 const { JobMoreInfoDialog, JOB_MORE_INFO_DIALOG } = require('./jobMoreInfoDialog');
+const { CompanyBenefitsDialog, COMPANY_BENEFITS_DIALOG } = require('./companyBenefitsDialog');
 
 const JOB_SEARCH_DIALOG = 'jobSearchDialog';
 
@@ -25,6 +26,9 @@ const userResponses = {
     foundOneJob: 'Yeah, it looks good',
     foundManyJobs: 'I did',
     foundNoJob: 'Unfortunately not',
+    seeBenefitsYes: `I'd like to see your benefits`,
+    seeVideo: `The video please`,
+    seeBenefitsNo: 'Not right now',
     pipelineYes: `That'd be great`,
     pipelineNo: `It's ok, I'll just check back`
 };
@@ -34,6 +38,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         super(JOB_SEARCH_DIALOG);
 
         this.addDialog(new JobMoreInfoDialog())
+            .addDialog(new CompanyBenefitsDialog())
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
                 this.jobDisclaimerStep.bind(this),
                 this.selectCategoryOneStep.bind(this),
@@ -45,6 +50,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 this.redirectForMoreInfoStep.bind(this),
                 this.checkIfFoundJobStep.bind(this),
                 this.askToAddToPipelineStep.bind(this),
+                this.redirectToBenefitsStep.bind(this),
                 this.endStep.bind(this)
             ]));
 
@@ -229,14 +235,6 @@ class JobSearchDialog extends CancelAndHelpDialog {
             // Create thumbnail cards to display the results
             availableJobs.forEach(el => jobsToDisplay.push(this.createThumbnailCard(el)));
 
-            // availableJobs.forEach(el => {
-            //     if (el.video) {
-            //         jobsToDisplay.push(this.createThumbnailCardTwoButtons(el));
-            //     } else {
-            //         jobsToDisplay.push(this.createThumbnailCard(el));
-            //     }
-            // });
-
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);
             await stepContext.context.sendActivity({
@@ -303,9 +301,14 @@ class JobSearchDialog extends CancelAndHelpDialog {
             const firstTime = true;
 
             return await stepContext.beginDialog(JOB_MORE_INFO_DIALOG, { moreInfoJobs, firstTime });
+        } else if (stepContext.result === userResponses.moreInfoNo) {
+            // Send message to acknowledge didn't want to see more info
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(500);
+            await stepContext.context.sendActivity(`No worries - you can always check back if you get curious 😉`);
         }
 
-        // Otherwise, pass to the next step
+        // If not redirected, pass to the next step
         return stepContext.next();
     }
 
@@ -348,43 +351,6 @@ class JobSearchDialog extends CancelAndHelpDialog {
     }
 
     /**
-     * Check if the user found a job they like
-     * If there are no available jobs, go to the next step
-     */
-    // async checkIfFoundJobStep(stepContext) {
-    //     if (stepContext.values.userProfile.jobs.length > 0) {
-    //         let options;
-    //         let question;
-    //         if (stepContext.values.userProfile.jobs.length === 1) {
-    //             options = [userResponses.foundOneJob, userResponses.foundNoJob];
-    //             const sentences = [
-    //                 `Were you interested in the job?`,
-    //                 `Is this what you're after?`,
-    //                 `Does it interest you?`,
-    //                 `Does it look good for you?`];
-    //             question = randomSentence(sentences);
-    //         } else {
-    //             options = [userResponses.foundManyJobs, userResponses.foundNoJob];
-    //             const sentences = [
-    //                 `Did you find a job you're interested in?`,
-    //                 `Did you see one to apply for (or maybe more than one 😉)?`,
-    //                 `Did you find one that'd be a good fit?`];
-    //             question = randomSentence(sentences);
-    //         }
-
-    //         let message = MessageFactory.suggestedActions(options, question);
-
-    //         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-    //         await delay(3000);
-    //         await stepContext.context.sendActivity(message);
-    //         return Dialog.EndOfTurn;
-    //     }
-
-    //     // If no jobs were displayed, pass to the next step
-    //     return stepContext.next();
-    // }
-
-    /**
      * If there were no jobs, or the user didn't like the jobs found:
      * Ask if they want to join the pipeline
      */
@@ -393,7 +359,6 @@ class JobSearchDialog extends CancelAndHelpDialog {
         if (stepContext.result === userResponses.foundNoJob) {
             const responses = [
                 'Sorry to hear that.',
-                `That's a shame.`,
                 `That's no good.`];
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -401,32 +366,79 @@ class JobSearchDialog extends CancelAndHelpDialog {
             await stepContext.context.sendActivity(randomSentence(responses));
         }
 
-        // If the user found a job, let them know the next steps
+        // If the user found a job, ask if they'd like to see the benefits
         if (stepContext.result === userResponses.foundOneJob || stepContext.result === userResponses.foundManyJobs) {
-            const responses = [
+            const response = randomSentence([
                 `That's great 😀`,
                 `Fantastic`,
-                `Awesome!`];
+                `Awesome!`]);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(500);
-            await stepContext.context.sendActivity(randomSentence(responses));
+            await stepContext.context.sendActivity(response);
+
+            const options = [userResponses.seeBenefitsYes, userResponses.seeVideo, userResponses.seeBenefitsNo];
+            const message = MessageFactory.suggestedActions(options, `Can I share our benefits with you? ️️🏖️\n\nOr a video about our mission and what it's like to work here?`);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);
-            await stepContext.context.sendActivity(`Once you apply we ${ company.nextSteps }.`);
-
-            return await stepContext.next();
+            await stepContext.context.sendActivity(message);
+            return Dialog.EndOfTurn;
         }
 
         // Otherwise ask user if they want to join the pipeline
         let options = [userResponses.pipelineYes, userResponses.pipelineNo];
-        let question = MessageFactory.suggestedActions(options, `Would you like me to let you know when we have a new opening?`);
+        let question = MessageFactory.suggestedActions(options, `But we have new jobs opening all the time.\n\nWould you like me to let you know when new ones come up?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1000);
         await stepContext.context.sendActivity(question);
         return Dialog.EndOfTurn;
+    }
+
+    /**
+     * Check user's response:
+     * - Redirect to benefits dialog
+     * - Add to pipeline
+     */
+
+    async redirectToBenefitsStep(stepContext) {
+        // Check if the user wants to see the benefits
+        if (stepContext.result === userResponses.seeBenefitsYes) {
+            // Set the values for the next step
+            const benefits = true;
+            const video = false;
+
+            // Redirect to benefits dialog
+            return await stepContext.beginDialog(COMPANY_BENEFITS_DIALOG, { benefits, video });
+        } else if (stepContext.result === userResponses.seeVideo) {
+            // Set the values for the next step
+            const benefits = false;
+            const video = true;
+
+            // Redirect to benefits dialog
+            return await stepContext.beginDialog(COMPANY_BENEFITS_DIALOG, { benefits, video });
+        } else if (stepContext.result === userResponses.seeBenefitsNo) {
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1000);
+            await stepContext.context.sendActivity(`No problem.`);
+        }
+
+        // Check if the user wanted to be added to the pipeline
+        if (stepContext.result === userResponses.pipelineYes) {
+            // Update the conversationData
+            stepContext.values.conversationData.addToPipeline = true;
+
+            // Update the user profile
+            stepContext.values.userProfile.pipeline.push({
+                specialism: stepContext.values.userProfile.specialism,
+                location: stepContext.values.userProfile.location
+            });
+        } else if (stepContext.result === userResponses.pipelineNo) {
+            await stepContext.context.sendActivity(`No worries`);
+        }
+
+        return await stepContext.next();
     }
 
     /**
@@ -438,19 +450,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const conversationData = stepContext.values.conversationData;
         const userProfile = stepContext.values.userProfile;
 
-        // Check if the user wanted to be added to the pipeline
-        if (stepContext.result === userResponses.pipelineYes) {
-            // Update the conversationData
-            conversationData.addToPipeline = true;
-
-            // Update the user profile
-            userProfile.pipeline.push({
-                specialism: userProfile.specialism,
-                location: userProfile.location
-            });
-        } else if (stepContext.result === userResponses.pipelineNo) {
-            await stepContext.context.sendActivity(`No worries`);
-        }
+        // If the user found a job they like, tell them the next steps
+        // NEED A WAY TO KNOW THEY FOUND A JOB
+        await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+        await delay(2500);
+        await stepContext.context.sendActivity(`And once you apply we ${ company.nextSteps }.`);
 
         // Reset the jobSearch to false in conversationData
         conversationData.jobSearch = false;
@@ -458,6 +462,80 @@ class JobSearchDialog extends CancelAndHelpDialog {
         // End the dialog and return the conversationData and userProfile
         return await stepContext.endDialog({ conversationData, userProfile });
     }
+
+    // /**
+    //  * If there were no jobs, or the user didn't like the jobs found:
+    //  * Ask if they want to join the pipeline
+    //  */
+    // async askToAddToPipelineStep(stepContext) {
+    //     // If user didn't like the jobs found send them a sorry message
+    //     if (stepContext.result === userResponses.foundNoJob) {
+    //         const responses = [
+    //             'Sorry to hear that.',
+    //             `That's no good.`];
+
+    //         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+    //         await delay(500);
+    //         await stepContext.context.sendActivity(randomSentence(responses));
+    //     }
+
+    //     // If the user found a job, let them know the next steps
+    //     if (stepContext.result === userResponses.foundOneJob || stepContext.result === userResponses.foundManyJobs) {
+    //         const responses = [
+    //             `That's great 😀`,
+    //             `Fantastic`,
+    //             `Awesome!`];
+
+    //         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+    //         await delay(500);
+    //         await stepContext.context.sendActivity(randomSentence(responses));
+
+    //         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+    //         await delay(1500);
+    //         await stepContext.context.sendActivity(`Once you apply we ${ company.nextSteps }.`);
+
+    //         return await stepContext.next();
+    //     }
+
+    //     // Otherwise ask user if they want to join the pipeline
+    //     let options = [userResponses.pipelineYes, userResponses.pipelineNo];
+    //     let question = MessageFactory.suggestedActions(options, `But we have new jobs opening all the time.\n\nWould you like me to let you know when new ones come up?`);
+
+    //     await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+    //     await delay(1000);
+    //     await stepContext.context.sendActivity(question);
+    //     return Dialog.EndOfTurn;
+    // }
+
+    // /**
+    //  * Update userProfile to be added to the pipeline (if relevant)
+    //  * In the conversationState, return the jobSearch to false
+    //  * Return the conversationData and userProfile to the mainDialog
+    //  */
+    // async endStep(stepContext) {
+    //     const conversationData = stepContext.values.conversationData;
+    //     const userProfile = stepContext.values.userProfile;
+
+    //     // Check if the user wanted to be added to the pipeline
+    //     if (stepContext.result === userResponses.pipelineYes) {
+    //         // Update the conversationData
+    //         conversationData.addToPipeline = true;
+
+    //         // Update the user profile
+    //         userProfile.pipeline.push({
+    //             specialism: userProfile.specialism,
+    //             location: userProfile.location
+    //         });
+    //     } else if (stepContext.result === userResponses.pipelineNo) {
+    //         await stepContext.context.sendActivity(`No worries`);
+    //     }
+
+    //     // Reset the jobSearch to false in conversationData
+    //     conversationData.jobSearch = false;
+
+    //     // End the dialog and return the conversationData and userProfile
+    //     return await stepContext.endDialog({ conversationData, userProfile });
+    // }
 
     // ======================================
     // Helper functions
@@ -469,22 +547,6 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const loc = user.location;
         const exp = user.experience;
 
-        // Iterate over the items in the list and find those with correct values
-        // for (var i = 0; i < jobList.length; i++) {
-        //     // User entered all variables
-        //     if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].location === loc && jobList[i].minExperience === exp) {
-        //         relevantJobs.push(jobList[i]);
-        //     // User provided location, experience is 'all'
-        //     } else if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].location === loc) {
-        //         relevantJobs.push(jobList[i]);
-        //     // Location is 'all', but user provided experience
-        //     } else if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2 && jobList[i].minExperience === exp) {
-        //         relevantJobs.push(jobList[i]);
-        //     // Location and experience are 'all'
-        //     } else if (jobList[i].cat1 === cat1 && jobList[i].cat2 === cat2) {
-        //         relevantJobs.push(jobList[i]);
-        //     }
-        // }
         for (var i = 0; i < jobList.length; i++) {
             if (loc === 'all' && exp === 'all') {
                 if (jobList[i].specialism === spec) {

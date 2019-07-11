@@ -16,8 +16,9 @@ const sendPipelineEmail = (userProfile) => {
                 <ul>
                     <li style="padding-bottom: 8px;">Name: ${ userProfile.name }</li>
                     <li style="padding-bottom: 8px;">Email: ${ userProfile.email }</li>
-                    <li style="padding-bottom: 8px;">Job type: ${ userProfile.categoryTwo }</li>
+                    <li style="padding-bottom: 8px;">Job type: ${ userProfile.specialism }</li>
                     <li style="padding-bottom: 8px;">Location: ${ userProfile.location }</li>
+                    <li style="padding-bottom: 8px;">Years of experience: ${ userProfile.experience }</li>
                 </ul>
                 <p>Other information that may be relevant for this user:</p>
                 <ul>

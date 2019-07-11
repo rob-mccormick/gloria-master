@@ -14,7 +14,7 @@ const WATERFALL_DIALOG = 'waterfallDialog';
 
 const userOptions = {
     whyOnSite: [
-        `I wanted learn more about ${ company.name }`,
+        `I heard ${ company.name } is hiring`,
         `I'm looking at places I might like to work`,
         `I wanted to ask a question`
     ],
@@ -103,11 +103,11 @@ class BrowsingDialog extends CancelAndHelpDialog {
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);
-            await stepContext.context.sendActivity(`You've come to the right place!`);
+            await stepContext.context.sendActivity(`Well, you've come to the right place.`);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);
-            await stepContext.context.sendActivity(`Here you can learn about what we offer, check out our offices and hear from our team.`);
+            await stepContext.context.sendActivity(`Here you can learn about ${ company.name } - what we do, what we offer and why we're a great place to work.`);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(2500);

@@ -37,7 +37,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
                 this.jobDisclaimerStep.bind(this),
                 this.selectCategoryOneStep.bind(this),
-                this.selectCategoryTwoStep.bind(this),
+                this.selectSpecialismStep.bind(this),
                 this.selectLocationStep.bind(this),
                 this.experienceStep.bind(this),
                 this.presentAvailableJobsStep.bind(this),
@@ -97,9 +97,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
     }
 
     /**
-     * Ask the user to select from the avaiable category two options
+     * Ask the user to select from the avaiable specialisms
      */
-    async selectCategoryTwoStep(stepContext) {
+    async selectSpecialismStep(stepContext) {
         // Get the correct options to present to the user
         const index = company.categoryOne.indexOf(stepContext.result);
         const options = company.specialism[index];
@@ -130,7 +130,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
             return await stepContext.replaceDialog(JOB_SEARCH_DIALOG, { conversationData, userProfile });
         }
-        // Save user's categoryTwo selection
+        // Save user's specialism selection
         stepContext.values.userProfile.specialism = stepContext.result;
 
         // Present location options and ask user to select
@@ -210,11 +210,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
         } else {
             stepContext.values.userProfile.jobs = [];
             if (stepContext.values.userProfile.location === 'all' && stepContext.values.userProfile.experience !== 'all') {
-                response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs for you at the moment.`;
+                response = `Sorry, we don't have any ${ stepContext.values.userProfile.specialism } jobs for you at the moment.`;
             } else if (stepContext.values.userProfile.location === 'all') {
-                response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs at the moment.`;
+                response = `Sorry, we don't have any ${ stepContext.values.userProfile.specialism } jobs at the moment.`;
             } else {
-                response = `Sorry, we don't have any ${ stepContext.values.userProfile.categoryTwo } jobs in ${ stepContext.values.userProfile.location } for you at the moment.`;
+                response = `Sorry, we don't have any ${ stepContext.values.userProfile.specialism } jobs in ${ stepContext.values.userProfile.location } for you at the moment.`;
             }
         }
 

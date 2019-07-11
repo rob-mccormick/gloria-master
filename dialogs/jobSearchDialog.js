@@ -26,6 +26,8 @@ const userResponses = {
     foundOneJob: 'Yeah, it looks good',
     foundManyJobs: 'I did',
     foundNoJob: 'Unfortunately not',
+    clearFiltersYes: 'Yes',
+    clearFiltersNo: 'No',
     seeBenefitsYes: `I'd like to see your benefits`,
     seeVideo: `The video please`,
     seeBenefitsNo: 'Not right now',
@@ -92,6 +94,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
         // Set seenJobDisclaimer to true
         stepContext.values.conversationData.seenJobDisclaimer = true;
 
+        // If clearing filters, go to next step
+        if (stepContext.values.conversationData.unfilteredJob) {
+            return stepContext.next();
+        }
+
         // Present categoryOne options and ask user to select
         const options = company.categoryOne;
         const question = MessageFactory.suggestedActions(options, `So, what are you interested in?`);
@@ -106,6 +113,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
      * Ask the user to select from the avaiable specialisms
      */
     async selectSpecialismStep(stepContext) {
+        // If clearing filters, go to next step
+        if (stepContext.values.conversationData.unfilteredJob) {
+            return stepContext.next();
+        }
+
         // Get the correct options to present to the user
         const index = company.categoryOne.indexOf(stepContext.result);
         const options = company.specialism[index];
@@ -129,6 +141,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
      * Ask the user to select which location they're interested in
      */
     async selectLocationStep(stepContext) {
+        // If clearing filters, go to next step
+        if (stepContext.values.conversationData.unfilteredJob) {
+            return stepContext.next();
+        }
+
         // Send user back if they selected 'Go back'
         if (stepContext.result === userResponses.back) {
             const conversationData = stepContext.values.conversationData;
@@ -160,6 +177,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
      * Ask the user to share how much experience they have to narrow down the job search
      */
     async experienceStep(stepContext) {
+        // If clearing filters, go to next step
+        if (stepContext.values.conversationData.unfilteredJob) {
+            return stepContext.next();
+        }
+
         // Save user's location selection
         if (stepContext.result === userResponses.allLocations) {
             stepContext.values.userProfile.location = 'all';
@@ -201,7 +223,13 @@ class JobSearchDialog extends CancelAndHelpDialog {
         stepContext.values.conversationData.jobSearchComplete = true;
 
         // Find available jobs
-        const availableJobs = this.findRelevantJobs(jobs, stepContext.values.userProfile);
+        let availableJobs;
+
+        if (stepContext.values.conversationData.unfilteredJob) {
+            availableJobs = this.findRelevantJobs(jobs, stepContext.values.conversationData.unfilteredJob);
+        } else {
+            availableJobs = this.findRelevantJobs(jobs, stepContext.values.userProfile);
+        }
 
         // Send the user a message on the job search results
         let response;
@@ -216,11 +244,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
         } else {
             stepContext.values.userProfile.jobs = [];
             if (stepContext.values.userProfile.location === 'all' && stepContext.values.userProfile.experience !== 'all') {
-                response = `Sorry, we don't have any ${ stepContext.values.userProfile.specialism } jobs for you at the moment.`;
+                response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs for you at the moment.`;
             } else if (stepContext.values.userProfile.location === 'all') {
-                response = `Sorry, we don't have any ${ stepContext.values.userProfile.specialism } jobs at the moment.`;
+                response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs at the moment.`;
             } else {
-                response = `Sorry, we don't have any ${ stepContext.values.userProfile.specialism } jobs in ${ stepContext.values.userProfile.location } for you at the moment.`;
+                response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs in ${ stepContext.values.userProfile.location } for you at the moment.`;
             }
         }
 
@@ -251,7 +279,8 @@ class JobSearchDialog extends CancelAndHelpDialog {
      * If jobs were presented, check:
      * - do any of them have extra info (video)
      * - If so, ask if the user wants to see it
-     * - otherwise, continue to next step
+     * If no jobs found and location and/or experience given
+     * - ask the user if they want to clear these filters and do another search
      */
     async seeMoreInfoStep(stepContext) {
         if (stepContext.values.userProfile.jobs.length > 0) {
@@ -286,6 +315,21 @@ class JobSearchDialog extends CancelAndHelpDialog {
             }
         }
 
+        // If no jobs found and filters used, check if want to clear and research
+        const location = stepContext.values.userProfile.location;
+        const experience = stepContext.values.userProfile.experience;
+        const jobsLength = stepContext.values.userProfile.jobs.length;
+
+        if (jobsLength === 0 && (location !== 'all' || experience !== 'all')) {
+            const options = [userResponses.clearFiltersYes, userResponses.clearFiltersNo];
+            const message = MessageFactory.suggestedActions(options, `Would you like to clear the filters and retry the job search?`);
+
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1500);
+            await stepContext.context.sendActivity(message);
+            return Dialog.EndOfTurn;
+        }
+
         // Otherwise, pass to the next step
         return stepContext.next();
     }
@@ -295,6 +339,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
      *
      */
     async redirectForMoreInfoStep(stepContext) {
+        // Check if the user wants to see more info
         if (stepContext.result === userResponses.moreInfoYes) {
             // Save jobs to new object
             const moreInfoJobs = stepContext.values.moreInfoJobs;
@@ -306,6 +351,34 @@ class JobSearchDialog extends CancelAndHelpDialog {
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(500);
             await stepContext.context.sendActivity(`No worries - you can always check back if you get curious 😉`);
+
+        // Now check for no jobs if they want to clear the filters
+        } else if (stepContext.result === userResponses.clearFiltersYes) {
+            // Get userProfile and conversationData
+            const conversationData = stepContext.values.conversationData;
+            const userProfile = stepContext.values.userProfile;
+
+            // Set up conversationData
+            conversationData.unfilteredJob = {
+                location: 'all',
+                experience: 'all',
+                specialism: userProfile.specialism
+            };
+
+            // Send the user a message so they know the job search will start over
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1000);
+            await stepContext.context.sendActivity(`Alright - I'm taking another look...`);
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(2500);
+
+            // Restart the dialog
+            return await stepContext.replaceDialog(JOB_SEARCH_DIALOG, { conversationData, userProfile });
+        } else if (stepContext.result === userResponses.clearFiltersNo) {
+            // Send a message confirming end
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1000);
+            await stepContext.context.sendActivity(`No worries`);
         }
 
         // If not redirected, pass to the next step

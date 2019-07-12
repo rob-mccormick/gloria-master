@@ -162,7 +162,7 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
     createVideo(videoUrl) {
         return MessageFactory.attachment(
             CardFactory.videoCard(
-                '',
+                `Working at ${ company.name }`,
                 [ videoUrl ]
             )
         );

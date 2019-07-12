@@ -2,7 +2,7 @@
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
 const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
-const { MessageFactory, ActivityTypes } = require('botbuilder');
+const { MessageFactory, CardFactory, ActivityTypes } = require('botbuilder');
 
 const { company } = require('../companyDetails');
 const { delay } = require('../helperFunctions');
@@ -152,10 +152,19 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
     // Helper functions
     // ======================================
 
+    // createVideo(videoUrl) {
+    //     return MessageFactory.contentUrl(
+    //         videoUrl,
+    //         'video/mp4'
+    //     );
+    // }
+
     createVideo(videoUrl) {
-        return MessageFactory.contentUrl(
-            videoUrl,
-            'video/mp4'
+        return MessageFactory.attachment(
+            CardFactory.videoCard(
+                '',
+                [ videoUrl ]
+            )
         );
     }
 }

@@ -689,33 +689,19 @@ class JobSearchDialog extends CancelAndHelpDialog {
         );
     }
 
-    createThumbnailCardTwoButtons(jobObj) {
-        return CardFactory.thumbnailCard(
-            `${ jobObj.title }`,
-            [{ url: '' }],
-            [{
-                type: 'openUrl',
-                title: 'See job description',
-                value: `${ jobObj.link }`
-            }, {
-                type: 'postBack',
-                title: 'Learn more',
-                // value: `Tell me more about ${ jobObj.title }`
-                value: `testing`
-            }],
-            {
-                subtitle: `${ jobObj.location }`,
-                text: `${ jobObj.intro }`
-            }
-        );
-    }
+    // createVideo() {
+    //     return MessageFactory.contentUrl(
+    //         'https://www.youtube.com/watch?v=Vm4tx1O9GAc',
+    //         'video/mp4'
+    //     );
+    // }
 
-    createVideoYouTube() {
-        return MessageFactory.contentUrl(
-            'https://www.youtube.com/watch?v=Vm4tx1O9GAc',
-            'video/mp4'
-        );
-    }
+    // createVideoYouTube() {
+    //     return MessageFactory.contentUrl(
+    //         'https://www.youtube.com/watch?v=Vm4tx1O9GAc',
+    //         'video/mp4'
+    //     );
+    // }
 }
 
 module.exports.JobSearchDialog = JobSearchDialog;

@@ -139,7 +139,7 @@ const jobs = [
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application',
-        video: 'https://www.loom.com/share/83e113e5c61342f594627c25668c6201'
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/message-media/Desktop+Recording+July+12th%2C+2019.mp4'
     }, {
         id: 115,
         title: 'Team Leader',

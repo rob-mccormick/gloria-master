@@ -43,7 +43,7 @@ class BrowsingDialog extends CancelAndHelpDialog {
     }
 
     /**
-     * Saves the conversation abd user data passed from the mainDialog
+     * Saves the conversation and user data passed from the mainDialog
      * Shows the disclaimer if the user hasn't seen it this conversation
      */
     async jobDisclaimerStep(stepContext) {
@@ -62,7 +62,7 @@ class BrowsingDialog extends CancelAndHelpDialog {
             await stepContext.context.sendActivity(`Just so you know, our chat won't be linked to any job application.`);
         }
 
-        // If user has seen the disclaimer this conversation, go to next step
+        // Go to next step
         return stepContext.next();
     }
 

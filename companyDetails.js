@@ -130,7 +130,7 @@ const jobs = [
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application',
-        video: 'https://www.youtube.com/watch?v=l49MHwooaVQ'
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/message-media/bottle-drawing.MP4'
     }, {
         id: 114,
         title: 'Social Media Manager',
@@ -139,7 +139,7 @@ const jobs = [
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application',
-        video: 'https://www.youtube.com/watch?v=yjrdJBP5i1I'
+        video: 'https://www.loom.com/share/83e113e5c61342f594627c25668c6201'
     }, {
         id: 115,
         title: 'Team Leader',

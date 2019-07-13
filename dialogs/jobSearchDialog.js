@@ -244,9 +244,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
         } else {
             stepContext.values.userProfile.jobs = [];
             if (stepContext.values.userProfile.location === 'all' && stepContext.values.userProfile.experience !== 'all') {
-                response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs for you at the moment.`;
-            } else if (stepContext.values.userProfile.location === 'all') {
                 response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs at the moment.`;
+            } else if (stepContext.values.userProfile.location === 'all') {
+                response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs for you at the moment.`;
             } else {
                 response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs in ${ stepContext.values.userProfile.location } for you at the moment.`;
             }
@@ -567,80 +567,6 @@ class JobSearchDialog extends CancelAndHelpDialog {
         return await stepContext.endDialog({ conversationData, userProfile });
     }
 
-    // /**
-    //  * If there were no jobs, or the user didn't like the jobs found:
-    //  * Ask if they want to join the pipeline
-    //  */
-    // async askToAddToPipelineStep(stepContext) {
-    //     // If user didn't like the jobs found send them a sorry message
-    //     if (stepContext.result === userResponses.foundNoJob) {
-    //         const responses = [
-    //             'Sorry to hear that.',
-    //             `That's no good.`];
-
-    //         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-    //         await delay(500);
-    //         await stepContext.context.sendActivity(randomSentence(responses));
-    //     }
-
-    //     // If the user found a job, let them know the next steps
-    //     if (stepContext.result === userResponses.foundOneJob || stepContext.result === userResponses.foundManyJobs) {
-    //         const responses = [
-    //             `That's great 😀`,
-    //             `Fantastic`,
-    //             `Awesome!`];
-
-    //         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-    //         await delay(500);
-    //         await stepContext.context.sendActivity(randomSentence(responses));
-
-    //         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-    //         await delay(1500);
-    //         await stepContext.context.sendActivity(`Once you apply we ${ company.nextSteps }.`);
-
-    //         return await stepContext.next();
-    //     }
-
-    //     // Otherwise ask user if they want to join the pipeline
-    //     let options = [userResponses.pipelineYes, userResponses.pipelineNo];
-    //     let question = MessageFactory.suggestedActions(options, `But we have new jobs opening all the time.\n\nWould you like me to let you know when new ones come up?`);
-
-    //     await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-    //     await delay(1000);
-    //     await stepContext.context.sendActivity(question);
-    //     return Dialog.EndOfTurn;
-    // }
-
-    // /**
-    //  * Update userProfile to be added to the pipeline (if relevant)
-    //  * In the conversationState, return the jobSearch to false
-    //  * Return the conversationData and userProfile to the mainDialog
-    //  */
-    // async endStep(stepContext) {
-    //     const conversationData = stepContext.values.conversationData;
-    //     const userProfile = stepContext.values.userProfile;
-
-    //     // Check if the user wanted to be added to the pipeline
-    //     if (stepContext.result === userResponses.pipelineYes) {
-    //         // Update the conversationData
-    //         conversationData.addToPipeline = true;
-
-    //         // Update the user profile
-    //         userProfile.pipeline.push({
-    //             specialism: userProfile.specialism,
-    //             location: userProfile.location
-    //         });
-    //     } else if (stepContext.result === userResponses.pipelineNo) {
-    //         await stepContext.context.sendActivity(`No worries`);
-    //     }
-
-    //     // Reset the jobSearch to false in conversationData
-    //     conversationData.jobSearch = false;
-
-    //     // End the dialog and return the conversationData and userProfile
-    //     return await stepContext.endDialog({ conversationData, userProfile });
-    // }
-
     // ======================================
     // Helper functions
     // ======================================
@@ -688,20 +614,6 @@ class JobSearchDialog extends CancelAndHelpDialog {
             }
         );
     }
-
-    // createVideo() {
-    //     return MessageFactory.contentUrl(
-    //         'https://www.youtube.com/watch?v=Vm4tx1O9GAc',
-    //         'video/mp4'
-    //     );
-    // }
-
-    // createVideoYouTube() {
-    //     return MessageFactory.contentUrl(
-    //         'https://www.youtube.com/watch?v=Vm4tx1O9GAc',
-    //         'video/mp4'
-    //     );
-    // }
 }
 
 module.exports.JobSearchDialog = JobSearchDialog;

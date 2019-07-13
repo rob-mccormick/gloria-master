@@ -13,8 +13,6 @@ const JOB_MORE_INFO_DIALOG = 'jobMoreInfoDialog';
 const WATERFALL_DIALOG = 'waterfallDialog';
 
 const responses = {
-    seeInfoYes: 'I would',
-    seeInfoNo: 'Not really',
     redoYes: 'Yes please',
     redoNo: 'Not right now'
 };

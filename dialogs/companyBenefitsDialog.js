@@ -2,7 +2,7 @@
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
 const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
-const { MessageFactory, CardFactory, ActivityTypes } = require('botbuilder');
+const { MessageFactory, ActivityTypes, CardFactory } = require('botbuilder');
 
 const { company } = require('../companyDetails');
 const { delay } = require('../helperFunctions');
@@ -65,6 +65,8 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
             await stepContext.context.sendActivity(`Perfect, here's it is`);
 
             await stepContext.context.sendActivity(this.createVideo(company.companyVideo));
+
+            await stepContext.context.sendActivity({ attachments: [this.createAnimationCard(company.companyVideo)] });
         }
 
         // Go to next step
@@ -152,21 +154,34 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
     // Helper functions
     // ======================================
 
-    // createVideo(videoUrl) {
-    //     return MessageFactory.contentUrl(
-    //         videoUrl,
-    //         'video/mp4'
-    //     );
-    // }
-
     createVideo(videoUrl) {
-        return MessageFactory.attachment(
-            CardFactory.videoCard(
-                `Working at ${ company.name }`,
-                [ videoUrl ]
-            )
+        return MessageFactory.contentUrl(
+            videoUrl,
+            'video/mp4'
         );
     }
+
+    createAnimationCard(videoUrl) {
+        return CardFactory.animationCard(
+            `Working at ${ company.name }`,
+            [
+                { url: videoUrl }
+            ],
+            []
+            // {
+            //     subtitle: 'Animation Card'
+            // }
+        );
+    }
+
+    // createVideoAttachment(videoUrl) {
+    //     const reply = { type: ActivityTypes.Message };
+
+    //     reply.mediaUrl = videoUrl;
+    //     reply.contentType = 'video/youtube';
+
+    //     return reply;
+    // }
 }
 
 module.exports = { CompanyBenefitsDialog, COMPANY_BENEFITS_DIALOG };

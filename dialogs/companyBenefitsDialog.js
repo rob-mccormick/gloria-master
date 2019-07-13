@@ -67,6 +67,8 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
             await stepContext.context.sendActivity(this.createVideo(company.companyVideo));
 
             await stepContext.context.sendActivity({ attachments: [this.createAnimationCard(company.companyVideo)] });
+
+            await stepContext.context.sendActivity(this.createVideoAttachment(company.companyVideo));
         }
 
         // Go to next step
@@ -164,14 +166,21 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
     createAnimationCard(videoUrl) {
         return CardFactory.animationCard(
             `Working at ${ company.name }`,
-            [
-                { url: videoUrl }
-            ],
-            []
+            [videoUrl]
+            // []
             // {
             //     subtitle: 'Animation Card'
             // }
         );
+    }
+
+    createVideoAttachment(videoUrl) {
+        const card = CardFactory.videoCard(
+            `Working at ${ company.name }`,
+            [videoUrl]
+        );
+
+        return MessageFactory.attachment(card);
     }
 
     // createVideoAttachment(videoUrl) {

@@ -148,9 +148,9 @@ class PipelineDialog extends CancelAndHelpDialog {
 
         // Set message based on whether want to see all locations or a specific one
         if (userProfile.location === 'all') {
-            message = `Perfect, we'll let you know when any ${ userProfile.categoryTwo } jobs come up.`;
+            message = `Perfect, thanks ${ userProfile.name }.  We'll let you know when any ${ userProfile.categoryTwo } jobs come up.`;
         } else {
-            message = `Perfect, we'll let you know when any ${ userProfile.categoryTwo } jobs in ${ userProfile.location } come up.`;
+            message = `Perfect, thanks ${ userProfile.name }.  We'll let you know when any ${ userProfile.categoryTwo } jobs in ${ userProfile.location } come up.`;
         }
 
         await stepContext.context.sendActivity(message);

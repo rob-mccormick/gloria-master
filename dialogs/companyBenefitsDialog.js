@@ -14,7 +14,7 @@ const COMPANY_BENEFITS_DIALOG = 'companyBenefitsDialog';
 const WATERFALL_DIALOG = 'waterfallDialog';
 
 const responses = {
-    otherOptionYes: `That'd be great`,
+    otherOptionYes: `Go on`,
     otherOptionNo: 'No thanks'
 };
 
@@ -64,11 +64,11 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
             await delay(500);
             await stepContext.context.sendActivity(`Perfect, here's it is`);
 
+            // Use this version if the video is uploaded as a file (mp4)
             await stepContext.context.sendActivity(this.createVideo(company.companyVideo));
 
-            await stepContext.context.sendActivity({ attachments: [this.createAnimationCard(company.companyVideo)] });
-
-            await stepContext.context.sendActivity(this.createVideoAttachment(company.companyVideo));
+            // Use this version if the video is hosted on youtube or similar
+            // await stepContext.context.sendActivity({ attachments: [this.createAnimationCard(company.companyVideo)] });
         }
 
         // Go to next step
@@ -131,7 +131,7 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
         } else if (stepContext.values.benefits && stepContext.values.firstTime) {
             message = `Well, thanks for checking out our benefits.`;
         } else {
-            message = `I hope you liked what you saw 😉`;
+            message = `I hope you liked what you saw 🙂`;
         }
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -167,30 +167,8 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
         return CardFactory.animationCard(
             `Working at ${ company.name }`,
             [videoUrl]
-            // []
-            // {
-            //     subtitle: 'Animation Card'
-            // }
         );
     }
-
-    createVideoAttachment(videoUrl) {
-        const card = CardFactory.videoCard(
-            `Working at ${ company.name }`,
-            [videoUrl]
-        );
-
-        return MessageFactory.attachment(card);
-    }
-
-    // createVideoAttachment(videoUrl) {
-    //     const reply = { type: ActivityTypes.Message };
-
-    //     reply.mediaUrl = videoUrl;
-    //     reply.contentType = 'video/youtube';
-
-    //     return reply;
-    // }
 }
 
 module.exports = { CompanyBenefitsDialog, COMPANY_BENEFITS_DIALOG };

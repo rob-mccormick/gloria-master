@@ -16,7 +16,7 @@ class DialogAndWelcomeBot extends DialogBot {
             for (let cnt = 0; cnt < membersAdded.length; cnt++) {
                 if (membersAdded[cnt].id !== context.activity.recipient.id) {
                     const choices = [userIntent.searchJobs, userIntent.browsing];
-                    const question = MessageFactory.suggestedActions(choices, `Can I help you find a job at ${ company.name }?`);
+                    const question = MessageFactory.suggestedActions(choices, `Would you like some help finding a job at ${ company.name }?`);
 
                     await context.sendActivity(`Hey there! 👋`);
                     await context.sendActivity(question);

@@ -18,18 +18,18 @@ const WATERFALL_DIALOG = 'waterfallDialog';
 
 const userResponses = {
     back: 'Go back',
-    allLocations: 'Show me all locations',
+    allLocations: `I'm open to all`,
     yearsExperience: ['0', '1', '2', '3', '4', '5', '6', '7+'],
-    allExperience: 'All jobs please',
-    moreInfoYes: 'Go on',
+    allExperience: 'Show me all',
+    moreInfoYes: `That'd be great`,
     moreInfoNo: 'No thanks',
     foundOneJob: 'Yeah, it looks good',
     foundManyJobs: 'I did',
     foundNoJob: 'Unfortunately not',
     clearFiltersYes: `If you wouldn't mind`,
     clearFiltersNo: `No, it's fine`,
-    seeBenefitsYes: `I'd like to see your benefits`,
-    seeVideo: `The video please`,
+    seeBenefitsYes: `What are your benefits?`,
+    seeVideo: `Let's see the video`,
     seeBenefitsNo: 'Not right now',
     pipelineYes: `That'd be great`,
     pipelineNo: `It's ok, I'll just check back`
@@ -164,7 +164,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             options.push(userResponses.allLocations);
         }
 
-        const question = MessageFactory.suggestedActions(options, `In which location?`);
+        const question = MessageFactory.suggestedActions(options, `Which location is best for you?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(500);
@@ -241,6 +241,8 @@ class JobSearchDialog extends CancelAndHelpDialog {
             // Generate the message response
             const jobPlural = (availableJobs.length > 1) ? 'jobs' : 'job';
             response = `Perfect! We have ${ availableJobs.length } ${ jobPlural } for you.`;
+        } else if (availableJobs.length === 0 && stepContext.values.conversationData.unfilteredJob) {
+            response = `Sorry, nothing 🤨`;
         } else {
             stepContext.values.userProfile.jobs = [];
             if (stepContext.values.userProfile.location === 'all' && stepContext.values.userProfile.experience !== 'all') {
@@ -248,7 +250,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             } else if (stepContext.values.userProfile.location === 'all') {
                 response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs for you at the moment.`;
             } else {
-                response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs in ${ stepContext.values.userProfile.location } for you at the moment.`;
+                response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs in ${ stepContext.values.userProfile.location } at the moment.`;
             }
         }
 
@@ -300,9 +302,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 let question;
 
                 if (moreInfoJobs.length === 1) {
-                    question = `If you're interested, I can give you an insider tip.`;
+                    question = `So would you like to hear about the role from the hiring manager?`;
                 } else {
-                    question = `If you're interested, I can give you insider tips...`;
+                    question = `So would you like to hear about the roles directly from the hiring managers?`;
                 }
 
                 const options = [userResponses.moreInfoYes, userResponses.moreInfoNo];
@@ -310,6 +312,10 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
                 await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
                 await delay(3000);
+                await stepContext.context.sendActivity(`I know job descriptions can be a little dry...`);
+
+                await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+                await delay(1500);
                 await stepContext.context.sendActivity(message);
                 return Dialog.EndOfTurn;
             }
@@ -320,7 +326,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const experience = stepContext.values.userProfile.experience;
         const jobsLength = stepContext.values.userProfile.jobs.length;
 
-        if (jobsLength === 0 && (location !== 'all' || experience !== 'all')) {
+        if (stepContext.values.conversationData.unfilteredJob) {
+            return stepContext.next();
+        } else if (jobsLength === 0 && (location !== 'all' || experience !== 'all')) {
             let question;
             const options = [userResponses.clearFiltersYes, userResponses.clearFiltersNo];
 
@@ -446,7 +454,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         if (stepContext.result === userResponses.foundNoJob) {
             const responses = [
                 'Sorry to hear that.',
-                `That's no good.`];
+                `That's a shame.`];
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(500);
@@ -459,8 +467,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             stepContext.values.foundJob = true;
 
             const response = randomSentence([
-                `That's great 😀`,
-                `Fantastic`,
+                `Fantastic 😀`,
                 `Awesome!`]);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -468,7 +475,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             await stepContext.context.sendActivity(response);
 
             const options = [userResponses.seeBenefitsYes, userResponses.seeVideo, userResponses.seeBenefitsNo];
-            const message = MessageFactory.suggestedActions(options, `Can I share our benefits with you? ️️🏖️\n\nOr a video about our mission and what it's like to work here?`);
+            const message = MessageFactory.suggestedActions(options, `Can I share our benefits with you? ️️🏖️\n\nOr a video about our mission and what it's like to work at ${ company.name }?`);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);
@@ -538,7 +545,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 location: stepContext.values.userProfile.location
             });
         } else if (stepContext.result === userResponses.pipelineNo) {
-            await stepContext.context.sendActivity(`No worries`);
+            await stepContext.context.sendActivity(`No problem.`);
         }
 
         return await stepContext.next();
@@ -557,7 +564,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         if (stepContext.values.foundJob) {
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(2500);
-            await stepContext.context.sendActivity(`And when you apply we ${ company.nextSteps }.`);
+            await stepContext.context.sendActivity(`As for the next steps - we'll ${ company.nextSteps }.`);
         }
 
         // Reset the jobSearch to false in conversationData

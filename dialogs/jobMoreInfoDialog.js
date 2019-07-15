@@ -49,7 +49,7 @@ class JobMoreInfoDialog extends CancelAndHelpDialog {
         }
 
         if (firstTime) {
-            stepContext.context.sendActivity(`You can hear about the roles directly from the hiring managers.`);
+            stepContext.context.sendActivity(`Excellent - which job interests you?`);
         }
 
         const options = this.buildResponseOptions(stepContext.values.jobs);

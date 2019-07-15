@@ -2,8 +2,8 @@
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
 const userIntent = {
-    searchJobs: `That'd be great`,
-    browsing: `I'm just browsing`
+    searchJobs: `Yes please`,
+    browsing: `No, I'm just browsing`
 };
 
 // eslint-disable-next-line promise/param-names

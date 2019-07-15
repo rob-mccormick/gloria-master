@@ -21,7 +21,7 @@ const USER_PROFILE_PROPERTY = 'userProfile';
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
 
 const userResponses = {
-    yesQuestion: 'Actually, I do',
+    yesQuestion: 'Actually, there is',
     noQuestion: 'No, all good thanks',
     jobSearch: `I'd like to see the jobs`,
     askQuestion: 'I have a question'
@@ -210,7 +210,7 @@ class MainDialog extends ComponentDialog {
         // If they completed the job search check if they have a question
         if (!conversationData.hasQuestion && conversationData.jobSearchComplete) {
             let options = [userResponses.noQuestion, userResponses.yesQuestion];
-            let question = MessageFactory.suggestedActions(options, `Do you have any questions about ${ company.name } or our application process?`);
+            let question = MessageFactory.suggestedActions(options, `Is there something else I can help you with?  Like questions about our application process? Or what we offer?`);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);
@@ -273,9 +273,8 @@ class MainDialog extends ComponentDialog {
         // If conversation finished, say good-bye
         if (conversationData.finishedConversation) {
             const responses = [
-                `It's been good chatting with you 🙂`,
-                `Well, it was good talking with you!`,
-                `I don't know about you, but I could literally chat all day long 😜`
+                `Thanks for dropping by - it's been good chatting with you 🙂`,
+                `Thanks for dropping by - it was great talking with you!`
             ];
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -284,7 +283,7 @@ class MainDialog extends ComponentDialog {
 
             // Give the user a chance to restart the conversation
             let options = [userResponses.jobSearch, userResponses.askQuestion];
-            let question = MessageFactory.suggestedActions(options, `Let me know if you need anything else.`);
+            let question = MessageFactory.suggestedActions(options, `If there's something else you need, let me know.`);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);

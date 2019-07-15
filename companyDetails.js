@@ -14,7 +14,7 @@ const company = {
         ['Sales', 'Marketing', 'Customer Success'],
         ['Compliance', 'People', 'Finance', 'Legal', 'Admin']
     ],
-    nextSteps: `aim to get back to you in 2 working days`,
+    nextSteps: `aim to get back to you in 2 working days after you apply.`,
     companyVideo: 'https://www.youtube.com/watch?v=l49MHwooaVQ',
     benefits: {
         siteLink: 'https://www.idealrole.com/demo',

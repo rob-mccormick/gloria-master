@@ -13,7 +13,7 @@ const GDPR_DIALOG = 'gdprDialog';
 const WATERFALL_DIALOG = 'waterfallDialog';
 
 const userResponses = {
-    yes: 'Yes, of course',
+    yes: 'Yeah, of course',
     no: `I'd rather not`
 };
 

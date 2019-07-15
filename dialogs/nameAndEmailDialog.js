@@ -76,7 +76,7 @@ class NameAndEmailDialog extends CancelAndHelpDialog {
             stepContext.values.name = stepContext.result;
 
             // Set the prompt question for the email
-            promptQuestion = `Thanks ${ stepContext.values.name }.  What's the best email to reach you on?`;
+            promptQuestion = `And what's the best email to reach you on?`;
         }
 
         const promptOptions = {

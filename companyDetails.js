@@ -18,7 +18,28 @@ const company = {
     companyVideo: 'https://www.youtube.com/watch?v=l49MHwooaVQ',
     benefits: {
         siteLink: 'https://www.idealrole.com/demo',
-        message: 'Along with awesome colleagues, engaging work, and the opportunity to help us build the new internet, we offer a number of beneifts.\n\nYou can find them on our careers site - about halfway down.'
+        message: 'Along with awesome colleagues, engaging work, and the opportunity to help us build the new internet, we offer a number of beneifts.\n\nCheck them out 👇',
+        cards: [
+            {
+                benefit: 'PiedPiperCoin rewards',
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-money.png'
+            }, {
+                benefit: 'Generous leave policy',
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-island.png'
+            }, {
+                benefit: 'Learning and development',
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-book.png'
+            }, {
+                benefit: 'Yoga classes and retreats',
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-yoga.png'
+            }, {
+                benefit: 'Healthy food and snacks',
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-salad.png'
+            }, {
+                benefit: 'Comprehensive health plans',
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-health.png'
+            }
+        ]
     },
     glassdoor: 'https://www.glassdoor.co.uk/Overview/Working-at-Typeform-EI_IE991912.11,19.htm',
     emailContacts: ['rob@idealrole.com']

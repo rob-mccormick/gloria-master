@@ -2,7 +2,7 @@
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
 const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
-const { MessageFactory, ActivityTypes, CardFactory } = require('botbuilder');
+const { MessageFactory, ActivityTypes, CardFactory, AttachmentLayoutTypes } = require('botbuilder');
 
 const { company } = require('../companyDetails');
 const { delay } = require('../helperFunctions');
@@ -49,10 +49,19 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
 
         // Determine what to show
         if (benefits) {
+            // Get the benefits to display
+            let benefits = company.benefits.cards;
+            let benefitsToDisplay = [];
+
+            benefits.forEach(el => benefitsToDisplay.push(this.createHeroCard(el)));
+
             // Let the user know the info is on their site
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);
-            await stepContext.context.sendActivity(company.benefits.message);
+            await stepContext.context.sendActivity({
+                attachments: benefitsToDisplay,
+                attachmentLayout: AttachmentLayoutTypes.Carousel
+            });
 
             // Then provide the link to the site for the user
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -169,6 +178,47 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
             [videoUrl]
         );
     }
+
+    // createHeroCard(benefit, imageUrl) {
+    //     return CardFactory.heroCard(
+    //         benefit,
+    //         [imageUrl]
+    //         // CardFactory.actions([
+    //         //     {
+    //         //         type: 'openUrl',
+    //         //         title: 'Get started',
+    //         //         value: 'https://docs.microsoft.com/en-us/azure/bot-service/'
+    //         //     }
+    //         // ])
+    //     );
+    // }
+    // createHeroCard() {
+    //     return CardFactory.heroCard(
+    //         'PiedPiperCoin rewards',
+    //         'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/Money+Emoji+%5BFree+Download+Money+Face+Emoji%5D.png',
+    //         [
+    //             {
+    //                 type: 'openUrl',
+    //                 title: 'Get started',
+    //                 value: 'https://docs.microsoft.com/en-us/azure/bot-service/'
+    //             }
+    //         ]
+    //     );
+    // }
+
+    createHeroCard(obj) {
+        return CardFactory.heroCard(
+            obj.benefit,
+            CardFactory.images([obj.imageUrl])
+        );
+    }
+
+    // createHeroCard() {
+    //     return CardFactory.heroCard(
+    //         'PiedPiperCoin rewards',
+    //         CardFactory.images(['https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/Money+Emoji+%5BFree+Download+Money+Face+Emoji%5D.png'])
+    //     );
+    // }
 }
 
 module.exports = { CompanyBenefitsDialog, COMPANY_BENEFITS_DIALOG };

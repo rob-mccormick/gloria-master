@@ -15,25 +15,25 @@ const company = {
         ['Compliance', 'People', 'Finance', 'Legal', 'Admin']
     ],
     nextSteps: `aim to get back to you in 2 working days after you apply.`,
-    companyVideo: 'https://www.youtube.com/watch?v=l49MHwooaVQ',
+    companyVideo: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/employer-video.mp4',
     benefits: {
         siteLink: 'https://www.idealrole.com/demo',
         message: 'Along with awesome colleagues, engaging work, and the opportunity to help us build the new internet, we offer a number of beneifts.\n\nCheck them out 👇',
         cards: [
             {
-                benefit: 'PiedPiperCoin rewards',
+                benefit: 'PiedPiperCoin rewards\n\n',
                 imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-money.png'
             }, {
-                benefit: 'Generous leave policy',
+                benefit: 'Generous leave policy\n\n',
                 imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-island.png'
             }, {
-                benefit: 'Learning and development',
+                benefit: 'Learning & development budget',
                 imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-book.png'
             }, {
-                benefit: 'Yoga classes and retreats',
+                benefit: 'Yoga classes and retreats\n\n',
                 imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-yoga.png'
             }, {
-                benefit: 'Healthy food and snacks',
+                benefit: 'Healthy food and snacks\n\n',
                 imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-salad.png'
             }, {
                 benefit: 'Comprehensive health plans',
@@ -53,7 +53,8 @@ const jobs = [
         specialism: 'Design',
         minExperience: 7,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 102,
         title: 'Back-end Engineer',
@@ -61,7 +62,8 @@ const jobs = [
         specialism: 'Engineering',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 103,
         title: 'iOS Developer',
@@ -69,7 +71,8 @@ const jobs = [
         specialism: 'Engineering',
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 104,
         title: 'Android Developer',
@@ -77,7 +80,8 @@ const jobs = [
         specialism: 'Engineering',
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 105,
         title: 'Full-stack Engineer',
@@ -85,7 +89,8 @@ const jobs = [
         specialism: 'Engineering',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 106,
         title: 'DevOps Engineer',
@@ -93,7 +98,8 @@ const jobs = [
         specialism: 'Engineering',
         minExperience: 4,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 107,
         title: 'Product Designer',
@@ -101,7 +107,8 @@ const jobs = [
         specialism: 'Product',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 108,
         title: 'Product Manager',
@@ -109,7 +116,8 @@ const jobs = [
         specialism: 'Product',
         minExperience: 5,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 109,
         title: 'Data Scientist',
@@ -117,7 +125,8 @@ const jobs = [
         specialism: 'Analytics',
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 110,
         title: 'Data Analyst',
@@ -125,7 +134,8 @@ const jobs = [
         specialism: 'Analytics',
         minExperience: 1,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 111,
         title: 'Account Manager',
@@ -134,7 +144,7 @@ const jobs = [
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application',
-        video: 'https://www.youtube.com/watch?v=l49MHwooaVQ'
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 112,
         title: 'Partner Sales Manager',
@@ -142,7 +152,8 @@ const jobs = [
         specialism: 'Sales',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 113,
         title: 'Product Marketing Manager',
@@ -151,7 +162,7 @@ const jobs = [
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application',
-        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/message-media/bottle-drawing.MP4'
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 114,
         title: 'Social Media Manager',
@@ -160,7 +171,7 @@ const jobs = [
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
         link: 'https://www.idealrole.com/demo/job-application',
-        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/message-media/Desktop+Recording+July+12th%2C+2019.mp4'
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 115,
         title: 'Team Leader',
@@ -168,7 +179,8 @@ const jobs = [
         specialism: 'Customer Success',
         minExperience: 4,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 116,
         title: 'Customer Success Manager',
@@ -176,7 +188,8 @@ const jobs = [
         specialism: 'Customer Success',
         minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 117,
         title: 'Customer Success Manager',
@@ -184,7 +197,8 @@ const jobs = [
         specialism: 'Customer Success',
         minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 118,
         title: 'Customer Success Manager',
@@ -192,7 +206,8 @@ const jobs = [
         specialism: 'Customer Success',
         minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 119,
         title: 'Recruiter',
@@ -200,7 +215,8 @@ const jobs = [
         specialism: 'People',
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 120,
         title: 'Business Partner',
@@ -208,7 +224,8 @@ const jobs = [
         specialism: 'People',
         minExperience: 5,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 121,
         title: 'Accountant',
@@ -216,7 +233,8 @@ const jobs = [
         specialism: 'Finance',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 122,
         title: 'Head of Legal',
@@ -224,7 +242,8 @@ const jobs = [
         specialism: 'Legal',
         minExperience: 7,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }, {
         id: 123,
         title: 'Operations Manager',
@@ -232,7 +251,8 @@ const jobs = [
         specialism: 'Operations',
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
-        link: 'https://www.idealrole.com/demo/job-application'
+        link: 'https://www.idealrole.com/demo/job-application',
+        video: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4'
     }
 ];
 
@@ -272,7 +292,8 @@ const helpTopics = {
             \n\nTo help you we try to be as flexible as we can - in hours and location.
             \n\nIf you need something permanent, best to ask when the recruiter contacts you. Otherwise you're team lead will be able to help when you need it.`,
         remote: `We prefer you to be in the office when you can. But we're also flexible and you can work from home or remotely when you need to.
-            \n\nAnd for some of our roles we're open to you working remotely. Just let one of our recruiters know if this is what you're looking for.`,
+            \n\nAnd for some of our roles we're open to you working remotely.
+            \n\nIf you need to work remotely just let one of our team know when they get in touch (after you apply).`,
         partTime: `While our jobs are normally full-time, we understand everyone needs something a little different.
             \n\nWhere we can we'll do our best to accomodate part-time hours. Best to let the recruitment team know when they contact you.`,
         annualLeave: `You can find the annual leave you'll get on the job description.  It can vary a bit depending on the location.
@@ -292,7 +313,7 @@ const helpTopics = {
             \n\nTo be safe, you can let me know what job your after and I'll let you know every time we have a new one.`,
         registerInterest: `I can help with that!
             \n\nJust search for the job you want and leave your details. Then I'll let you know every time one of those jobs comes up.`,
-        afterApply: `After you apply we'll ${ company.nextSteps }.`,
+        afterApply: `After you apply we'll aim to get back to you in 2 working days.`,
         hiringDecision: `It depends a bit on the job. The recruiter who contacted you will be able to give you an idea for the role you applied for.
             \n\nWhatever the case, you should get an update from us within a week of your interview.`
     },

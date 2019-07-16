@@ -564,7 +564,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         if (stepContext.values.foundJob) {
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(2500);
-            await stepContext.context.sendActivity(`As for the next steps - we'll ${ company.nextSteps }.`);
+            await stepContext.context.sendActivity(`As for the next steps - we'll ${ company.nextSteps }`);
         }
 
         // Reset the jobSearch to false in conversationData

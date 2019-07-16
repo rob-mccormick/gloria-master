@@ -48,9 +48,9 @@ class JobMoreInfoDialog extends CancelAndHelpDialog {
             return stepContext.next();
         }
 
-        if (firstTime) {
-            stepContext.context.sendActivity(`Excellent - which job interests you?`);
-        }
+        // if (firstTime) {
+        //     stepContext.context.sendActivity(`Excellent - which job interests you?`);
+        // }
 
         const options = this.buildResponseOptions(stepContext.values.jobs);
         const question = this.buildQuestion(stepContext.values.jobs);
@@ -148,10 +148,10 @@ class JobMoreInfoDialog extends CancelAndHelpDialog {
     }
 
     buildQuestion(jobList) {
-        let question = `Which job would you like to hear about?\n`;
+        let question = `Which job would you like to hear about?\n\n`;
 
         for (var i = 1; i <= jobList.length; i++) {
-            question += `\n${ i } - ${ jobList[i - 1].title }`;
+            question += `${ i } - ${ jobList[i - 1].title }\n\n`;
         }
 
         return question;

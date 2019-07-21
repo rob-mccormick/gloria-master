@@ -62,11 +62,6 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
                 attachments: benefitsToDisplay,
                 attachmentLayout: AttachmentLayoutTypes.Carousel
             });
-
-            // Then provide the link to the site for the user
-            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-            await delay(2000);
-            await stepContext.context.sendActivity(`Here's the link to the page: ${ company.benefits.siteLink }`);
         } else if (video) {
             // Show the video
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });

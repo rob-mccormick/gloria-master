@@ -39,18 +39,12 @@ class JobMoreInfoDialog extends CancelAndHelpDialog {
         const moreInfoJobs = stepContext.options.moreInfoJobs;
         stepContext.values.jobs = moreInfoJobs;
 
-        const firstTime = stepContext.options.firstTime;
-
         if (moreInfoJobs.length === 1) {
             stepContext.context.sendActivity(`You can hear more about ${ moreInfoJobs[0].title } directly from the hiring manager.`);
             stepContext.context.sendActivity(`Check it out`);
 
             return stepContext.next();
         }
-
-        // if (firstTime) {
-        //     stepContext.context.sendActivity(`Excellent - which job interests you?`);
-        // }
 
         const options = this.buildResponseOptions(stepContext.values.jobs);
         const question = this.buildQuestion(stepContext.values.jobs);
@@ -113,9 +107,8 @@ class JobMoreInfoDialog extends CancelAndHelpDialog {
     async endStep(stepContext) {
         if (stepContext.result === responses.redoYes && stepContext.values.jobs.length > 2) {
             const moreInfoJobs = stepContext.values.jobs;
-            const firstTime = false;
 
-            return await stepContext.replaceDialog(JOB_MORE_INFO_DIALOG, { moreInfoJobs, firstTime });
+            return await stepContext.replaceDialog(JOB_MORE_INFO_DIALOG, { moreInfoJobs });
         } else if (stepContext.result === responses.redoYes && stepContext.values.jobs.length === 2) {
             let info;
 

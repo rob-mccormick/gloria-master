@@ -22,22 +22,22 @@ const company = {
         cards: [
             {
                 benefit: 'PiedPiperCoin rewards\n\n',
-                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-money.png'
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-money.png?versionId=null'
             }, {
                 benefit: 'Generous leave policy\n\n',
-                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-island.png'
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-island.png?versionId=null'
             }, {
                 benefit: 'Learning & development budget',
-                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-book.png'
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-book.png?versionId=null'
             }, {
                 benefit: 'Yoga classes and retreats\n\n',
-                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-yoga.png'
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-yoga.png?versionId=null'
             }, {
                 benefit: 'Healthy food and snacks\n\n',
-                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-salad.png'
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-salad.png?versionId=null'
             }, {
                 benefit: 'Comprehensive health plans',
-                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-health.png'
+                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-health.png?versionId=null'
             }
         ]
     },

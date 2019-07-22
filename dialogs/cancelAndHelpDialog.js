@@ -31,7 +31,8 @@ class CancelAndHelpDialog extends ComponentDialog {
         switch (text) {
         case 'help':
         case '?':
-            await innerDc.context.sendActivity('[ This is where to send sample help to the user... ]');
+            await innerDc.context.sendActivity(`If you're stuck - or have a question for someone - I can take your message and have someone get back to you.
+            \n\nJust answer yes when I ask if you have any questions.`);
             return { status: DialogTurnStatus.waiting };
         case 'cancel':
         case 'reset':

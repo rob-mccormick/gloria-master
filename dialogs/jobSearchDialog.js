@@ -72,6 +72,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const userProfile = stepContext.options.userProfile;
         stepContext.values.userProfile = userProfile;
 
+        // Show the user the disclaimer if they haven't seen it
         if (!stepContext.values.conversationData.seenJobDisclaimer) {
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(500);
@@ -122,7 +123,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const index = company.categoryOne.indexOf(stepContext.result);
         const options = company.specialism[index];
 
-        // Add the option to return to select categoryOne
+        // Add the option to go back to select categoryOne
         if (options[(options.length - 1)] !== userResponses.back) {
             options.push(userResponses.back);
         }
@@ -137,7 +138,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
     }
 
     /**
-     * Save the user's specialsim selection
+     * Save the user's specialism selection
      * Ask the user to select which location they're interested in
      */
     async selectLocationStep(stepContext) {
@@ -167,7 +168,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const question = MessageFactory.suggestedActions(options, `Which location is best for you?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(500);
+        await delay(1000);
         await stepContext.context.sendActivity(question);
         return Dialog.EndOfTurn;
     }
@@ -200,7 +201,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const question = MessageFactory.suggestedActions(options, `And how many years experience do you have?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        await delay(500);
+        await delay(1000);
         await stepContext.context.sendActivity(question);
         return Dialog.EndOfTurn;
     }
@@ -302,9 +303,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 let question;
 
                 if (moreInfoJobs.length === 1) {
-                    question = `So would you like to hear about the role from the hiring manager?`;
+                    question = `Would you like to hear about the role from the hiring manager?`;
                 } else {
-                    question = `So would you like to hear about the roles directly from the hiring managers?`;
+                    question = `Would you like to hear about the roles directly from the hiring managers?`;
                 }
 
                 const options = [userResponses.moreInfoYes, userResponses.moreInfoNo];
@@ -312,10 +313,6 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
                 await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
                 await delay(3000);
-                await stepContext.context.sendActivity(`I know job descriptions can be a little dry...`);
-
-                await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-                await delay(1500);
                 await stepContext.context.sendActivity(message);
                 return Dialog.EndOfTurn;
             }

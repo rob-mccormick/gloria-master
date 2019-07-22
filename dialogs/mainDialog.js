@@ -102,6 +102,7 @@ class MainDialog extends ComponentDialog {
             seenJobDisclaimer: false,
             jobSearch: false,
             jobSearchComplete: false,
+            unfilteredJob: false,
             addToPipeline: false,
             hasQuestion: false,
             userConfirmedEmail: false,
@@ -186,7 +187,7 @@ class MainDialog extends ComponentDialog {
     /**
      * Save the result from the pipeline step (if completed)
      * Access the userProfile
-     * Then either send the user to the job search dialog or continue
+     * If they completed the job search - ask if they have a question
      * @param {*} stepContext
      */
     async checkIfHasQuestionStep(stepContext) {
@@ -201,9 +202,8 @@ class MainDialog extends ComponentDialog {
             await this.userProfile.set(stepContext.context, updatedUser);
         }
 
-        // Access the conversation and user data
+        // Access the conversation data
         const conversationData = await this.conversationData.get(stepContext.context);
-        // const userProfile = await this.userProfile.get(stepContext.context);
 
         this.logger.log(`conversationData from the checkQuestion step: ${ JSON.stringify(conversationData) }`);
 
@@ -298,6 +298,7 @@ class MainDialog extends ComponentDialog {
             seenJobDisclaimer: false,
             jobSearch: false,
             jobSearchComplete: false,
+            unfilteredJob: false,
             addToPipeline: false,
             hasQuestion: false,
             userConfirmedEmail: false,
@@ -327,6 +328,7 @@ class MainDialog extends ComponentDialog {
             conversationData.jobSearch = true;
             conversationData.jobSearchComplete = false;
             conversationData.hasQuestion = false;
+            conversationData.unfilteredJob = false;
         } else if (stepContext.result === userResponses.askQuestion) {
             conversationData.jobSearch = false;
             conversationData.hasQuestion = true;

@@ -21,6 +21,7 @@ class UserProfile {
 
         // User's questions
         this.questions = [];
+        this.questionContext = [];
     }
 }
 

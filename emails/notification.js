@@ -49,6 +49,7 @@ const sendQuestionEmail = (userProfile) => {
                 </ul>
                 <p>Other information that may be relevant for the response:</p>
                 <ul>
+                    <li style="padding-bottom: 8px;">The last question they searched: ${ JSON.stringify(userProfile.questionContext[(userProfile.questionContext.length - 1)]) }</li>
                     <li style="padding-bottom: 8px;">All questions they've asked: ${ JSON.stringify(userProfile.questions) }</li>
                     <li style="padding-bottom: 8px;">And their pipeline info: ${ JSON.stringify(userProfile.pipeline) }</li>
                 </ul>

@@ -561,7 +561,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
         if (stepContext.values.foundJob) {
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(2500);
-            await stepContext.context.sendActivity(`As for the next steps - we'll ${ company.nextSteps }`);
+            await stepContext.context.sendActivity(`Now all you need to do is apply!`);
+
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1000);
+            await stepContext.context.sendActivity(company.nextSteps);
         }
 
         // Reset the jobSearch to false in conversationData
@@ -582,20 +586,22 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const exp = user.experience;
 
         for (var i = 0; i < jobList.length; i++) {
+            let specIndex = jobList[i].specialism.indexOf(spec);
+
             if (loc === 'all' && exp === 'all') {
-                if (jobList[i].specialism === spec) {
+                if (specIndex >= 0) {
                     relevantJobs.push(jobList[i]);
                 }
             } else if (loc === 'all' && exp !== 'all') {
-                if (jobList[i].specialism === spec && jobList[i].minExperience <= exp) {
+                if (specIndex >= 0 && jobList[i].minExperience <= exp) {
                     relevantJobs.push(jobList[i]);
                 }
             } else if (loc !== 'all' && exp === 'all') {
-                if (jobList[i].specialism === spec && jobList[i].location === loc) {
+                if (specIndex >= 0 && jobList[i].location === loc) {
                     relevantJobs.push(jobList[i]);
                 }
             } else if (loc !== 'all' && exp !== 'all') {
-                if (jobList[i].specialism === spec && jobList[i].location === loc && jobList[i].minExperience <= exp) {
+                if (specIndex >= 0 && jobList[i].location === loc && jobList[i].minExperience <= exp) {
                     relevantJobs.push(jobList[i]);
                 }
             }
@@ -609,8 +615,12 @@ class JobSearchDialog extends CancelAndHelpDialog {
             [{ url: '' }],
             [{
                 type: 'openUrl',
-                title: 'See job description',
-                value: `${ jobObj.link }`
+                title: 'See Job Description',
+                value: `${ jobObj.jdLink }`
+            }, {
+                type: 'openUrl',
+                title: 'Apply',
+                value: `${ jobObj.applyLink }`
             }],
             {
                 subtitle: `${ jobObj.location }`,

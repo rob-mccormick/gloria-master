@@ -55,9 +55,14 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
 
             benefits.forEach(el => benefitsToDisplay.push(this.createHeroCard(el)));
 
-            // Let the user know the info is on their site
+            // Give broader benefits first - then more specific
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);
+            await stepContext.context.sendActivity(company.benefits.message);
+
+            // Let the user know the info is on their site
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(2000);
             await stepContext.context.sendActivity({
                 attachments: benefitsToDisplay,
                 attachmentLayout: AttachmentLayoutTypes.Carousel
@@ -70,9 +75,6 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
 
             // Use this version if the video is uploaded as a file (mp4)
             await stepContext.context.sendActivity(this.createVideo(company.companyVideo));
-
-            // Use this version if the video is hosted on youtube or similar
-            // await stepContext.context.sendActivity({ attachments: [this.createAnimationCard(company.companyVideo)] });
         }
 
         // Go to next step

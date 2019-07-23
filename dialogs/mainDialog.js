@@ -140,8 +140,8 @@ class MainDialog extends ComponentDialog {
         // Access conversation and user data
         const conversationData = await this.conversationData.get(stepContext.context);
         const userProfile = await this.userProfile.get(stepContext.context, new UserProfile());
-        this.logger.log(`userProfile from the jobSearch step: ${ JSON.stringify(userProfile) }`);
-        this.logger.log(`conversationData from the jobSearch step: ${ JSON.stringify(conversationData) }`);
+        // this.logger.log(`userProfile from the jobSearch step: ${ JSON.stringify(userProfile) }`);
+        // this.logger.log(`conversationData from the jobSearch step: ${ JSON.stringify(conversationData) }`);
 
         // Redirect user to job search if jobSearch is true
         if (conversationData.jobSearch) {
@@ -153,7 +153,7 @@ class MainDialog extends ComponentDialog {
     }
 
     /**
-     * Save the result from the browsing dialog (if completed)
+     * Save the results from the job search dialog (if completed)
      * Access the userProfile
      * Then either send the user to the pipline dialog or continue
      * @param {*} stepContext
@@ -173,7 +173,7 @@ class MainDialog extends ComponentDialog {
         const conversationData = await this.conversationData.get(stepContext.context);
         const userProfile = await this.userProfile.get(stepContext.context);
 
-        this.logger.log(`userProfile from the pipeline step: ${ JSON.stringify(userProfile) }`);
+        // this.logger.log(`userProfile from the pipeline step: ${ JSON.stringify(userProfile) }`);
 
         // Redirect user to pipeline if addToPipeline is true
         if (conversationData.addToPipeline) {
@@ -195,7 +195,7 @@ class MainDialog extends ComponentDialog {
         if (stepContext.result) {
             const updatedConversation = stepContext.result.conversationData;
             const updatedUser = stepContext.result.userProfile;
-            this.logger.log(`userProfile after pipeline step: ${ JSON.stringify(updatedUser) }`);
+            // this.logger.log(`userProfile after pipeline step: ${ JSON.stringify(updatedUser) }`);
 
             // Set the new data
             await this.conversationData.set(stepContext.context, updatedConversation);
@@ -205,12 +205,12 @@ class MainDialog extends ComponentDialog {
         // Access the conversation data
         const conversationData = await this.conversationData.get(stepContext.context);
 
-        this.logger.log(`conversationData from the checkQuestion step: ${ JSON.stringify(conversationData) }`);
+        // this.logger.log(`conversationData from the checkQuestion step: ${ JSON.stringify(conversationData) }`);
 
         // If they completed the job search check if they have a question
         if (!conversationData.hasQuestion && conversationData.jobSearchComplete) {
             let options = [userResponses.yesQuestion, userResponses.noQuestion];
-            let question = MessageFactory.suggestedActions(options, `Is there something else I can help you with?\n\nLike questions about our application process? Or what we offer?`);
+            let question = MessageFactory.suggestedActions(options, `Is there something else I can help you with?\n\nLike preparing your application? Or what happens after you apply?`);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);
@@ -241,8 +241,8 @@ class MainDialog extends ComponentDialog {
         // Access the user profile
         const userProfile = await this.userProfile.get(stepContext.context);
 
-        this.logger.log(`conversationData from redirectToQuestionStep: ${ JSON.stringify(conversationData) }`);
-        this.logger.log(`userProfile from redirectToQuestionStep: ${ JSON.stringify(userProfile) }`);
+        // this.logger.log(`conversationData from redirectToQuestionStep: ${ JSON.stringify(conversationData) }`);
+        // this.logger.log(`userProfile from redirectToQuestionStep: ${ JSON.stringify(userProfile) }`);
 
         // Redirect user to ask a question if hasQuestion is true and hasn't finished the conversation
         if (conversationData.hasQuestion) {
@@ -253,7 +253,7 @@ class MainDialog extends ComponentDialog {
     }
 
     async endDialogStep(stepContext) {
-        // If was provided a question, capture the user data
+        // If was asked a question, capture the user data
         if (stepContext.result) {
             const updatedConversation = stepContext.result.conversationData;
             const updatedUser = stepContext.result.userProfile;
@@ -263,12 +263,10 @@ class MainDialog extends ComponentDialog {
             await this.userProfile.set(stepContext.context, updatedUser);
         }
 
-        // Reset the hasQuestion to false
         let conversationData = await this.conversationData.get(stepContext.context);
-        conversationData.hasQuestion = false;
 
         // console.log(`userProfile from the endDialog step: ${ JSON.stringify(updatedUser) }`);
-        this.logger.log(`conversationData from the endDialog step: ${ JSON.stringify(conversationData) }`);
+        // this.logger.log(`conversationData from the endDialog step: ${ JSON.stringify(conversationData) }`);
 
         // If conversation finished, say good-bye
         if (conversationData.finishedConversation) {
@@ -336,8 +334,8 @@ class MainDialog extends ComponentDialog {
 
         // Get the user data to send back to the start of the dialog
         const userProfile = await this.userProfile.get(stepContext.context);
-        this.logger.log(`userProfile just before restarting mainDialog: ${ JSON.stringify(userProfile) }`);
-        this.logger.log(`conversationData just before restarting mainDialog: ${ JSON.stringify(conversationData) }`);
+        // this.logger.log(`userProfile just before restarting mainDialog: ${ JSON.stringify(userProfile) }`);
+        // this.logger.log(`conversationData just before restarting mainDialog: ${ JSON.stringify(conversationData) }`);
 
         // Restart the mainDialog with the updated conversationData
         return await stepContext.beginDialog(MAIN_WATERFALL_DIALOG, { conversationData, userProfile });

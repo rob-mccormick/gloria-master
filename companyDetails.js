@@ -319,7 +319,7 @@ const helpTopics = {
             answer: [
                 `The good news - we keep all applications for future roles.`,
                 `The bad news - our system isn't always great at matching people to the right roles.`,
-                `To be safe, you can let me know what job your after and I'll let you know every time we have a new one.`
+                `To be safe, check back here. And if there are no jobs I can let you know every time we have a new one.`
             ]
         }, {
             question: `How to prepare for interviews?`,

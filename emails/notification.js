@@ -45,7 +45,7 @@ const sendQuestionEmail = (userProfile) => {
                 <ul>
                     <li style="padding-bottom: 8px;">Name: ${ userProfile.name }</li>
                     <li style="padding-bottom: 8px;">Email: ${ userProfile.email }</li>
-                    <li style="padding-bottom: 8px;">Question: ${ JSON.stringify(userProfile.questions[0]) }</li>
+                    <li style="padding-bottom: 8px;">Question: ${ JSON.stringify(userProfile.questions[(userProfile.questions.length - 1)]) }</li>
                 </ul>
                 <p>Other information that may be relevant for the response:</p>
                 <ul>

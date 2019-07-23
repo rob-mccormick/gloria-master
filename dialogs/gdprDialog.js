@@ -38,11 +38,6 @@ class GdprDialog extends CancelAndHelpDialog {
         const options = [userResponses.yes, userResponses.no];
         const question = MessageFactory.suggestedActions(options, 'Is this ok with you?');
 
-        // Provide the GDPR notice
-        // await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        // await delay(500);
-        // await stepContext.context.sendActivity(' Before we continue, I need to make sure everything is legit 😉');
-
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(500);
         await stepContext.context.sendActivity(`To get back to you I'll need your name and email address.

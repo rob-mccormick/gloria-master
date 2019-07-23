@@ -9,12 +9,7 @@ const { helpTopics } = require('../companyDetails');
 const { delay, randomSentence } = require('../helperFunctions');
 
 // Import other dialogs
-// const { ApplyingDialog, APPLYING_DIALOG } = require('./questions/applyingDialog');
-// const { InterviewDialog, INTERVIEW_DIALOG } = require('./questions/interviewDialog');
-// const { FlexibleWorkingDialog, FLEXIBLE_WORKING_DIALOG } = require('./questions/flexibleWorkingDialog');
-const { LeaveQuestionDialog, LEAVE_QUESTION_DIALOG } = require('./questions/leaveQuestionDialog');
-// const { RecruitmentProcessDialog, RECRUITMENT_PROCESS_DIALOG } = require('./questions/recruitmentProcessDialog');
-// const { StudentDialog, STUDENT_DIALOG } = require('./questions/studentDialog');
+const { LeaveQuestionDialog, LEAVE_QUESTION_DIALOG } = require('./leaveQuestionDialog');
 
 const QUESTION_DIALOG = 'questionDialog';
 
@@ -25,14 +20,10 @@ const responses = {
     back: 'Go back',
     answered: 'Yes thanks',
     notAnswered: 'No',
-    // applying: 'How to apply',
-    // interview: `Interviews`,
-    // flexibleWorking: `Working options`,
-    // recruitmentProcess: 'Your recruitment process',
-    // student: `Internships and grad opportunities`,
     yesLeaveQuestion: `Yes please`,
     noLeaveQuestion: `No need`,
-    yesMoreQuestion: `Yes`,
+    yesNewQuestion: `Yes, but on something else`,
+    yesMoreQuestion: `Yes, on this topic`,
     noMoreQuestion: `No thanks`
 };
 
@@ -48,17 +39,13 @@ class QuestionDialog extends CancelAndHelpDialog {
         super(QUESTION_DIALOG);
 
         this.addDialog(new LeaveQuestionDialog())
-            // .addDialog(new ApplyingDialog())
-            // .addDialog(new InterviewDialog())
-            // .addDialog(new FlexibleWorkingDialog())
-            // .addDialog(new RecruitmentProcessDialog())
-            // .addDialog(new StudentDialog())
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
                 this.helpTopicsStep.bind(this),
                 this.presentQuestionsStep.bind(this),
                 this.presentAnswerStep.bind(this),
                 this.checkIfAnsweredQuestionStep.bind(this),
                 this.anotherQuestionStep.bind(this),
+                this.redirectStep.bind(this),
                 this.endStep.bind(this)
             ]));
 
@@ -181,17 +168,51 @@ class QuestionDialog extends CancelAndHelpDialog {
     async checkIfAnsweredQuestionStep(stepContext) {
         let options;
         let question;
-        // If did not answer question, ask if want to leave a question
-        if (stepContext.result === responses.notAnswered) {
-            options = [responses.yesLeaveQuestion, responses.noLeaveQuestion];
-            question = `Sorry about that 🤨\n\nCan I take your question and have someone get back to you?`;
-        } else if (stepContext.result === responses.answered) {
-            options = [responses.yesMoreQuestion, responses.noMoreQuestion];
+        // If answered their question, ask they have another
+        if (stepContext.result === responses.answered) {
+            options = [responses.yesNewQuestion, responses.yesMoreQuestion, responses.noMoreQuestion];
             question = randomSentence([
                 `Would you like to ask another question?`,
                 `Can I help you with another question?`
             ]);
+
+            const response = MessageFactory.suggestedActions(options, question);
+
+            await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+            await delay(1000);
+            await stepContext.context.sendActivity(response);
+            return Dialog.EndOfTurn;
         }
+
+        // If didn't answer their question, pass to next step
+        return stepContext.next();
+    }
+
+    /**
+     * Process the responses from the previous step
+     * - Restart dialog if user has a question on a new topic
+     * - Continue if is finished
+     * - Otherwise ask if wants to leave a question
+     */
+    async anotherQuestionStep(stepContext) {
+        const conversationData = stepContext.values.conversationData;
+        const userProfile = stepContext.values.userProfile;
+        let question;
+
+        // Deal with each user response
+        switch (stepContext.result) {
+        case responses.yesNewQuestion:
+            return await stepContext.replaceDialog(QUESTION_DIALOG, { conversationData, userProfile });
+        case responses.noMoreQuestion:
+            return stepContext.next();
+        case responses.yesMoreQuestion:
+            question = `Hmm, I'm afraid I've shared all I know...\n\nCan I take your question and have someone get back to you?`;
+            break;
+        default:
+            question = `Sorry about that 🤨\n\nCan I take your question and have someone get back to you?`;
+        }
+
+        const options = [responses.yesLeaveQuestion, responses.noLeaveQuestion];
 
         const response = MessageFactory.suggestedActions(options, question);
 
@@ -204,22 +225,17 @@ class QuestionDialog extends CancelAndHelpDialog {
     /**
      * Process the responses from the previous step
      * - Redirect to leaveQuestion dialog if user wants to leave a question
-     * - Restart dialog if user has another question
      * - Otherwise go to final step
      */
-    async anotherQuestionStep(stepContext) {
+    async redirectStep(stepContext) {
         const conversationData = stepContext.values.conversationData;
         const userProfile = stepContext.values.userProfile;
 
-        // Deal with each user response
-        switch (stepContext.result) {
-        case responses.yesLeaveQuestion:
+        if (stepContext.result === responses.yesLeaveQuestion) {
             return await stepContext.beginDialog(LEAVE_QUESTION_DIALOG, { conversationData, userProfile });
-        case responses.yesMoreQuestion:
-            return await stepContext.beginDialog(QUESTION_DIALOG, { conversationData, userProfile });
-        default:
-            return stepContext.next();
         }
+
+        return stepContext.next();
     }
 
     /**
@@ -236,10 +252,11 @@ class QuestionDialog extends CancelAndHelpDialog {
         } else {
             conversationData = stepContext.values.conversationData;
             userProfile = stepContext.values.userProfile;
-
-            // Set finishedConversation to true
-            conversationData.finishedConversation = true;
         }
+
+        // Set finishedConversation to true and hasQuestion to false
+        conversationData.finishedConversation = true;
+        conversationData.hasQuestion = false;
 
         return await stepContext.endDialog({ conversationData, userProfile });
     }

@@ -4,13 +4,13 @@
 const { WaterfallDialog, Dialog, TextPrompt } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
-const { CancelAndHelpDialog } = require('../cancelAndHelpDialog');
-const { delay, randomSentence } = require('../../helperFunctions');
-const { sendQuestionEmail } = require('../../emails/notification');
+const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
+const { delay, randomSentence } = require('../helperFunctions');
+const { sendQuestionEmail } = require('../emails/notification');
 
 // Import other dialogs
-const { GdprDialog, GDPR_DIALOG } = require('../gdprDialog');
-const { NameAndEmailDialog, NAME_AND_EMAIL_DIALOG } = require('../nameAndEmailDialog');
+const { GdprDialog, GDPR_DIALOG } = require('./gdprDialog');
+const { NameAndEmailDialog, NAME_AND_EMAIL_DIALOG } = require('./nameAndEmailDialog');
 
 const LEAVE_QUESTION_DIALOG = 'leaveQuestionDialog';
 const QUESTION_PROMPT = 'questionPrompt';

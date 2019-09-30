@@ -1,8 +1,8 @@
 // Company specific details to be used by the Bot
 
 const company = {
-    name: 'PiedPiper',
-    locations: ['Silicon Valley', 'Oakland'],
+    name: 'MarketInvoice',
+    locations: ['London', 'Manchester'],
     privacyNotice: 'https://www.idealrole.com/privacy',
     categoryOne: [
         'Building the product',
@@ -21,9 +21,6 @@ const company = {
         message: 'Along with awesome colleagues, engaging work, and the opportunity to help us build the new internet, we offer a number of beneifts.\n\nCheck them out 👇',
         cards: [
             {
-                benefit: 'PiedPiperCoin rewards\n\n',
-                imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-money.png?versionId=null'
-            }, {
                 benefit: 'Generous leave policy\n\n',
                 imageUrl: 'https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-island.png?versionId=null'
             }, {
@@ -49,7 +46,7 @@ const jobs = [
     {
         id: 101,
         title: 'Design Director',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Design'],
         minExperience: 7,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -59,7 +56,7 @@ const jobs = [
     }, {
         id: 102,
         title: 'Web Developer',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Engineering', 'Marketing'],
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -69,7 +66,7 @@ const jobs = [
     }, {
         id: 103,
         title: 'iOS Developer',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Engineering'],
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -79,7 +76,7 @@ const jobs = [
     }, {
         id: 104,
         title: 'Android Developer',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Engineering'],
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -89,7 +86,7 @@ const jobs = [
     }, {
         id: 105,
         title: 'Full-stack Engineer',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Engineering'],
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -99,7 +96,7 @@ const jobs = [
     }, {
         id: 106,
         title: 'DevOps Engineer',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Engineering'],
         minExperience: 4,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -109,7 +106,7 @@ const jobs = [
     }, {
         id: 107,
         title: 'Product Designer',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Product', 'Design'],
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -119,7 +116,7 @@ const jobs = [
     }, {
         id: 108,
         title: 'Product Manager',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Product'],
         minExperience: 5,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -129,7 +126,7 @@ const jobs = [
     }, {
         id: 109,
         title: 'Data Scientist',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Analytics'],
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -139,7 +136,7 @@ const jobs = [
     }, {
         id: 110,
         title: 'Data Analyst',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Analytics'],
         minExperience: 1,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -149,7 +146,7 @@ const jobs = [
     }, {
         id: 111,
         title: 'Account Manager',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Sales'],
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -159,7 +156,7 @@ const jobs = [
     }, {
         id: 112,
         title: 'Partner Sales Manager',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Sales'],
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -169,7 +166,7 @@ const jobs = [
     }, {
         id: 113,
         title: 'Product Marketing Manager',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Marketing', 'Product'],
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -179,7 +176,7 @@ const jobs = [
     }, {
         id: 114,
         title: 'Social Media Manager',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Marketing'],
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -189,7 +186,7 @@ const jobs = [
     }, {
         id: 115,
         title: 'Team Leader',
-        location: 'Oakland',
+        location: company.locations[1],
         specialism: ['Customer Success'],
         minExperience: 4,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -199,7 +196,7 @@ const jobs = [
     }, {
         id: 116,
         title: 'Customer Success Manager',
-        location: 'Oakland',
+        location: company.locations[1],
         specialism: ['Customer Success'],
         minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -209,7 +206,7 @@ const jobs = [
     }, {
         id: 117,
         title: 'Customer Success Manager',
-        location: 'Oakland',
+        location: company.locations[1],
         specialism: ['Customer Success'],
         minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -219,7 +216,7 @@ const jobs = [
     }, {
         id: 118,
         title: 'Customer Success Manager',
-        location: 'Oakland',
+        location: company.locations[1],
         specialism: ['Customer Success'],
         minExperience: 0,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -229,7 +226,7 @@ const jobs = [
     }, {
         id: 119,
         title: 'Recruiter',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['People'],
         minExperience: 2,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -239,7 +236,7 @@ const jobs = [
     }, {
         id: 120,
         title: 'Business Partner',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['People'],
         minExperience: 5,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -249,7 +246,7 @@ const jobs = [
     }, {
         id: 121,
         title: 'Accountant',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Finance'],
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -259,7 +256,7 @@ const jobs = [
     }, {
         id: 122,
         title: 'Head of Legal',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Legal'],
         minExperience: 7,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',
@@ -269,7 +266,7 @@ const jobs = [
     }, {
         id: 123,
         title: 'Operations Manager',
-        location: 'Silicon Valley',
+        location: company.locations[0],
         specialism: ['Operations'],
         minExperience: 3,
         intro: 'This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.',

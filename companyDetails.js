@@ -1,8 +1,8 @@
 // Company specific details to be used by the Bot
 
 const company = {
-    name: 'Attest',
-    locations: ['London', 'New York'],
+    name: 'Secret Escapes',
+    locations: ['London', 'Dublin', 'Bristol', 'Berlin'],
     privacyNotice: 'https://www.idealrole.com/privacy',
     categoryOne: [
         'Building the product',

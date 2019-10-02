@@ -1,8 +1,8 @@
 // Company specific details to be used by the Bot
 
 const company = {
-    name: 'MarketInvoice',
-    locations: ['London', 'Manchester'],
+    name: 'depop',
+    locations: ['London', 'Milan', 'New York'],
     privacyNotice: 'https://www.idealrole.com/privacy',
     categoryOne: [
         'Building the product',

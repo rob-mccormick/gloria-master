@@ -1,8 +1,8 @@
 // Company specific details to be used by the Bot
 
 const company = {
-    name: 'depop',
-    locations: ['London', 'Milan', 'New York'],
+    name: '11:FS',
+    locations: ['London'],
     privacyNotice: 'https://www.idealrole.com/privacy',
     categoryOne: [
         'Building the product',

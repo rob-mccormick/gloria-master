@@ -1,8 +1,8 @@
 // Company specific details to be used by the Bot
 
 const company = {
-    name: 'Form3',
-    locations: ['London', 'Remote'],
+    name: 'GoCardless',
+    locations: ['London', 'Paris', 'Munich', 'San Francisco'],
     privacyNotice: 'https://www.idealrole.com/privacy',
     categoryOne: [
         'Building the product',

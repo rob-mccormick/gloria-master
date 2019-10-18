@@ -18,6 +18,7 @@ const WATERFALL_DIALOG = 'waterfallDialog';
 
 const userResponses = {
     back: 'Go back',
+    bothLocations: `I'm open to both`,
     allLocations: `I'm open to all`,
     yearsExperience: ['0', '1', '2', '3', '4', '5', '6', '7+'],
     allExperience: 'Show me all',
@@ -160,9 +161,21 @@ class JobSearchDialog extends CancelAndHelpDialog {
         // Present location options and ask user to select
         const options = company.locations;
 
-        // Add option to select all locations
-        if (options[(options.length - 1)] !== userResponses.allLocations) {
-            options.push(userResponses.allLocations);
+        // First, if there is only 1 location save it to the user and move to next step
+        if (company.locations.length === 1) {
+            stepContext.values.userProfile.location = options[0];
+            return stepContext.next();
+        }
+
+        var opLen = options.length;
+
+        // Add option to select both or all locations
+        if (options[(opLen - 1)] !== userResponses.bothLocations && options[(opLen - 1)] !== userResponses.allLocations) {
+            if (company.locations.length === 2) {
+                options.push(userResponses.bothLocations);
+            } else if (company.locations.length > 2) {
+                options.push(userResponses.allLocations);
+            }
         }
 
         const question = MessageFactory.suggestedActions(options, `Which location is best for you?`);
@@ -184,9 +197,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
         }
 
         // Save user's location selection
-        if (stepContext.result === userResponses.allLocations) {
+        if (stepContext.result === userResponses.allLocations || stepContext.result === userResponses.bothLocations) {
             stepContext.values.userProfile.location = 'all';
-        } else {
+        } else if (stepContext.result) {
             stepContext.values.userProfile.location = stepContext.result;
         }
 
@@ -246,10 +259,14 @@ class JobSearchDialog extends CancelAndHelpDialog {
             response = `Sorry, nothing 🤨`;
         } else {
             stepContext.values.userProfile.jobs = [];
-            if (stepContext.values.userProfile.location === 'all' && stepContext.values.userProfile.experience !== 'all') {
+            if (stepContext.values.userProfile.location === 'all' && stepContext.values.userProfile.experience === 'all') {
                 response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs at the moment.`;
             } else if (stepContext.values.userProfile.location === 'all') {
                 response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs for you at the moment.`;
+            } else if (stepContext.values.userProfile.location === 'Remote' && stepContext.values.userProfile.experience === 'all') {
+                response = `Unfortunately, we don't have any remote ${ stepContext.values.userProfile.specialism } jobs at the moment.`;
+            } else if (stepContext.values.userProfile.location === 'Remote') {
+                response = `Unfortunately, we don't have any remote ${ stepContext.values.userProfile.specialism } jobs for you at the moment.`;
             } else {
                 response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs in ${ stepContext.values.userProfile.location } at the moment.`;
             }

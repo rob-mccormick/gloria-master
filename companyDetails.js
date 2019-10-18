@@ -2,7 +2,7 @@
 
 const company = {
     name: 'Habito',
-    locations: ['London'],
+    locations: ['London', 'Manchester', 'Remote'],
     privacyNotice: 'https://www.idealrole.com/privacy',
     categoryOne: [
         'Building the product',

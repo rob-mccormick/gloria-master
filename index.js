@@ -20,9 +20,6 @@ const { MainDialog } = require('./dialogs/mainDialog');
 const ENV_FILE = path.join(__dirname, '.env');
 require('dotenv').config({ path: ENV_FILE });
 
-// Add bot analytics middleware
-const dashbot = require('dashbot')(process.env.DASHBOT_API).microsoft;
-
 // NOT USING TRANSCRIPT STORAGE until have better way to analyse
 
 // // Add transcript storage
@@ -44,7 +41,6 @@ const adapter = new BotFrameworkAdapter({
 });
 
 // Use the middleware for analytics [and storing transcripts]
-adapter.use(dashbot.middleware());
 // adapter.use(transcriptMiddleware);
 
 // Catch-all for errors.

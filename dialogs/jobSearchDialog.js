@@ -30,6 +30,7 @@ const userResponses = {
     clearFiltersYes: `If you wouldn't mind`,
     clearFiltersNo: `No, it's fine`,
     seeBenefitsYes: `What are your benefits?`,
+    seeOnlyBenefitsYes: `Sure`,
     seeVideo: `Let's see the video`,
     seeBenefitsNo: 'Not right now',
     pipelineYes: `That'd be great`,
@@ -492,8 +493,16 @@ class JobSearchDialog extends CancelAndHelpDialog {
             await delay(500);
             await stepContext.context.sendActivity(response);
 
-            const options = [userResponses.seeBenefitsYes, userResponses.seeVideo, userResponses.seeBenefitsNo];
-            const message = MessageFactory.suggestedActions(options, `Can I share our benefits with you? ️️🏖️\n\nOr a video about our mission and what it's like to work at ${ company.name }?`);
+            let message;
+            let options;
+
+            if (company.companyVideo) {
+                options = [userResponses.seeBenefitsYes, userResponses.seeVideo, userResponses.seeBenefitsNo];
+                message = MessageFactory.suggestedActions(options, `Would you like to hear about our benefits? ️️🏖️\n\nOr a video about life at ${ company.name }?`);
+            } else {
+                options = [userResponses.seeOnlyBenefitsYes, userResponses.seeBenefitsNo];
+                message = MessageFactory.suggestedActions(options, `Would you like to hear about our benefits? ️️🏖️`);
+            }
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1500);

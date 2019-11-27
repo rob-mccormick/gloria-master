@@ -40,9 +40,6 @@ class JobMoreInfoDialog extends CancelAndHelpDialog {
         stepContext.values.jobs = moreInfoJobs;
 
         if (moreInfoJobs.length === 1) {
-            stepContext.context.sendActivity(`You can hear more about ${ moreInfoJobs[0].title } directly from the hiring manager.`);
-            stepContext.context.sendActivity(`Check it out`);
-
             return stepContext.next();
         }
 

@@ -319,10 +319,14 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
                 let question;
 
-                if (moreInfoJobs.length === 1) {
+                if (moreInfoJobs.length === 1 & stepContext.values.userProfile.jobs.length === 1) {
                     question = `Would you like to hear about the role from the hiring manager?`;
-                } else {
+                } else if (moreInfoJobs.length === 1) {
+                    question = `Would you like to hear about the ${ moreInfoJobs[0].title } role from the hiring manager?`;
+                } else if (moreInfoJobs.length === stepContext.values.userProfile.jobs.length) {
                     question = `Would you like to hear about the roles directly from the hiring managers?`;
+                } else {
+                    question = `We have videos of some of the managers talking about the role they're hiring for. \n\nWould you like to take a look?`;
                 }
 
                 const options = [userResponses.moreInfoYes, userResponses.moreInfoNo];

@@ -230,7 +230,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         // Save user's experience selection
         if (stepContext.result === userResponses.allExperience) {
             stepContext.values.userProfile.experience = 'all';
-        } else {
+        } else if (stepContext.resultgit s) {
             stepContext.values.userProfile.experience = parseInt(stepContext.result, 10);
         }
 

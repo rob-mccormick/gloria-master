@@ -542,7 +542,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         const firstTime = true;
 
         // Check if the user wants to see the benefits
-        if (stepContext.result === userResponses.seeBenefitsYes) {
+        if (stepContext.result === userResponses.seeBenefitsYes || stepContext.result === userResponses.seeOnlyBenefitsYes) {
             // Set the values for the next step
             benefits = true;
             video = false;

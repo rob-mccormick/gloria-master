@@ -93,8 +93,10 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
             return stepContext.next();
         } else if (stepContext.values.video) {
             question = `Would you also like to see our benefits?`;
-        } else if (stepContext.values.benefits) {
+        } else if (stepContext.values.benefits && company.companyVideo) {
             question = `Would you also like to see the video?`;
+        } else {
+            return stepContext.next();
         }
 
         const options = [responses.otherOptionYes, responses.otherOptionNo];
@@ -134,7 +136,7 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
 
         if (stepContext.values.video && stepContext.values.firstTime) {
             message = `Well, thanks for watching.`;
-        } else if (stepContext.values.benefits && stepContext.values.firstTime) {
+        } else if (stepContext.values.benefits && stepContext.values.firstTime && company.companyVideo) {
             message = `Well, thanks for checking out our benefits.`;
         } else {
             message = `I hope you liked what you saw 🙂`;

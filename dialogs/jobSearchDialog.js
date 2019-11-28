@@ -230,7 +230,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         // Save user's experience selection
         if (stepContext.result === userResponses.allExperience) {
             stepContext.values.userProfile.experience = 'all';
-        } else if (stepContext.resultgit s) {
+        } else if (stepContext.result) {
             stepContext.values.userProfile.experience = parseInt(stepContext.result, 10);
         }
 
@@ -260,9 +260,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
             response = `Sorry, nothing 🤨`;
         } else {
             stepContext.values.userProfile.jobs = [];
-            if (stepContext.values.userProfile.location === 'all' && stepContext.values.userProfile.experience === 'all') {
+            if ((stepContext.values.userProfile.location === 'all' || company.locations.length === 1) && stepContext.values.userProfile.experience === 'all') {
                 response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs at the moment.`;
-            } else if (stepContext.values.userProfile.location === 'all') {
+            } else if (stepContext.values.userProfile.location === 'all' || company.locations.length === 1) {
                 response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs for you at the moment.`;
             } else if (stepContext.values.userProfile.location === 'Remote' && stepContext.values.userProfile.experience === 'all') {
                 response = `Unfortunately, we don't have any remote ${ stepContext.values.userProfile.specialism } jobs at the moment.`;
@@ -351,13 +351,14 @@ class JobSearchDialog extends CancelAndHelpDialog {
             let question;
             const options = [userResponses.clearFiltersYes, userResponses.clearFiltersNo];
 
-            // Change the question depending on the persons selections
-            if (location !== 'all' && experience !== 'all') {
-                question = `Would you like me to check for ${ stepContext.values.userProfile.specialism } jobs in all locations and for all levels of experience?`;
-            } else if (experience !== 'all') {
+            if ((location === 'all' || company.locations.length === 1) && experience !== 'all') {
                 question = `Would you like me to check for all levels of experience?`;
-            } else {
+            } else if (location !== 'all' && company.locations.length > 1 && experience === 'all') {
                 question = `Would you like me to check for ${ stepContext.values.userProfile.specialism } jobs in all locations?`;
+            } else if (location !== 'all' && company.locations.length > 1 && experience !== 'all') {
+                question = `Would you like me to check for ${ stepContext.values.userProfile.specialism } jobs in all locations and for all levels of experience?`;
+            } else {
+                return stepContext.next();
             }
 
             const message = MessageFactory.suggestedActions(options, question);

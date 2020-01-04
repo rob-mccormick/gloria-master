@@ -12,6 +12,8 @@ const { sendQuestionEmail } = require('../emails/notification');
 const { GdprDialog, GDPR_DIALOG } = require('./gdprDialog');
 const { NameAndEmailDialog, NAME_AND_EMAIL_DIALOG } = require('./nameAndEmailDialog');
 
+const { postQnData } = require('../company/authorization');
+
 const LEAVE_QUESTION_DIALOG = 'leaveQuestionDialog';
 const QUESTION_PROMPT = 'questionPrompt';
 
@@ -172,6 +174,15 @@ class LeaveQuestionDialog extends CancelAndHelpDialog {
         ];
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+
+        // Send data to API
+        let questionData = {
+            question_helpful: conversationData.questionHelpful,
+            wants_reply: true,
+            question_left: userProfile.questions[userProfile.questions.length - 1]
+        };
+        postQnData(userProfile.questionContext, questionData);
+
         await delay(1500);
         await stepContext.context.sendActivity(randomSentence(responses));
 

@@ -105,6 +105,7 @@ class MainDialog extends ComponentDialog {
             unfilteredJob: false,
             addToPipeline: false,
             hasQuestion: false,
+            questionHelpful: false,
             userConfirmedEmail: false,
             finishedConversation: false
         });

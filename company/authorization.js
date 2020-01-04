@@ -46,8 +46,15 @@ const postJobData = (user, data = {}) => {
 };
 
 // Post question data to the API
-const postQnData = (data) => {
-    postData(data, `cbqnsdata/${ companyId }/post`);
+const postQnData = (user, data) => {
+    let userData = {
+        has_question: true,
+        search_question: user[user.length - 1]
+    };
+
+    let qnData = { ...userData, ...data };
+
+    postData(qnData, `cbqnsdata/${ companyId }/post`);
 };
 
 module.exports = { postJobData, postQnData };

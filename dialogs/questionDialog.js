@@ -11,6 +11,8 @@ const { delay, randomSentence } = require('../helperFunctions');
 // Import other dialogs
 const { LeaveQuestionDialog, LEAVE_QUESTION_DIALOG } = require('./leaveQuestionDialog');
 
+const { postQnData } = require('../company/authorization');
+
 const QUESTION_DIALOG = 'questionDialog';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
@@ -145,6 +147,7 @@ class QuestionDialog extends CancelAndHelpDialog {
             let response = answer[i];
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+
             await delay(1000);
             await stepContext.context.sendActivity(response);
         }
@@ -179,10 +182,21 @@ class QuestionDialog extends CancelAndHelpDialog {
             const response = MessageFactory.suggestedActions(options, question);
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+
+            // Send data to API
+            stepContext.values.conversationData.questionHelpful = true;
+            let questionData = { question_helpful: true };
+            postQnData(stepContext.values.userProfile.questionContext, questionData);
+
             await delay(1000);
             await stepContext.context.sendActivity(response);
             return Dialog.EndOfTurn;
         }
+
+        // Send data to API
+        stepContext.values.conversationData.questionHelpful = false;
+        let questionData = { question_helpful: false };
+        postQnData(stepContext.values.userProfile.questionContext, questionData);
 
         // If didn't answer their question, pass to next step
         return stepContext.next();
@@ -232,7 +246,21 @@ class QuestionDialog extends CancelAndHelpDialog {
         const userProfile = stepContext.values.userProfile;
 
         if (stepContext.result === responses.yesLeaveQuestion) {
+            // Send data to API
+            let questionData = {
+                question_helpful: stepContext.values.conversationData.questionHelpful,
+                wants_reply: true
+            };
+            postQnData(stepContext.values.userProfile.questionContext, questionData);
+
             return await stepContext.beginDialog(LEAVE_QUESTION_DIALOG, { conversationData, userProfile });
+        } else if (stepContext.result === responses.noLeaveQuestion) {
+            // Send data to API
+            let questionData = {
+                question_helpful: stepContext.values.conversationData.questionHelpful,
+                wants_reply: false
+            };
+            postQnData(stepContext.values.userProfile.questionContext, questionData);
         }
 
         return stepContext.next();

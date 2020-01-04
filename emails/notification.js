@@ -4,7 +4,7 @@
 // Get SendGrid
 const sgMail = require('@sendgrid/mail');
 
-const { company } = require('../companyDetails');
+const { company } = require('../company/companyDetails');
 
 const sendPipelineEmail = (userProfile) => {
     sgMail.send({

@@ -12,6 +12,8 @@ const { sendPipelineEmail } = require('../emails/notification');
 const { GdprDialog, GDPR_DIALOG } = require('./gdprDialog');
 const { NameAndEmailDialog, NAME_AND_EMAIL_DIALOG } = require('./nameAndEmailDialog');
 
+const { postJobData } = require('../company/authorization');
+
 const PIPELINE_DIALOG = 'pipelineDialog';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
@@ -152,6 +154,13 @@ class PipelineDialog extends CancelAndHelpDialog {
         } else {
             message = `Perfect, thanks ${ userProfile.name }.  We'll let you know when any ${ userProfile.categoryTwo } jobs in ${ userProfile.location } come up.`;
         }
+
+        // Send data to API
+        let jobData = {
+            add_to_pipeline: true,
+            joined_pipeline: true
+        };
+        postJobData(stepContext.values.userProfile, jobData);
 
         await stepContext.context.sendActivity(message);
 

@@ -4,10 +4,12 @@
 const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes, CardFactory, AttachmentLayoutTypes } = require('botbuilder');
 
-const { company } = require('../companyDetails');
+const { company } = require('../company/companyDetails');
 const { delay } = require('../helperFunctions');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
+
+const { postJobData } = require('../company/authorization');
 
 const COMPANY_BENEFITS_DIALOG = 'companyBenefitsDialog';
 
@@ -46,6 +48,9 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
 
         const firstTime = stepContext.options.firstTime;
         stepContext.values.firstTime = firstTime;
+
+        const userProfile = stepContext.options.userProfile;
+        stepContext.values.userProfile = userProfile;
 
         // Determine what to show
         if (benefits) {
@@ -118,6 +123,7 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
             let benefits;
             let video;
             const firstTime = false;
+            let userProfile = stepContext.values.userProfile;
 
             if (stepContext.values.benefits) {
                 benefits = false;
@@ -128,10 +134,10 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
             }
 
             // Restart dialog
-            return await stepContext.replaceDialog(COMPANY_BENEFITS_DIALOG, { benefits, video, firstTime });
+            return await stepContext.replaceDialog(COMPANY_BENEFITS_DIALOG, { benefits, video, firstTime, userProfile });
         }
 
-        // As isn't seeing another option, base message of what did see
+        // As isn't seeing another option, base message on what did see
         let message;
 
         if (stepContext.values.video && stepContext.values.firstTime) {
@@ -143,6 +149,30 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
         }
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+
+        // Send data to API
+        let jobData = {};
+        if (!stepContext.values.firstTime) {
+            jobData = {
+                saw_benefits: true,
+                saw_company_video: true
+            };
+        } else if (stepContext.values.firstTime && stepContext.values.video) {
+            jobData = {
+                saw_benefits: false,
+                saw_company_video: true
+            };
+        } else if (stepContext.values.benefits && !company.companyVideo) {
+            jobData = { saw_benefits: true
+            };
+        } else {
+            jobData = {
+                saw_benefits: true,
+                saw_company_video: false
+            };
+        }
+        postJobData(stepContext.values.userProfile, jobData);
+
         await delay(1000);
         await stepContext.context.sendActivity(message);
 

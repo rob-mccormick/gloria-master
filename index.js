@@ -7,10 +7,10 @@ const restify = require('restify');
 const sgMail = require('@sendgrid/mail');
 
 // Import required bot services. See https://aka.ms/bot-services to learn more about the different parts of a bot.
-const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState, TranscriptLoggerMiddleware } = require('botbuilder');
+const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState } = require('botbuilder');
 
 // Import Azure storage
-const { AzureBlobTranscriptStore, BlobStorage } = require('botbuilder-azure');
+const { BlobStorage } = require('botbuilder-azure');
 
 // This bot's main dialog.
 const { DialogAndWelcomeBot } = require('./bots/dialogAndWelcomeBot');
@@ -20,17 +20,6 @@ const { MainDialog } = require('./dialogs/mainDialog');
 const ENV_FILE = path.join(__dirname, '.env');
 require('dotenv').config({ path: ENV_FILE });
 
-// NOT USING TRANSCRIPT STORAGE until have better way to analyse
-
-// // Add transcript storage
-// let transcriptStore = new AzureBlobTranscriptStore({
-//     containerName: process.env.BLOB_NAME_TRANSCRIPTS,
-//     storageAccountOrConnectionString: process.env.BLOB_STRING
-// });
-
-// // Create the middleware layer to log incoming and outgoing activities to the transcript store
-// const transcriptMiddleware = new TranscriptLoggerMiddleware(transcriptStore);
-
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about adapters.
 const adapter = new BotFrameworkAdapter({
@@ -39,9 +28,6 @@ const adapter = new BotFrameworkAdapter({
     channelService: process.env.ChannelService,
     openIdMetadata: process.env.BotOpenIdMetadata
 });
-
-// Use the middleware for analytics [and storing transcripts]
-// adapter.use(transcriptMiddleware);
 
 // Catch-all for errors.
 adapter.onTurnError = async (context, error) => {
@@ -80,6 +66,9 @@ const bot = new DialogAndWelcomeBot(conversationState, userState, dialog, logger
 // Add the SendGrid API key
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+// Add variable to capture the Ideal Role API key
+const apiKey = process.env.IR_API_KEY;
+
 // Create HTTP server
 let server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function() {
@@ -95,3 +84,6 @@ server.post('/api/messages', (req, res) => {
         await bot.run(turnContext);
     });
 });
+
+// module.exports = { apiKey };
+exports.apiKey = apiKey;

@@ -15,6 +15,8 @@ class UserProfile {
         this.specialism = specialism;
         this.experience = experience;
         this.jobs = [];
+        this.sawJobVideo = null;
+        this.foundJob = null;
 
         // User's pipeline
         this.pipeline = [];

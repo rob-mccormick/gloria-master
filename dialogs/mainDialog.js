@@ -12,7 +12,7 @@ const { PipelineDialog, PIPELINE_DIALOG } = require('./pipelineDialog');
 const { QuestionDialog, QUESTION_DIALOG } = require('./questionDialog');
 
 const { UserProfile } = require('../userProfile');
-const { company } = require('../companyDetails');
+const { company } = require('../company/companyDetails');
 const { delay, userIntent, randomSentence } = require('../helperFunctions');
 
 const CONVERSATION_DATA_PROPERTY = 'conversationData';

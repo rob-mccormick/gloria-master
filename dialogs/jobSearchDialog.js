@@ -5,12 +5,14 @@ const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, CardFactory, AttachmentLayoutTypes, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
-const { company, jobs } = require('../companyDetails');
+const { company, jobs } = require('../company/companyDetails');
 const { delay, randomSentence } = require('../helperFunctions');
 
 // Import other dialogs
 const { JobMoreInfoDialog, JOB_MORE_INFO_DIALOG } = require('./jobMoreInfoDialog');
 const { CompanyBenefitsDialog, COMPANY_BENEFITS_DIALOG } = require('./companyBenefitsDialog');
+
+const { postJobData } = require('../company/authorization');
 
 const JOB_SEARCH_DIALOG = 'jobSearchDialog';
 
@@ -274,6 +276,15 @@ class JobSearchDialog extends CancelAndHelpDialog {
         }
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+
+        // Send data to API
+        let jobData = stepContext.values.userProfile;
+        if (stepContext.values.conversationData.unfilteredJob) {
+            jobData['location'] = 'all';
+            jobData['experience'] = 'all';
+        }
+        postJobData(jobData);
+
         await delay(500);
         await stepContext.context.sendActivity(response);
 
@@ -384,8 +395,20 @@ class JobSearchDialog extends CancelAndHelpDialog {
             const moreInfoJobs = stepContext.values.moreInfoJobs;
             const firstTime = true;
 
+            // Save that saw video
+            stepContext.values.userProfile.sawJobVideo = true;
+
+            // Send data to API
+            postJobData(stepContext.values.userProfile);
+
             return await stepContext.beginDialog(JOB_MORE_INFO_DIALOG, { moreInfoJobs, firstTime });
         } else if (stepContext.result === userResponses.moreInfoNo) {
+            // Save that the user didn't want to see more info
+            stepContext.values.userProfile.sawJobVideo = false;
+
+            // Send data to API
+            postJobData(stepContext.values.userProfile);
+
             // Send message to acknowledge didn't want to see more info
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(500);
@@ -477,6 +500,13 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 `That's a shame.`];
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+
+            // Update user profile to reflect did not find a job
+            stepContext.values.userProfile.foundJob = false;
+
+            // Send data to API
+            postJobData(stepContext.values.userProfile);
+
             await delay(500);
             await stepContext.context.sendActivity(randomSentence(responses));
         }
@@ -506,6 +536,13 @@ class JobSearchDialog extends CancelAndHelpDialog {
             }
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+
+            // Update user profile to reflect found a job
+            stepContext.values.userProfile.foundJob = true;
+
+            // Send data to API
+            postJobData(stepContext.values.userProfile);
+
             await delay(1500);
             await stepContext.context.sendActivity(message);
             return Dialog.EndOfTurn;
@@ -541,6 +578,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
         let video;
         const firstTime = true;
 
+        // Set the userProfile to send to the benefits dialog
+        const userProfile = stepContext.values.userProfile;
+
         // Check if the user wants to see the benefits
         if (stepContext.result === userResponses.seeBenefitsYes || stepContext.result === userResponses.seeOnlyBenefitsYes) {
             // Set the values for the next step
@@ -548,16 +588,25 @@ class JobSearchDialog extends CancelAndHelpDialog {
             video = false;
 
             // Redirect to benefits dialog
-            return await stepContext.beginDialog(COMPANY_BENEFITS_DIALOG, { benefits, video, firstTime });
+            return await stepContext.beginDialog(COMPANY_BENEFITS_DIALOG, { benefits, video, firstTime, userProfile });
         } else if (stepContext.result === userResponses.seeVideo) {
             // Set the values for the next step
             benefits = false;
             video = true;
 
             // Redirect to benefits dialog
-            return await stepContext.beginDialog(COMPANY_BENEFITS_DIALOG, { benefits, video, firstTime });
+            return await stepContext.beginDialog(COMPANY_BENEFITS_DIALOG, { benefits, video, firstTime, userProfile });
         } else if (stepContext.result === userResponses.seeBenefitsNo) {
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+
+            // Send data to API
+            let jobData = {
+                found_job: true,
+                saw_benefits: false
+            };
+            if (company.companyVideo) { jobData['saw_company_video'] = false; }
+            postJobData(stepContext.values.userProfile, jobData);
+
             await delay(1000);
             await stepContext.context.sendActivity(`No problem.`);
         }
@@ -572,8 +621,22 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 specialism: stepContext.values.userProfile.specialism,
                 location: stepContext.values.userProfile.location
             });
+
+            // Send data to API
+            let jobData = {
+                found_job: false,
+                add_to_pipeline: true
+            };
+            postJobData(stepContext.values.userProfile, jobData);
         } else if (stepContext.result === userResponses.pipelineNo) {
             await stepContext.context.sendActivity(`No problem.`);
+
+            // Send data to API
+            let jobData = {
+                found_job: false,
+                add_to_pipeline: false
+            };
+            postJobData(stepContext.values.userProfile, jobData);
         }
 
         return await stepContext.next();
@@ -662,4 +725,5 @@ class JobSearchDialog extends CancelAndHelpDialog {
 }
 
 module.exports.JobSearchDialog = JobSearchDialog;
+
 module.exports.JOB_SEARCH_DIALOG = JOB_SEARCH_DIALOG;

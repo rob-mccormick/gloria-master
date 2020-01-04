@@ -4,7 +4,7 @@
 const { DialogBot } = require('./dialogBot');
 const { MessageFactory } = require('botbuilder');
 
-const { company } = require('../companyDetails');
+const { company } = require('../company/companyDetails');
 const { userIntent } = require('../helperFunctions');
 
 class DialogAndWelcomeBot extends DialogBot {

@@ -6,7 +6,7 @@ const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay } = require('../helperFunctions');
-const { company } = require('../companyDetails');
+const { company } = require('../company/companyDetails');
 
 const BROWSING_DIALOG = 'browsingDialog';
 

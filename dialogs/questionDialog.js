@@ -5,7 +5,7 @@ const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
-const { helpTopics } = require('../companyDetails');
+const { helpTopics } = require('../company/companyDetails');
 const { delay, randomSentence } = require('../helperFunctions');
 
 // Import other dialogs

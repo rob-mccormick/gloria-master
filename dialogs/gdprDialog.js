@@ -5,7 +5,7 @@ const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
-const { company } = require('../companyDetails');
+const { company } = require('../company/companyDetails');
 const { delay } = require('../helperFunctions');
 
 const GDPR_DIALOG = 'gdprDialog';

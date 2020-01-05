@@ -45,14 +45,14 @@ adapter.onTurnError = async (context, error) => {
 let conversationState, userState;
 
 // Set storage based on development or production environment
-let mode = 'Dev';
+let mode = 'Prod';
 let storage;
 
 if (mode === 'Dev') {
     // For local development, in-memory storage is used.
     storage = new MemoryStorage();
-} else if (mode === 'Prod') {
-    // For production create access to Blob Storage
+} else {
+    // For production create access to Blob Storage (default)
     storage = new BlobStorage({
         containerName: process.env.BLOB_NAME_STATE,
         storageAccountOrConnectionString: process.env.BLOB_STRING

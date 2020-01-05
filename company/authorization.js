@@ -2,7 +2,8 @@ const request = require('request');
 
 const auth = require('../index');
 
-const baseUrl = 'https://app.idealrole.com/api/';
+// const baseUrl = 'https://app.idealrole.com/api/';
+const baseUrl = 'http://127.0.0.1:5000/api/';
 const companyId = '1';
 
 // Post data to the API using the provided url

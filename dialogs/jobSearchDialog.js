@@ -277,8 +277,14 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
 
+        // Make sure jobFound and sawJobVideo are null (not previous search value)
+        stepContext.values.userProfile.foundJob = null;
+        stepContext.values.userProfile.sawJobVideo = null;
+
         // Send data to API
         let jobData = stepContext.values.userProfile;
+
+        // If filters were cleared, set location and experience to all
         if (stepContext.values.conversationData.unfilteredJob) {
             jobData['location'] = 'all';
             jobData['experience'] = 'all';
@@ -605,7 +611,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 saw_benefits: false
             };
             if (company.companyVideo) { jobData['saw_company_video'] = false; }
-            postJobData(stepContext.values.userProfile,stepContext.context._activity.conversation.id, jobData);
+            postJobData(stepContext.values.userProfile, stepContext.context._activity.conversation.id, jobData);
 
             await delay(1000);
             await stepContext.context.sendActivity(`No problem.`);

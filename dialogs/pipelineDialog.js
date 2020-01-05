@@ -155,14 +155,14 @@ class PipelineDialog extends CancelAndHelpDialog {
             message = `Perfect, thanks ${ userProfile.name }.  We'll let you know when any ${ userProfile.categoryTwo } jobs in ${ userProfile.location } come up.`;
         }
 
+        await stepContext.context.sendActivity(message);
+
         // Send data to API
         let jobData = {
             add_to_pipeline: true,
             joined_pipeline: true
         };
         postJobData(stepContext.values.userProfile, stepContext.context._activity.conversation.id, jobData);
-
-        await stepContext.context.sendActivity(message);
 
         // Send email notification of new user to be added to pipeline
         sendPipelineEmail(userProfile);

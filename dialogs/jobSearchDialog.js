@@ -283,7 +283,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             jobData['location'] = 'all';
             jobData['experience'] = 'all';
         }
-        postJobData(jobData);
+        postJobData(jobData, stepContext.context._activity.conversation.id);
 
         await delay(500);
         await stepContext.context.sendActivity(response);
@@ -399,7 +399,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             stepContext.values.userProfile.sawJobVideo = true;
 
             // Send data to API
-            postJobData(stepContext.values.userProfile);
+            postJobData(stepContext.values.userProfile, stepContext.context._activity.conversation.id);
 
             return await stepContext.beginDialog(JOB_MORE_INFO_DIALOG, { moreInfoJobs, firstTime });
         } else if (stepContext.result === userResponses.moreInfoNo) {
@@ -407,7 +407,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             stepContext.values.userProfile.sawJobVideo = false;
 
             // Send data to API
-            postJobData(stepContext.values.userProfile);
+            postJobData(stepContext.values.userProfile, stepContext.context._activity.conversation.id);
 
             // Send message to acknowledge didn't want to see more info
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -505,7 +505,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             stepContext.values.userProfile.foundJob = false;
 
             // Send data to API
-            postJobData(stepContext.values.userProfile);
+            postJobData(stepContext.values.userProfile, stepContext.context._activity.conversation.id);
 
             await delay(500);
             await stepContext.context.sendActivity(randomSentence(responses));
@@ -541,7 +541,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             stepContext.values.userProfile.foundJob = true;
 
             // Send data to API
-            postJobData(stepContext.values.userProfile);
+            postJobData(stepContext.values.userProfile, stepContext.context._activity.conversation.id);
 
             await delay(1500);
             await stepContext.context.sendActivity(message);
@@ -605,7 +605,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 saw_benefits: false
             };
             if (company.companyVideo) { jobData['saw_company_video'] = false; }
-            postJobData(stepContext.values.userProfile, jobData);
+            postJobData(stepContext.values.userProfile,stepContext.context._activity.conversation.id, jobData);
 
             await delay(1000);
             await stepContext.context.sendActivity(`No problem.`);
@@ -627,7 +627,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 found_job: false,
                 add_to_pipeline: true
             };
-            postJobData(stepContext.values.userProfile, jobData);
+            postJobData(stepContext.values.userProfile, stepContext.context._activity.conversation.id, jobData);
         } else if (stepContext.result === userResponses.pipelineNo) {
             await stepContext.context.sendActivity(`No problem.`);
 
@@ -636,7 +636,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 found_job: false,
                 add_to_pipeline: false
             };
-            postJobData(stepContext.values.userProfile, jobData);
+            postJobData(stepContext.values.userProfile, stepContext.context._activity.conversation.id, jobData);
         }
 
         return await stepContext.next();

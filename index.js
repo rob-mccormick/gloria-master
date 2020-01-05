@@ -44,14 +44,20 @@ adapter.onTurnError = async (context, error) => {
 // A bot requires a state store to persist the dialog and user state between messages.
 let conversationState, userState;
 
-// For local development, in-memory storage is used.
-// const storage = new MemoryStorage();
+// Set storage based on development or production environment
+let mode = 'Dev';
+let storage;
 
-// For production create access to Blob Storage
-const storage = new BlobStorage({
-    containerName: process.env.BLOB_NAME_STATE,
-    storageAccountOrConnectionString: process.env.BLOB_STRING
-});
+if (mode === 'Dev') {
+    // For local development, in-memory storage is used.
+    storage = new MemoryStorage();
+} else if (mode === 'Prod') {
+    // For production create access to Blob Storage
+    storage = new BlobStorage({
+        containerName: process.env.BLOB_NAME_STATE,
+        storageAccountOrConnectionString: process.env.BLOB_STRING
+    });
+}
 
 conversationState = new ConversationState(storage);
 userState = new UserState(storage);

@@ -171,7 +171,7 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
                 saw_company_video: false
             };
         }
-        postJobData(stepContext.values.userProfile, jobData);
+        postJobData(stepContext.values.userProfile, stepContext.context._activity.conversation.id, jobData);
 
         await delay(1000);
         await stepContext.context.sendActivity(message);

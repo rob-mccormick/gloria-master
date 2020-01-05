@@ -181,7 +181,7 @@ class LeaveQuestionDialog extends CancelAndHelpDialog {
             wants_reply: true,
             question_left: userProfile.questions[userProfile.questions.length - 1]
         };
-        postQnData(userProfile.questionContext, questionData);
+        postQnData(userProfile.questionContext, stepContext.context._activity.conversation.id, questionData);
 
         await delay(1500);
         await stepContext.context.sendActivity(randomSentence(responses));

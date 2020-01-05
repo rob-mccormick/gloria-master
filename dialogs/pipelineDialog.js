@@ -160,7 +160,7 @@ class PipelineDialog extends CancelAndHelpDialog {
             add_to_pipeline: true,
             joined_pipeline: true
         };
-        postJobData(stepContext.values.userProfile, jobData);
+        postJobData(stepContext.values.userProfile, stepContext.context._activity.conversation.id, jobData);
 
         await stepContext.context.sendActivity(message);
 

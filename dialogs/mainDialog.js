@@ -27,6 +27,8 @@ const userResponses = {
     askQuestion: 'I have a question'
 };
 
+let conversationId;
+
 class MainDialog extends ComponentDialog {
     constructor(conversationState, userState, logger) {
         super('MainDialog');
@@ -46,7 +48,6 @@ class MainDialog extends ComponentDialog {
         this.logger = logger;
 
         // Define the main dialog and its related components.
-        // This is a sample "book a flight" dialog.
         this.addDialog(new BrowsingDialog())
             .addDialog(new JobSearchDialog())
             .addDialog(new PipelineDialog())

@@ -186,7 +186,7 @@ class QuestionDialog extends CancelAndHelpDialog {
             // Send data to API
             stepContext.values.conversationData.questionHelpful = true;
             let questionData = { question_helpful: true };
-            postQnData(stepContext.values.userProfile.questionContext, questionData);
+            postQnData(stepContext.values.userProfile.questionContext, stepContext.context._activity.conversation.id, questionData);
 
             await delay(1000);
             await stepContext.context.sendActivity(response);
@@ -196,7 +196,7 @@ class QuestionDialog extends CancelAndHelpDialog {
         // Send data to API
         stepContext.values.conversationData.questionHelpful = false;
         let questionData = { question_helpful: false };
-        postQnData(stepContext.values.userProfile.questionContext, questionData);
+        postQnData(stepContext.values.userProfile.questionContext, stepContext.context._activity.conversation.id, questionData);
 
         // If didn't answer their question, pass to next step
         return stepContext.next();
@@ -251,7 +251,7 @@ class QuestionDialog extends CancelAndHelpDialog {
                 question_helpful: stepContext.values.conversationData.questionHelpful,
                 wants_reply: true
             };
-            postQnData(stepContext.values.userProfile.questionContext, questionData);
+            postQnData(stepContext.values.userProfile.questionContext, stepContext.context._activity.conversation.id, questionData);
 
             return await stepContext.beginDialog(LEAVE_QUESTION_DIALOG, { conversationData, userProfile });
         } else if (stepContext.result === responses.noLeaveQuestion) {
@@ -260,7 +260,7 @@ class QuestionDialog extends CancelAndHelpDialog {
                 question_helpful: stepContext.values.conversationData.questionHelpful,
                 wants_reply: false
             };
-            postQnData(stepContext.values.userProfile.questionContext, questionData);
+            postQnData(stepContext.values.userProfile.questionContext, stepContext.context._activity.conversation.id, questionData);
         }
 
         return stepContext.next();

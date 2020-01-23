@@ -1,6 +1,7 @@
 // Company specific details to be used by the Bot
 
 const company = {
+    id: 1,
     name: 'PiedPiper',
     locations: ['Silicon Valley', 'Oakland'],
     privacyNotice: 'https://www.idealrole.com/privacy',

@@ -1,6 +1,8 @@
 // Copyright (c) Ideal Role Limited. All rights reserved.
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
+const fs = require('fs');
+
 // For both my bot and the start up bot
 const { ComponentDialog, DialogSet, DialogTurnStatus, WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
@@ -12,8 +14,12 @@ const { PipelineDialog, PIPELINE_DIALOG } = require('./pipelineDialog');
 const { QuestionDialog, QUESTION_DIALOG } = require('./questionDialog');
 
 const { UserProfile } = require('../userProfile');
-const { company } = require('../company/companyDetails');
+// const { company } = require('../company/companyDetails');
 const { delay, userIntent, randomSentence } = require('../helperFunctions');
+
+// Load company data
+let companyData = fs.readFileSync('company/companyData.json');
+let company = JSON.parse(companyData);
 
 const CONVERSATION_DATA_PROPERTY = 'conversationData';
 const USER_PROFILE_PROPERTY = 'userProfile';

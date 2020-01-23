@@ -1,11 +1,24 @@
 // Copyright (c) Ideal Role Limited. All rights reserved.
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
+const fs = require('fs');
+
 const { DialogBot } = require('./dialogBot');
 const { MessageFactory } = require('botbuilder');
 
-const { company } = require('../company/companyDetails');
+// const { company } = require('../company/companyDetails');
 const { userIntent } = require('../helperFunctions');
+
+// Async
+let company;
+fs.readFile('company/companyData.json', (err, data) => {
+    if (err) throw err;
+    company = JSON.parse(data);
+});
+
+// Sync
+// let companyData = fs.readFileSync('company/companyData.json');
+// let company = JSON.parse(companyData);
 
 class DialogAndWelcomeBot extends DialogBot {
     constructor(conversationState, userState, dialog, logger) {

@@ -1,12 +1,21 @@
 // Copyright (c) Ideal Role Limited. All rights reserved.
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
+const fs = require('fs');
+
 const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay } = require('../helperFunctions');
-const { company } = require('../company/companyDetails');
+// const { company } = require('../company/companyDetails');
+
+// Load company data
+let companyData = fs.readFileSync('company/companyData.json');
+let company = JSON.parse(companyData);
+
+const { postBrowsingData } = require('../company/authorization');
+let browsingData;
 
 const BROWSING_DIALOG = 'browsingDialog';
 
@@ -52,6 +61,10 @@ class BrowsingDialog extends CancelAndHelpDialog {
         stepContext.values.conversationData = conversationData;
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+
+        // Send data to API
+        postBrowsingData(stepContext.context._activity.conversation.id);
+
         await delay(500);
         await stepContext.context.sendActivity('No worries.');
 
@@ -91,6 +104,11 @@ class BrowsingDialog extends CancelAndHelpDialog {
             const hiringQuestion = MessageFactory.suggestedActions(userOptions.heardHiring, 'Are you happy looking around, or would you like some help?');
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+
+            // Send data to API
+            browsingData = { why_on_site: userOptions.whyOnSite[0] };
+            postBrowsingData(stepContext.context._activity.conversation.id, browsingData);
+
             await delay(1000);
             await stepContext.context.sendActivity('You heard right - we have some great roles available!');
 
@@ -102,6 +120,11 @@ class BrowsingDialog extends CancelAndHelpDialog {
             const lookingQuestion = MessageFactory.suggestedActions(userOptions.lookingAround, 'Are you looking in a particular business area?');
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
+
+            // Send data to API
+            browsingData = { why_on_site: userOptions.whyOnSite[1] };
+            postBrowsingData(stepContext.context._activity.conversation.id, browsingData);
+
             await delay(1000);
             await stepContext.context.sendActivity(`Well, you've come to the right place.`);
 
@@ -114,6 +137,10 @@ class BrowsingDialog extends CancelAndHelpDialog {
             await stepContext.context.sendActivity(lookingQuestion);
             return Dialog.EndOfTurn;
         case userOptions.whyOnSite[2]:
+            // Send data to API
+            browsingData = { why_on_site: userOptions.whyOnSite[2] };
+            postBrowsingData(stepContext.context._activity.conversation.id, browsingData);
+
             // Set askQuestion in conversationData to true
             const conversationData = stepContext.values.conversationData;
             conversationData.hasQuestion = true;

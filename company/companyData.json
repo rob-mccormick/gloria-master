@@ -1,0 +1,49 @@
+{
+    "id":1,
+    "name":"Hooli",
+    "locations":
+    [
+        "Silicon Valley",
+        "Oakland"
+    ],
+    "privacyNotice":"https://www.idealrole.com/privacy",
+    "categoryOne":
+    [
+        "Building the product",
+        "Growing the business",
+        "Running the company"
+    ],
+    "specialism":
+    [
+        ["Design","Engineering","Product","Analytics"],
+        ["Sales","Marketing","Customer Success"],
+        ["Compliance","People","Finance","Legal","Admin"]
+    ],
+    "nextSteps":"It's easy and you'll only need a copy of your CV.\\n\\nJust scroll up and click \"apply\" on the job you like 👆",
+    "companyVideo":"https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/employer-video.mp4",
+    "benefits":
+    {
+        "siteLink":"https://www.idealrole.com/demo",
+        "message":"Along with awesome colleagues, engaging work, and the opportunity to help us build the new internet, we offer a number of beneifts.\\n\\nCheck them out 👇",
+        "cards":
+        [
+            {
+                "benefit":"Generous leave policy\\n\\n",
+                "imageUrl":"https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-island.png?versionId=null"
+            },{
+                "benefit":"Learning & development budget",
+                "imageUrl":"https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-book.png?versionId=null"
+            },{
+                "benefit":"Yoga classes and retreats\\n\\n",
+                "imageUrl":"https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-yoga.png?versionId=null"
+            },{
+                "benefit":"Healthy food and snacks\\n\\n",
+                "imageUrl":"https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-salad.png?versionId=null"
+            },{
+                "benefit":"Comprehensive health plans",
+                "imageUrl":"https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-health.png?versionId=null"
+            }
+        ]},
+    "glassdoor":"https://www.glassdoor.co.uk/Overview/Working-at-Typeform-EI_IE991912.11,19.htm",
+    "emailContacts":["rob@idealrole.com"]
+}

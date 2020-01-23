@@ -1,10 +1,15 @@
+const fs = require('fs');
 const request = require('request');
 
 const auth = require('../index');
 
 // const baseUrl = 'https://app.idealrole.com/api/';
 const baseUrl = 'http://127.0.0.1:5000/api/';
-const companyId = '1';
+
+// Load company data
+let companyData = fs.readFileSync('company/companyData.json');
+let company = JSON.parse(companyData);
+const companyId = company.id;
 
 // Post data to the API using the provided url
 const postData = (data, id, url) => {
@@ -59,4 +64,14 @@ const postQnData = (user, id, data = {}) => {
     postData(qnData, id, `cbqnsdata/${ companyId }/post`);
 };
 
-module.exports = { postJobData, postQnData };
+const postBrowsingData = (id, data = {}) => {
+    let userData = {
+        is_browsing: true
+    };
+
+    let browsingData = { ...userData, ...data };
+
+    postData(browsingData, id, `cbbrowsingdata/${ companyId }/post`);
+};
+
+module.exports = { postJobData, postQnData, postBrowsingData };

@@ -1,12 +1,20 @@
 // Copyright (c) Ideal Role Limited. All rights reserved.
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
+const fs = require('fs');
+
 const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, CardFactory, AttachmentLayoutTypes, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
-const { company, jobs } = require('../company/companyDetails');
+// const { jobs } = require('../company/companyDetails');
 const { delay, randomSentence } = require('../helperFunctions');
+
+// Load data
+let companyData = fs.readFileSync('company/companyData.json');
+let company = JSON.parse(companyData);
+let jobsData = fs.readFileSync('company/jobsData.json');
+let jobs = JSON.parse(jobsData);
 
 // Import other dialogs
 const { JobMoreInfoDialog, JOB_MORE_INFO_DIALOG } = require('./jobMoreInfoDialog');

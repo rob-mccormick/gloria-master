@@ -16,8 +16,7 @@ const { BlobStorage } = require('botbuilder-azure');
 const { DialogAndWelcomeBot } = require('./bots/dialogAndWelcomeBot');
 const { MainDialog } = require('./dialogs/mainDialog');
 
-const { getCompanyData, receiveCompanyData } = require('./company/getNewCompanyData');
-// const getData = require('./company/getNewCompanyData');
+const { getCompanyData, getJobMap } = require('./company/getNewData');
 
 // Read environment variables from .env file
 const ENV_FILE = path.join(__dirname, '.env');
@@ -105,15 +104,19 @@ server.post('/api/hooks', (req, res, next) => {
     let data = req.body || {};
     console.log(data);
 
-    if (data.data.skinny) {
-        console.log('Skinny payload');
+    if (data.data.change && data.hook.event.includes('companychatbot')) {
         getCompanyData(apiKey);
-        res.send('Requesting data from API');
-    } else {
-        receiveCompanyData(data);
-        res.send('Information received');
+        res.send('Requesting company data from API');
+    } else if (data.data.change && data.hook.event.includes('location')) {
+        console.log(data);
+    } else if (data.data.change && data.hook.event.includes('jobmap')) {
+        getJobMap(apiKey);
+        res.send('Requesting jobmap data from API');
     }
 
+    // If data is not sent in correct hook format:
+    // Return error and don't do anything
+    // res.send('Unauthorized');
     return next();
 });
 

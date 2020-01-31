@@ -1,0 +1,27 @@
+{
+  "categoryOne": [
+    "Building the product",
+    "Growing the business",
+    "Running the company"
+  ],
+  "specialism": [
+    [
+      "Design",
+      "Product",
+      "Analytics",
+      "Engineering"
+    ],
+    [
+      "Sales",
+      "Marketing",
+      "Customer Success"
+    ],
+    [
+      "Legal",
+      "Compliance",
+      "Admin",
+      "People",
+      "Finance"
+    ]
+  ]
+}

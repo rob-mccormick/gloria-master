@@ -16,7 +16,8 @@ const { BlobStorage } = require('botbuilder-azure');
 const { DialogAndWelcomeBot } = require('./bots/dialogAndWelcomeBot');
 const { MainDialog } = require('./dialogs/mainDialog');
 
-const getData = require('./company/getNewCompanyData');
+const { getCompanyData, receiveCompanyData } = require('./company/getNewCompanyData');
+// const getData = require('./company/getNewCompanyData');
 
 // Read environment variables from .env file
 const ENV_FILE = path.join(__dirname, '.env');
@@ -88,6 +89,9 @@ server.listen(process.env.port || process.env.PORT || 3978, function() {
     console.log(`\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`);
 });
 
+// Middleware
+server.use(restify.plugins.bodyParser());
+
 // Listen for incoming activities and route them to your bot main dialog.
 server.post('/api/messages', (req, res) => {
     // Route received a request to adapter for processing
@@ -97,25 +101,21 @@ server.post('/api/messages', (req, res) => {
     });
 });
 
-// server.post('/api/hooks', (req, res) => {
-//     // Need to capture the request body*****
-//     // Docs here: http://restify.com/
-//     console.log(req.body);
-//     res.send('Testing!');
-// });
+server.post('/api/hooks', (req, res, next) => {
+    let data = req.body || {};
+    console.log(data);
 
-server.post('/api/hooks',
-    function(req, res, next) {
-        console.log(req.body);
-        req.someData = 'foo';
-        return next();
-    },
-    function(req, res, next) {
-        res.send(req.someData);
-        console.log(req.body);
-        return next();
+    if (data.skinny) {
+        console.log('Skinny payload');
+        getCompanyData(apiKey);
+        res.send('Requesting data from API');
+    } else {
+        receiveCompanyData(data);
+        res.send('Information received');
     }
-);
+
+    return next();
+});
 
 // module.exports = { apiKey };
 exports.apiKey = apiKey;

@@ -19,9 +19,24 @@ function writeToFile(data, path) {
     });
 };
 
+const receiveCompanyData = (data) => {
+
+    const companyData = {
+        name: data.company,
+        privacyNotice: data.privacy_notice_url,
+        nextSteps: data.next_steps,
+        emailContacts: [data.talent_email]
+    };
+
+    if (data.company_video_url) {
+        companyData['companyVideo'] = data.company_video_url;
+    }
+
+    writeToFile(companyData, 'company/fattest.json');
+};
+
 // Get company chatbot data from REST API
 const getCompanyData = (apiKey) => {
-    // let data = [];
     let options = {
         method: 'GET',
         uri: baseUrl + `companychatbot/1`,
@@ -29,18 +44,6 @@ const getCompanyData = (apiKey) => {
         headers: { 'content-type': 'application/json', authorization: `Api-Key ${ apiKey }` },
         json: true
     };
-
-    // request(options, (error, { body }) => {
-    //     if (error) {
-    //         callback(error, undefined);
-    //     } else {
-    //         callback(undefined, {
-    //             response: body[0]
-    //         });
-    //     };
-
-    //     console.log(body[0]);
-    // });
 
     request(options, (error, response, body) => {
         if (error) throw new Error(error);
@@ -63,27 +66,9 @@ const getCompanyData = (apiKey) => {
                 companyData['companyVideo'] = obj.company_video_url;
             }
 
-            writeToFile(companyData, 'company/testing.json');
+            writeToFile(companyData, 'company/skinnytest.json');
         }
     });
-
-    // // Send GET request to API
-    // request(options, (error, response, body) => {
-    //     if (error) throw new Error(error);
-
-    //     if (!error && response && response.statusCode === 200) {
-    //         console.log(response.statusCode);
-    //         console.log(response.body[0]);
-    //         data.push(response.body[0]);
-    //         fs.writeFile('/temp/test.txt', 'Hey there!', (err) => {
-    //             if (err) {
-    //                 return console.log(err);
-    //             }
-    //             console.log('The file was saved!');
-    //         });
-    //         return data;
-    //     }
-    // });
 };
 
 // // Load company data
@@ -155,4 +140,4 @@ const getCompanyData = (apiKey) => {
 //     postData(browsingData, id, `cbbrowsingdata/${ companyId }/post`);
 // };
 
-module.exports = { getCompanyData };
+module.exports = { getCompanyData, receiveCompanyData };

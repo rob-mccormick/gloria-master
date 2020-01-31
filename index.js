@@ -105,7 +105,7 @@ server.post('/api/hooks', (req, res, next) => {
     let data = req.body || {};
     console.log(data);
 
-    if (data.skinny) {
+    if (data.data.skinny) {
         console.log('Skinny payload');
         getCompanyData(apiKey);
         res.send('Requesting data from API');

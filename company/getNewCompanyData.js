@@ -19,20 +19,30 @@ function writeToFile(data, path) {
     });
 };
 
-const receiveCompanyData = (data) => {
+const receiveCompanyData = (hook) => {
+    const data = hook.data.fields;
+
+    let existingData = JSON.parse(fs.readFileSync('company/companyInfo.json'));
+
+    if (existingData.lastUpdated && existingData.lastUpdated > data.updated_at) {
+        return;
+    }
 
     const companyData = {
         name: data.company,
         privacyNotice: data.privacy_notice_url,
+        benefitsLink: data.benefits_url,
+        benefitsMessage: data.benefits_message,
         nextSteps: data.next_steps,
-        emailContacts: [data.talent_email]
+        emailContacts: [data.talent_email],
+        lastUpdated: data.updated_at
     };
 
     if (data.company_video_url) {
         companyData['companyVideo'] = data.company_video_url;
     }
 
-    writeToFile(companyData, 'company/fattest.json');
+    writeToFile(companyData, 'company/companyInfo.json');
 };
 
 // Get company chatbot data from REST API

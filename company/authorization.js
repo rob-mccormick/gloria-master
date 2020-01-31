@@ -64,6 +64,7 @@ const postQnData = (user, id, data = {}) => {
     postData(qnData, id, `cbqnsdata/${ companyId }/post`);
 };
 
+// Post browsing data to the API
 const postBrowsingData = (id, data = {}) => {
     let userData = {
         is_browsing: true

@@ -16,6 +16,8 @@ const { BlobStorage } = require('botbuilder-azure');
 const { DialogAndWelcomeBot } = require('./bots/dialogAndWelcomeBot');
 const { MainDialog } = require('./dialogs/mainDialog');
 
+const getData = require('./company/getNewCompanyData');
+
 // Read environment variables from .env file
 const ENV_FILE = path.join(__dirname, '.env');
 require('dotenv').config({ path: ENV_FILE });
@@ -74,6 +76,10 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Add variable to capture the Ideal Role API key
 const apiKey = process.env.IR_API_KEY;
+// const companyId = process.env.COMPANY_ID;
+
+// Load company data
+// getData.getCompanyData(apiKey);
 
 // Create HTTP server
 let server = restify.createServer();
@@ -90,6 +96,26 @@ server.post('/api/messages', (req, res) => {
         await bot.run(turnContext);
     });
 });
+
+// server.post('/api/hooks', (req, res) => {
+//     // Need to capture the request body*****
+//     // Docs here: http://restify.com/
+//     console.log(req.body);
+//     res.send('Testing!');
+// });
+
+server.post('/api/hooks',
+    function(req, res, next) {
+        console.log(req.body);
+        req.someData = 'foo';
+        return next();
+    },
+    function(req, res, next) {
+        res.send(req.someData);
+        console.log(req.body);
+        return next();
+    }
+);
 
 // module.exports = { apiKey };
 exports.apiKey = apiKey;

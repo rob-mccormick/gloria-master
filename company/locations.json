@@ -1,0 +1,15 @@
+{
+  "locations": [
+    {
+      "streetAddress": "123 Main Street",
+      "city": "Silicon Valley",
+      "country": "United States"
+    },
+    {
+      "streetAddress": "2233 Broadway",
+      "city": "Oakland",
+      "country": "United States"
+    }
+  ],
+  "lastUpdated": "2020-02-03T15:52:18.027112Z"
+}

@@ -178,7 +178,6 @@ const getBenefits = (apiKey) => {
             let i;
             for (i = 0; i < objArray.length; i++) {
                 let obj = objArray[i];
-                console.log(`obj: ${ JSON.stringify(obj) }`);
 
                 if (obj.active_benefit) {
                     let benefit = {
@@ -204,6 +203,71 @@ const getBenefits = (apiKey) => {
             };
 
             writeToFile(benefitCards, 'company/benefits.json');
+        }
+    });
+};
+
+// Get company location data from REST API
+const getLocations = (apiKey) => {
+    let options = {
+        method: 'GET',
+        uri: baseUrl + `location/1`,
+        // uri: baseUrl + `companychatbot/${ auth.companyId }`,
+        headers: { 'content-type': 'application/json', authorization: `Api-Key ${ apiKey }` },
+        json: true
+    };
+
+    request(options, (error, response, body) => {
+        if (error) throw new Error(error);
+
+        console.log(response.statusCode);
+
+        if (!error && response && response.statusCode === 200) {
+            let objArray = response.body;
+
+            let existingData;
+
+            // Fetch the current benefit data - if it exists
+            try {
+                if (fs.existsSync('company/locations.json')) {
+                    existingData = JSON.parse(fs.readFileSync('company/locations.json'));
+                }
+            } catch (err) {
+                console.error(err);
+            };
+
+            // Check if the existing data is more recent than the hook notification
+            // If so, exit without making any changes
+            const recentUpdate = whenLastUpdated(objArray);
+
+            if (existingData && existingData.lastUpdated >= recentUpdate) {
+                return;
+            }
+
+            // Save the benefit data
+            let locations = [];
+
+            let i;
+            for (i = 0; i < objArray.length; i++) {
+                let obj = objArray[i];
+
+                let location = {
+                    streetAddress: obj.street_address,
+                    city: obj.city,
+                    country: obj.country
+                };
+
+                locations.push(location);
+            }
+
+            // Add the most recent update
+            const locationData = {
+                locations,
+                lastUpdated: recentUpdate
+            };
+            // console.log(`locationData: ${ JSON.stringify(locationData) }`);
+
+            writeToFile(locationData, 'company/locations.json');
         }
     });
 };
@@ -250,4 +314,4 @@ const whenLastUpdated = (objArray) => {
 //     writeToFile(companyData, 'company/companyInfo.json');
 // };
 
-module.exports = { getCompanyData, getJobMap, getBenefits };
+module.exports = { getBenefits, getCompanyData, getJobMap, getLocations };

@@ -76,7 +76,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Add variable to capture the Ideal Role API key
 const apiKey = process.env.IR_API_KEY;
-// const companyId = process.env.COMPANY_ID;
+const companyId = process.env.COMPANY_ID;
 
 // Load company data
 // getData.getCompanyData(apiKey);
@@ -124,5 +124,4 @@ server.post('/api/hooks', (req, res, next) => {
     return next();
 });
 
-// module.exports = { apiKey };
-exports.apiKey = apiKey;
+exports.companyId = companyId;

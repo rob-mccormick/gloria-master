@@ -2,6 +2,8 @@ const fs = require('fs');
 const request = require('request');
 
 // const auth = require('../index');
+const id = require('../index');
+// const { companyId } = require('../index');
 
 // const baseUrl = 'https://app.idealrole.com/api/';
 const baseUrl = 'http://127.0.0.1:5000/api/';
@@ -23,8 +25,7 @@ function writeToFile(data, path) {
 const getCompanyData = (apiKey) => {
     let options = {
         method: 'GET',
-        uri: baseUrl + `companychatbot/1`,
-        // uri: baseUrl + `companychatbot/${ auth.companyId }`,
+        uri: baseUrl + `companychatbot/${ id.companyId }`,
         headers: { 'content-type': 'application/json', authorization: `Api-Key ${ apiKey }` },
         json: true
     };
@@ -70,8 +71,7 @@ const getCompanyData = (apiKey) => {
 const getJobMap = (apiKey) => {
     let options = {
         method: 'GET',
-        uri: baseUrl + `jobmap/1`,
-        // uri: baseUrl + `companychatbot/${ auth.companyId }`,
+        uri: baseUrl + `jobmap/${ id.companyId }`,
         headers: { 'content-type': 'application/json', authorization: `Api-Key ${ apiKey }` },
         json: true
     };
@@ -139,8 +139,7 @@ const getJobMap = (apiKey) => {
 const getBenefits = (apiKey) => {
     let options = {
         method: 'GET',
-        uri: baseUrl + `benefit/1`,
-        // uri: baseUrl + `companychatbot/${ auth.companyId }`,
+        uri: baseUrl + `benefit/${ id.companyId }`,
         headers: { 'content-type': 'application/json', authorization: `Api-Key ${ apiKey }` },
         json: true
     };
@@ -211,8 +210,7 @@ const getBenefits = (apiKey) => {
 const getLocations = (apiKey) => {
     let options = {
         method: 'GET',
-        uri: baseUrl + `location/1`,
-        // uri: baseUrl + `companychatbot/${ auth.companyId }`,
+        uri: baseUrl + `location/${ id.companyId }`,
         headers: { 'content-type': 'application/json', authorization: `Api-Key ${ apiKey }` },
         json: true
     };

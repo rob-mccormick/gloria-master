@@ -10,15 +10,15 @@ const { MessageFactory } = require('botbuilder');
 const { userIntent } = require('../helperFunctions');
 
 // Async
-let company;
-fs.readFile('company/companyData.json', (err, data) => {
-    if (err) throw err;
-    company = JSON.parse(data);
-});
+// let company;
+// fs.readFile('company/companyInfo.json', (err, data) => {
+//     if (err) throw err;
+//     company = JSON.parse(data);
+// });
 
 // Sync
-// let companyData = fs.readFileSync('company/companyData.json');
-// let company = JSON.parse(companyData);
+let companyData = fs.readFileSync('company/companyInfo.json');
+let company = JSON.parse(companyData);
 
 class DialogAndWelcomeBot extends DialogBot {
     constructor(conversationState, userState, dialog, logger) {

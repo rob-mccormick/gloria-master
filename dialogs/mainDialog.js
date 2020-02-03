@@ -14,12 +14,10 @@ const { PipelineDialog, PIPELINE_DIALOG } = require('./pipelineDialog');
 const { QuestionDialog, QUESTION_DIALOG } = require('./questionDialog');
 
 const { UserProfile } = require('../userProfile');
-// const { company } = require('../company/companyDetails');
 const { delay, userIntent, randomSentence } = require('../helperFunctions');
 
 // Load company data
-let companyData = fs.readFileSync('company/companyData.json');
-let company = JSON.parse(companyData);
+let company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
 
 const CONVERSATION_DATA_PROPERTY = 'conversationData';
 const USER_PROFILE_PROPERTY = 'userProfile';

@@ -6,12 +6,11 @@ const fs = require('fs');
 const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes, CardFactory, AttachmentLayoutTypes } = require('botbuilder');
 
-// const { company } = require('../company/companyDetails');
 const { delay } = require('../helperFunctions');
 
 // Load company data
-let companyData = fs.readFileSync('company/companyData.json');
-let company = JSON.parse(companyData);
+let benefitData = JSON.parse(fs.readFileSync('company/benefits.json'));
+let company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 
@@ -31,7 +30,6 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
         super(COMPANY_BENEFITS_DIALOG);
 
         this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
-            // this.askWhatToSeeStep.bind(this),
             this.pathRedirectStep.bind(this),
             this.otherOptionStep.bind(this),
             this.endStep.bind(this)
@@ -61,7 +59,8 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
         // Determine what to show
         if (benefits) {
             // Get the benefits to display
-            let benefits = company.benefits.cards;
+            let benefits = benefitData.benefits;
+            console.log(`benefits: ${ JSON.stringify(benefits) }`);
             let benefitsToDisplay = [];
 
             benefits.forEach(el => benefitsToDisplay.push(this.createHeroCard(el)));
@@ -69,7 +68,7 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
             // Give broader benefits first - then more specific
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);
-            await stepContext.context.sendActivity(company.benefits.message);
+            await stepContext.context.sendActivity(company.benefitsMessage);
 
             // Let the user know the info is on their site
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -182,17 +181,6 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
         await delay(1000);
         await stepContext.context.sendActivity(message);
 
-        // // If the company has a glassdoor link, show it
-        // if (company.glassdoor) {
-        //     await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        //     await delay(1000);
-        //     await stepContext.context.sendActivity(`One other thing you may be interested in is our glassdoor reviews.`);
-
-        //     await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
-        //     await delay(1000);
-        //     await stepContext.context.sendActivity(`You can find them here:\n\n${ company.glassdoor }`);
-        // }
-
         return stepContext.endDialog();
     }
 
@@ -243,7 +231,7 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
 
     createHeroCard(obj) {
         return CardFactory.heroCard(
-            obj.benefit,
+            obj.title,
             CardFactory.images([obj.imageUrl])
         );
     }

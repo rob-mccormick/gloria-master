@@ -1,11 +1,12 @@
 {
   "name": "PiedPiper",
   "privacyNotice": "https://www.piedpiper.com/privacy",
-  "benefitsLink": "https://www.piedpiper.com/careers/#benefits",
-  "benefitsMessage": "",
+  "benefitsLink": "",
+  "benefitsMessage": "Along with awesome colleagues, engaging work, and the opportunity to help us build the new internet, we offer a number of benefits.  Check them out 👇",
   "nextSteps": "We'll get back to you in 2 working days.",
   "emailContacts": [
     "careers@piedpiper.com"
   ],
-  "lastUpdated": "2020-01-31T15:14:21.671623Z"
+  "lastUpdated": "2020-02-03T16:57:17.892443Z",
+  "companyVideo": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/employer-video.mp4"
 }

@@ -11,8 +11,8 @@ const { delay } = require('../helperFunctions');
 // const { company } = require('../company/companyDetails');
 
 // Load company data
-let companyData = fs.readFileSync('company/companyData.json');
-let company = JSON.parse(companyData);
+let companyInfo = fs.readFileSync('company/companyInfo.json');
+let company = JSON.parse(companyInfo);
 
 const { postBrowsingData } = require('../company/authorization');
 let browsingData;

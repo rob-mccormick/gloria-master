@@ -7,12 +7,11 @@ const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
-// const { company } = require('../company/companyDetails');
+
 const { delay } = require('../helperFunctions');
 
 // Load company data
-let companyData = fs.readFileSync('company/companyData.json');
-let company = JSON.parse(companyData);
+let company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
 
 const GDPR_DIALOG = 'gdprDialog';
 

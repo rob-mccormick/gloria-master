@@ -7,12 +7,14 @@ const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, CardFactory, AttachmentLayoutTypes, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
-// const { jobs } = require('../company/companyDetails');
 const { delay, randomSentence } = require('../helperFunctions');
 
 // Load data
-let companyData = fs.readFileSync('company/companyData.json');
-let company = JSON.parse(companyData);
+let company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
+let jobMap = JSON.parse(fs.readFileSync('company/jobMap.json'));
+let locationData = JSON.parse(fs.readFileSync('company/locations.json'));
+let locations = [];
+locationData.locations.forEach(el => locations.push(el.city));
 let jobsData = fs.readFileSync('company/jobsData.json');
 let jobs = JSON.parse(jobsData);
 
@@ -113,7 +115,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         }
 
         // Present categoryOne options and ask user to select
-        const options = company.categoryOne;
+        const options = jobMap.categoryOne;
         const question = MessageFactory.suggestedActions(options, `So, what are you interested in?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -132,8 +134,8 @@ class JobSearchDialog extends CancelAndHelpDialog {
         }
 
         // Get the correct options to present to the user
-        const index = company.categoryOne.indexOf(stepContext.result);
-        const options = company.specialism[index];
+        const index = jobMap.categoryOne.indexOf(stepContext.result);
+        const options = jobMap.specialism[index];
 
         // Add the option to go back to select categoryOne
         if (options[(options.length - 1)] !== userResponses.back) {
@@ -170,10 +172,10 @@ class JobSearchDialog extends CancelAndHelpDialog {
         stepContext.values.userProfile.specialism = stepContext.result;
 
         // Present location options and ask user to select
-        const options = company.locations;
+        const options = locations;
 
         // First, if there is only 1 location save it to the user and move to next step
-        if (company.locations.length === 1) {
+        if (locations.length === 1) {
             stepContext.values.userProfile.location = options[0];
             return stepContext.next();
         }
@@ -182,9 +184,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
         // Add option to select both or all locations
         if (options[(opLen - 1)] !== userResponses.bothLocations && options[(opLen - 1)] !== userResponses.allLocations) {
-            if (company.locations.length === 2) {
+            if (locations.length === 2) {
                 options.push(userResponses.bothLocations);
-            } else if (company.locations.length > 2) {
+            } else if (locations.length > 2) {
                 options.push(userResponses.allLocations);
             }
         }
@@ -270,9 +272,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
             response = `Sorry, nothing 🤨`;
         } else {
             stepContext.values.userProfile.jobs = [];
-            if ((stepContext.values.userProfile.location === 'all' || company.locations.length === 1) && stepContext.values.userProfile.experience === 'all') {
+            if ((stepContext.values.userProfile.location === 'all' || locations.length === 1) && stepContext.values.userProfile.experience === 'all') {
                 response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs at the moment.`;
-            } else if (stepContext.values.userProfile.location === 'all' || company.locations.length === 1) {
+            } else if (stepContext.values.userProfile.location === 'all' || locations.length === 1) {
                 response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs for you at the moment.`;
             } else if (stepContext.values.userProfile.location === 'Remote' && stepContext.values.userProfile.experience === 'all') {
                 response = `Unfortunately, we don't have any remote ${ stepContext.values.userProfile.specialism } jobs at the moment.`;
@@ -376,11 +378,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
             let question;
             const options = [userResponses.clearFiltersYes, userResponses.clearFiltersNo];
 
-            if ((location === 'all' || company.locations.length === 1) && experience !== 'all') {
+            if ((location === 'all' || locations.length === 1) && experience !== 'all') {
                 question = `Would you like me to check for all levels of experience?`;
-            } else if (location !== 'all' && company.locations.length > 1 && experience === 'all') {
+            } else if (location !== 'all' && locations.length > 1 && experience === 'all') {
                 question = `Would you like me to check for ${ stepContext.values.userProfile.specialism } jobs in all locations?`;
-            } else if (location !== 'all' && company.locations.length > 1 && experience !== 'all') {
+            } else if (location !== 'all' && locations.length > 1 && experience !== 'all') {
                 question = `Would you like me to check for ${ stepContext.values.userProfile.specialism } jobs in all locations and for all levels of experience?`;
             } else {
                 return stepContext.next();

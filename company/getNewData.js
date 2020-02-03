@@ -82,36 +82,25 @@ const getJobMap = (apiKey) => {
         console.log(response.statusCode);
 
         if (!error && response && response.statusCode === 200) {
-            console.log(response.body);
-
             let objArray = response.body;
 
-            // let existingData;
+            let existingData;
 
-            // // Async check - not great as responds after the model updates
-            // // fs.access('company/jobMap.json', fs.F_OK, (err) => {
-            // //     if (err) {
-            // //         console.error(err);
-            // //         return;
-            // //     }
-            // //     existingData = JSON.parse(fs.readFileSync('company/jobMap.json'));
-            // // });
+            try {
+                if (fs.existsSync('company/jobMap.json')) {
+                    existingData = JSON.parse(fs.readFileSync('company/jobMap.json'));
+                }
+            } catch (err) {
+                console.error(err);
+            };
 
-            // try {
-            //     if (fs.existsSync('company/jobMap.json')) {
-            //         existingData = JSON.parse(fs.readFileSync('company/jobMap.json'));
-            //     }
-            // } catch (err) {
-            //     console.error(err);
-            // };
+            // Check if the existing data is more recent than the hook notification
+            // If so, exit without making any changes
+            const recentUpdate = whenLastUpdated(objArray);
 
-            // // Check if the existing data is more recent than the hook notification
-            // // If so, exit without making any changes
-            // if (existingData && existingData.lastUpdated && existingData.lastUpdated >= objArray[0].updated_at) {
-            //     return;
-            // }
-
-            console.log(objArray);
+            if (existingData && existingData.lastUpdated >= recentUpdate) {
+                return;
+            }
 
             let categoryOne = [];
             let specialism = [];
@@ -136,14 +125,27 @@ const getJobMap = (apiKey) => {
 
             const jobMapData = {
                 categoryOne,
-                specialism
+                specialism,
+                lastUpdated: recentUpdate
             };
-
-            console.log(jobMapData);
 
             writeToFile(jobMapData, 'company/jobMap.json');
         }
     });
+};
+
+// Takes an object and returns the most recent update date
+const whenLastUpdated = (objArray) => {
+    let result;
+    let i;
+    for (i = 0; i < objArray.length; i++) {
+        let updated = objArray[i].updated_at;
+
+        if (!result || updated >= result) {
+            result = updated;
+        }
+    };
+    return result;
 };
 
 // Version for receiving fat payload via hook

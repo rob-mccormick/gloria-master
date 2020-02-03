@@ -66,7 +66,7 @@ const getCompanyData = (apiKey) => {
     });
 };
 
-// Get company chatbot data from REST API
+// Get company jobmap data from REST API
 const getJobMap = (apiKey) => {
     let options = {
         method: 'GET',
@@ -86,6 +86,7 @@ const getJobMap = (apiKey) => {
 
             let existingData;
 
+            // Fetch the current jobMap data - if it exists
             try {
                 if (fs.existsSync('company/jobMap.json')) {
                     existingData = JSON.parse(fs.readFileSync('company/jobMap.json'));
@@ -134,6 +135,79 @@ const getJobMap = (apiKey) => {
     });
 };
 
+// Get company benefits data from REST API
+const getBenefits = (apiKey) => {
+    let options = {
+        method: 'GET',
+        uri: baseUrl + `benefit/1`,
+        // uri: baseUrl + `companychatbot/${ auth.companyId }`,
+        headers: { 'content-type': 'application/json', authorization: `Api-Key ${ apiKey }` },
+        json: true
+    };
+
+    request(options, (error, response, body) => {
+        if (error) throw new Error(error);
+
+        console.log(response.statusCode);
+
+        if (!error && response && response.statusCode === 200) {
+            let objArray = response.body;
+
+            let existingData;
+
+            // Fetch the current benefit data - if it exists
+            try {
+                if (fs.existsSync('company/benefits.json')) {
+                    existingData = JSON.parse(fs.readFileSync('company/benefits.json'));
+                }
+            } catch (err) {
+                console.error(err);
+            };
+
+            // Check if the existing data is more recent than the hook notification
+            // If so, exit without making any changes
+            const recentUpdate = whenLastUpdated(objArray);
+
+            if (existingData && existingData.lastUpdated >= recentUpdate) {
+                return;
+            }
+
+            // Save the benefit data
+            let benefits = [];
+
+            let i;
+            for (i = 0; i < objArray.length; i++) {
+                let obj = objArray[i];
+                console.log(`obj: ${ JSON.stringify(obj) }`);
+
+                if (obj.active_benefit) {
+                    let benefit = {
+                        title: obj.title
+                    };
+
+                    if (obj.blurb) {
+                        benefit['blurb'] = obj.blurb;
+                    }
+
+                    if (obj.icon_url) {
+                        benefit['imageUrl'] = obj.icon_url;
+                    }
+
+                    benefits.push(benefit);
+                }
+            }
+
+            // Add the most recent update
+            const benefitCards = {
+                benefits,
+                lastUpdated: recentUpdate
+            };
+
+            writeToFile(benefitCards, 'company/benefits.json');
+        }
+    });
+};
+
 // Takes an object and returns the most recent update date
 const whenLastUpdated = (objArray) => {
     let result;
@@ -176,4 +250,4 @@ const whenLastUpdated = (objArray) => {
 //     writeToFile(companyData, 'company/companyInfo.json');
 // };
 
-module.exports = { getCompanyData, getJobMap };
+module.exports = { getCompanyData, getJobMap, getBenefits };

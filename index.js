@@ -16,7 +16,7 @@ const { BlobStorage } = require('botbuilder-azure');
 const { DialogAndWelcomeBot } = require('./bots/dialogAndWelcomeBot');
 const { MainDialog } = require('./dialogs/mainDialog');
 
-const { getCompanyData, getJobMap } = require('./company/getNewData');
+const { getCompanyData, getJobMap, getBenefits } = require('./company/getNewData');
 
 // Read environment variables from .env file
 const ENV_FILE = path.join(__dirname, '.env');
@@ -112,6 +112,9 @@ server.post('/api/hooks', (req, res, next) => {
     } else if (data.data.change && data.hook.event.includes('jobmap')) {
         getJobMap(apiKey);
         res.send('Requesting jobmap data from API');
+    } else if (data.data.change && data.hook.event.includes('benefit')) {
+        getBenefits(apiKey);
+        res.send('Requesting benefit data from API');
     }
 
     // If data is not sent in correct hook format:

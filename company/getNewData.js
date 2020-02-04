@@ -1,12 +1,7 @@
 const fs = require('fs');
 const request = require('request');
 
-// const auth = require('../index');
-const id = require('../index');
-// const { companyId } = require('../index');
-
-// const baseUrl = 'https://app.idealrole.com/api/';
-const baseUrl = 'http://127.0.0.1:5000/api/';
+const app = require('../index');
 
 function writeToFile(data, path) {
     const json = JSON.stringify(data, null, 2);
@@ -21,12 +16,81 @@ function writeToFile(data, path) {
     });
 };
 
-// Get company chatbot data from REST API
-const getCompanyData = (apiKey) => {
-    let options = {
+// Get company benefits data from REST API
+const getBenefits = () => {
+    const options = {
         method: 'GET',
-        uri: baseUrl + `companychatbot/${ id.companyId }`,
-        headers: { 'content-type': 'application/json', authorization: `Api-Key ${ apiKey }` },
+        uri: app.irApi.baseUrl + `benefit/${ app.irApi.id }`,
+        headers: { 'content-type': 'application/json', authorization: `Api-Key ${ app.irApi.key }` },
+        json: true
+    };
+
+    request(options, (error, response, body) => {
+        if (error) throw new Error(error);
+
+        console.log(response.statusCode);
+
+        if (!error && response && response.statusCode === 200) {
+            let objArray = response.body;
+
+            let existingData;
+
+            // Fetch the current benefit data - if it exists
+            try {
+                if (fs.existsSync('company/benefits.json')) {
+                    existingData = JSON.parse(fs.readFileSync('company/benefits.json'));
+                }
+            } catch (err) {
+                console.error(err);
+            };
+
+            // Check if the existing data is more recent than the hook notification
+            // If so, exit without making any changes
+            const recentUpdate = whenLastUpdated(objArray);
+
+            if (existingData && existingData.lastUpdated >= recentUpdate) {
+                return;
+            }
+
+            // Save the benefit data
+            let benefits = [];
+
+            let i;
+            for (i = 0; i < objArray.length; i++) {
+                let obj = objArray[i];
+
+                let benefit = {
+                    title: obj.title
+                };
+
+                if (obj.blurb) {
+                    benefit['blurb'] = obj.blurb;
+                }
+
+                if (obj.icon_url) {
+                    benefit['imageUrl'] = obj.icon_url;
+                }
+
+                benefits.push(benefit);
+            }
+
+            // Add the most recent update
+            const benefitCards = {
+                benefits,
+                lastUpdated: recentUpdate
+            };
+
+            writeToFile(benefitCards, 'company/benefits.json');
+        }
+    });
+};
+
+// Get company chatbot data from REST API
+const getCompanyData = () => {
+    const options = {
+        method: 'GET',
+        uri: app.irApi.baseUrl + `companychatbot/${ app.irApi.id }`,
+        headers: { 'content-type': 'application/json', authorization: `Api-Key ${ app.irApi.key }` },
         json: true
     };
 
@@ -67,12 +131,78 @@ const getCompanyData = (apiKey) => {
     });
 };
 
-// Get company jobmap data from REST API
-const getJobMap = (apiKey) => {
-    let options = {
+// Get job data from REST API
+const getJobs = () => {
+    const options = {
         method: 'GET',
-        uri: baseUrl + `jobmap/${ id.companyId }`,
-        headers: { 'content-type': 'application/json', authorization: `Api-Key ${ apiKey }` },
+        uri: app.irApi.baseUrl + `job/${ app.irApi.id }`,
+        headers: { 'content-type': 'application/json', authorization: `Api-Key ${ app.irApi.key }` },
+        json: true
+    };
+
+    request(options, (error, response, body) => {
+        if (error) throw new Error(error);
+
+        console.log(response.statusCode);
+
+        if (!error && response && response.statusCode === 200) {
+            let objArray = response.body;
+
+            let existingData;
+
+            // Fetch the current benefit data - if it exists
+            try {
+                if (fs.existsSync('company/benefits.json')) {
+                    existingData = JSON.parse(fs.readFileSync('company/benefits.json'));
+                }
+            } catch (err) {
+                console.error(err);
+            };
+
+            // Check if the existing data is more recent than the hook notification
+            // If so, exit without making any changes
+            const recentUpdate = whenLastUpdated(objArray);
+
+            if (existingData && existingData.lastUpdated >= recentUpdate) {
+                return;
+            }
+
+            // Save the benefit data
+            let jobs = [];
+
+            let i;
+            for (i = 0; i < objArray.length; i++) {
+                let obj = objArray[i];
+
+                let job = {
+                    title: obj.title,
+                    location: 'Silicon Valley',
+                    specialism: Array(obj.specialism),
+                    minExperience: obj.role_type,
+                    intro: obj.intro,
+                    jdLink: obj.description_url,
+                    applyLink: obj.apply_url,
+                    video: obj.video_url
+                };
+
+                jobs.push(job);
+            }
+
+            // Add the most recent update
+            jobs['lastUpdated'] = recentUpdate;
+            // console.log(`jobs: ${ JSON.stringify(jobs) }`);
+
+            writeToFile(jobs, 'company/jobs.json');
+        }
+    });
+};
+
+// Get company jobmap data from REST API
+const getJobMap = () => {
+    const options = {
+        method: 'GET',
+        uri: app.irApi.baseUrl + `jobmap/${ app.irApi.id }`,
+        headers: { 'content-type': 'application/json', authorization: `Api-Key ${ app.irApi.key }` },
         json: true
     };
 
@@ -135,83 +265,12 @@ const getJobMap = (apiKey) => {
     });
 };
 
-// Get company benefits data from REST API
-const getBenefits = (apiKey) => {
-    let options = {
-        method: 'GET',
-        uri: baseUrl + `benefit/${ id.companyId }`,
-        headers: { 'content-type': 'application/json', authorization: `Api-Key ${ apiKey }` },
-        json: true
-    };
-
-    request(options, (error, response, body) => {
-        if (error) throw new Error(error);
-
-        console.log(response.statusCode);
-
-        if (!error && response && response.statusCode === 200) {
-            let objArray = response.body;
-
-            let existingData;
-
-            // Fetch the current benefit data - if it exists
-            try {
-                if (fs.existsSync('company/benefits.json')) {
-                    existingData = JSON.parse(fs.readFileSync('company/benefits.json'));
-                }
-            } catch (err) {
-                console.error(err);
-            };
-
-            // Check if the existing data is more recent than the hook notification
-            // If so, exit without making any changes
-            const recentUpdate = whenLastUpdated(objArray);
-
-            if (existingData && existingData.lastUpdated >= recentUpdate) {
-                return;
-            }
-
-            // Save the benefit data
-            let benefits = [];
-
-            let i;
-            for (i = 0; i < objArray.length; i++) {
-                let obj = objArray[i];
-
-                if (obj.active_benefit) {
-                    let benefit = {
-                        title: obj.title
-                    };
-
-                    if (obj.blurb) {
-                        benefit['blurb'] = obj.blurb;
-                    }
-
-                    if (obj.icon_url) {
-                        benefit['imageUrl'] = obj.icon_url;
-                    }
-
-                    benefits.push(benefit);
-                }
-            }
-
-            // Add the most recent update
-            const benefitCards = {
-                benefits,
-                lastUpdated: recentUpdate
-            };
-
-            writeToFile(benefitCards, 'company/benefits.json');
-        }
-    });
-};
-
 // Get company location data from REST API
-const getLocations = (apiKey) => {
-    let options = {
+const getLocations = () => {
+    const options = {
         method: 'GET',
-        uri: baseUrl + `location/${ id.companyId }`,
-        headers: { 'content-type': 'application/json', authorization: `Api-Key ${ apiKey }` },
+        uri: app.irApi.baseUrl + `location/${ app.irApi.id }`,
+        headers: { 'content-type': 'application/json', authorization: `Api-Key ${ app.irApi.key }` },
         json: true
     };
 
@@ -312,4 +371,4 @@ const whenLastUpdated = (objArray) => {
 //     writeToFile(companyData, 'company/companyInfo.json');
 // };
 
-module.exports = { getBenefits, getCompanyData, getJobMap, getLocations };
+module.exports = { getBenefits, getCompanyData, getJobs, getJobMap, getLocations };

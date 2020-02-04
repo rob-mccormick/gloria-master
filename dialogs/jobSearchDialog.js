@@ -15,8 +15,9 @@ let jobMap = JSON.parse(fs.readFileSync('company/jobMap.json'));
 let locationData = JSON.parse(fs.readFileSync('company/locations.json'));
 let locations = [];
 locationData.locations.forEach(el => locations.push(el.city));
-let jobsData = fs.readFileSync('company/jobsData.json');
-let jobs = JSON.parse(jobsData);
+// let jobsData = fs.readFileSync('company/jobsData.json');
+// let jobs = JSON.parse(jobsData);
+let jobs = JSON.parse(fs.readFileSync('company/jobs.json'));
 
 // Import other dialogs
 const { JobMoreInfoDialog, JOB_MORE_INFO_DIALOG } = require('./jobMoreInfoDialog');

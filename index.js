@@ -4,6 +4,7 @@
 // Import required packages
 const path = require('path');
 const restify = require('restify');
+// const fs = require('fs');
 const sgMail = require('@sendgrid/mail');
 
 // Import required bot services. See https://aka.ms/bot-services to learn more about the different parts of a bot.
@@ -16,7 +17,7 @@ const { BlobStorage } = require('botbuilder-azure');
 const { DialogAndWelcomeBot } = require('./bots/dialogAndWelcomeBot');
 const { MainDialog } = require('./dialogs/mainDialog');
 
-const { getBenefits, getCompanyData, getJobMap, getLocations } = require('./company/getNewData');
+const { getBenefits, getCompanyData, getJobs, getJobMap, getLocations } = require('./company/getNewData');
 
 // Read environment variables from .env file
 const ENV_FILE = path.join(__dirname, '.env');
@@ -75,11 +76,11 @@ const bot = new DialogAndWelcomeBot(conversationState, userState, dialog, logger
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Add variable to capture the Ideal Role API key
-const apiKey = process.env.IR_API_KEY;
-const companyId = process.env.COMPANY_ID;
-
-// Load company data
-// getData.getCompanyData(apiKey);
+const irApi = {
+    key: process.env.IR_API_KEY,
+    id: process.env.COMPANY_ID,
+    baseUrl: process.env.BASE_URL
+};
 
 // Create HTTP server
 let server = restify.createServer();
@@ -105,16 +106,19 @@ server.post('/api/hooks', (req, res, next) => {
     console.log(data);
 
     if (data.data.change && data.hook.event.includes('companychatbot')) {
-        getCompanyData(apiKey);
+        getCompanyData();
         res.send('Requesting company data from API');
+    } else if (data.data.change && data.hook.event.includes('job')) {
+        getJobs();
+        res.send('Requesting job data from API');
     } else if (data.data.change && data.hook.event.includes('jobmap')) {
-        getJobMap(apiKey);
+        getJobMap();
         res.send('Requesting jobmap data from API');
     } else if (data.data.change && data.hook.event.includes('benefit')) {
-        getBenefits(apiKey);
+        getBenefits();
         res.send('Requesting benefit data from API');
     } else if (data.data.change && data.hook.event.includes('location')) {
-        getLocations(apiKey);
+        getLocations();
         res.send('Requesting location data from API');
     }
 
@@ -124,4 +128,4 @@ server.post('/api/hooks', (req, res, next) => {
     return next();
 });
 
-exports.companyId = companyId;
+module.exports.irApi = irApi;

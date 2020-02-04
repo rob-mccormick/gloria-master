@@ -99,12 +99,6 @@ const getBenefits = () => {
 // Get company chatbot data from REST API
 const getCompanyData = () => {
     const options = setOptions('companychatbot');
-    // const options = {
-    //     method: 'GET',
-    //     uri: app.irApi.baseUrl + `companychatbot/${ app.irApi.id }`,
-    //     headers: { 'content-type': 'application/json', authorization: `Api-Key ${ app.irApi.key }` },
-    //     json: true
-    // };
 
     request(options, (error, response, body) => {
         if (error) throw new Error(error);
@@ -116,13 +110,6 @@ const getCompanyData = () => {
 
             let obj = response.body[0];
 
-            // let existingData = JSON.parse(fs.readFileSync('company/companyInfo.json'));
-
-            // // Check if the existing data is more recent than the hook notification
-            // // If so, exit without making any changes
-            // if (existingData.lastUpdated && existingData.lastUpdated >= obj.updated_at) {
-            //     return;
-            // }
             let now = processTime();
 
             const companyData = {
@@ -147,12 +134,6 @@ const getCompanyData = () => {
 // Get job data from REST API
 const getJobs = () => {
     const options = setOptions('job');
-    // const options = {
-    //     method: 'GET',
-    //     uri: app.irApi.baseUrl + `job/${ app.irApi.id }`,
-    //     headers: { 'content-type': 'application/json', authorization: `Api-Key ${ app.irApi.key }` },
-    //     json: true
-    // };
 
     request(options, (error, response, body) => {
         if (error) throw new Error(error);
@@ -162,36 +143,20 @@ const getJobs = () => {
         if (!error && response && response.statusCode === 200) {
             let objArray = response.body;
 
-            // let existingData;
-
-            // // Fetch the current benefit data - if it exists
-            // try {
-            //     if (fs.existsSync('company/benefits.json')) {
-            //         existingData = JSON.parse(fs.readFileSync('company/benefits.json'));
-            //     }
-            // } catch (err) {
-            //     console.error(err);
-            // };
-
-            // // Check if the existing data is more recent than the hook notification
-            // // If so, exit without making any changes
-            // const recentUpdate = whenLastUpdated(objArray);
-
-            // if (existingData && existingData.lastUpdated >= recentUpdate) {
-            //     return;
-            // }
-
-            // Save the benefit data
             let jobs = [];
 
             let i;
             for (i = 0; i < objArray.length; i++) {
                 let obj = objArray[i];
 
+                let specialismArray = [];
+                obj.specialism.forEach(el => specialismArray.push(el.specialism));
+
                 let job = {
+                    id: obj.id,
                     title: obj.title,
-                    location: 'Silicon Valley',
-                    specialism: Array(obj.specialism),
+                    location: obj.location.city,
+                    specialism: specialismArray,
                     minExperience: obj.role_type,
                     intro: obj.intro,
                     jdLink: obj.description_url,
@@ -205,7 +170,6 @@ const getJobs = () => {
             // Add the most recent update
             let now = processTime();
             jobs['lastUpdated'] = now;
-            // console.log(`jobs: ${ JSON.stringify(jobs) }`);
 
             writeToFile(jobs, 'company/jobs.json');
         }
@@ -215,12 +179,6 @@ const getJobs = () => {
 // Get company jobmap data from REST API
 const getJobMap = () => {
     const options = setOptions('jobmap');
-    // const options = {
-    //     method: 'GET',
-    //     uri: app.irApi.baseUrl + `jobmap/${ app.irApi.id }`,
-    //     headers: { 'content-type': 'application/json', authorization: `Api-Key ${ app.irApi.key }` },
-    //     json: true
-    // };
 
     request(options, (error, response, body) => {
         if (error) throw new Error(error);
@@ -229,25 +187,6 @@ const getJobMap = () => {
 
         if (!error && response && response.statusCode === 200) {
             let objArray = response.body;
-
-            // let existingData;
-
-            // // Fetch the current jobMap data - if it exists
-            // try {
-            //     if (fs.existsSync('company/jobMap.json')) {
-            //         existingData = JSON.parse(fs.readFileSync('company/jobMap.json'));
-            //     }
-            // } catch (err) {
-            //     console.error(err);
-            // };
-
-            // // Check if the existing data is more recent than the hook notification
-            // // If so, exit without making any changes
-            // const recentUpdate = whenLastUpdated(objArray);
-
-            // if (existingData && existingData.lastUpdated >= recentUpdate) {
-            //     return;
-            // }
 
             let categoryOne = [];
             let specialism = [];
@@ -285,12 +224,6 @@ const getJobMap = () => {
 // Get company location data from REST API
 const getLocations = () => {
     const options = setOptions('location');
-    // const options = {
-    //     method: 'GET',
-    //     uri: app.irApi.baseUrl + `location/${ app.irApi.id }`,
-    //     headers: { 'content-type': 'application/json', authorization: `Api-Key ${ app.irApi.key }` },
-    //     json: true
-    // };
 
     request(options, (error, response, body) => {
         if (error) throw new Error(error);
@@ -299,25 +232,6 @@ const getLocations = () => {
 
         if (!error && response && response.statusCode === 200) {
             let objArray = response.body;
-
-            // let existingData;
-
-            // // Fetch the current benefit data - if it exists
-            // try {
-            //     if (fs.existsSync('company/locations.json')) {
-            //         existingData = JSON.parse(fs.readFileSync('company/locations.json'));
-            //     }
-            // } catch (err) {
-            //     console.error(err);
-            // };
-
-            // // Check if the existing data is more recent than the hook notification
-            // // If so, exit without making any changes
-            // const recentUpdate = whenLastUpdated(objArray);
-
-            // if (existingData && existingData.lastUpdated >= recentUpdate) {
-            //     return;
-            // }
 
             // Save the benefit data
             let locations = [];

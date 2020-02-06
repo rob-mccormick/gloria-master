@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 const { ComponentDialog, DialogTurnStatus } = require('botbuilder-dialogs');
-// const { MessageFactory } = require('botbuilder');
 
 /**
  * This base class watches for common phrases like "help" and "cancel" and takes action on them
@@ -40,10 +39,6 @@ class CancelAndHelpDialog extends ComponentDialog {
         case 'quit':
             await innerDc.context.sendActivity(`No problem, I'll restart now`);
             return await innerDc.cancelAllDialogs();
-        // case 'testing':
-        //     await innerDc.context.sendActivity('This is where we send a message.');
-        //     await innerDc.context.sendActivity(MessageFactory.suggestedActions(['yes', 'no'], 'Did you find a job you like?'));
-        //     return { status: DialogTurnStatus.waiting };
         }
     }
 }

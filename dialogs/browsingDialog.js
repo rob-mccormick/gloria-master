@@ -8,7 +8,6 @@ const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay } = require('../helperFunctions');
-// const { company } = require('../company/companyDetails');
 
 // Load company data
 let companyInfo = fs.readFileSync('company/companyInfo.json');

@@ -6,7 +6,6 @@ const fs = require('fs');
 const { DialogBot } = require('./dialogBot');
 const { MessageFactory } = require('botbuilder');
 
-// const { company } = require('../company/companyDetails');
 const { userIntent } = require('../helperFunctions');
 
 // Async

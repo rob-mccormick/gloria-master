@@ -15,8 +15,6 @@ const jobMap = JSON.parse(fs.readFileSync('company/jobMap.json'));
 const locationData = JSON.parse(fs.readFileSync('company/locations.json'));
 let locations = [];
 locationData.locations.forEach(el => locations.push(el.city));
-// let jobsData = fs.readFileSync('company/jobsData.json');
-// let jobs = JSON.parse(jobsData);
 const jobObj = JSON.parse(fs.readFileSync('company/jobs.json'));
 const jobs = jobObj.jobs;
 
@@ -34,9 +32,7 @@ const userResponses = {
     back: 'Go back',
     bothLocations: `I'm open to both`,
     allLocations: `I'm open to all`,
-    // yearsExperience: ['0', '1', '2', '3', '4', '5', '6', '7+'],
     roleTypes: jobObj.roleTypes,
-    // allExperience: 'Show me all',
     allRoleTypes: 'All roles',
     moreInfoYes: `That'd be great`,
     moreInfoNo: 'No thanks',
@@ -406,7 +402,6 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
     /**
      * Redirect user if they want to see more info
-     *
      */
     async redirectForMoreInfoStep(stepContext) {
         // Check if the user wants to see more info
@@ -474,7 +469,6 @@ class JobSearchDialog extends CancelAndHelpDialog {
      * Check if the user found a job they like
      * If there are no available jobs, go to the next step
      */
-
     async checkIfFoundJobStep(stepContext) {
         if (stepContext.values.userProfile.jobs.length > 0) {
             let options;

@@ -7,7 +7,6 @@ const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
-// const { helpTopics } = require('../company/companyDetails');
 const helpTopics = JSON.parse(fs.readFileSync('company/questions.json'));
 const { delay, randomSentence } = require('../helperFunctions');
 

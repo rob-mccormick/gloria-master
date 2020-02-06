@@ -31,8 +31,6 @@ const userResponses = {
     askQuestion: 'I have a question'
 };
 
-let conversationId;
-
 class MainDialog extends ComponentDialog {
     constructor(conversationState, userState, logger) {
         super('MainDialog');

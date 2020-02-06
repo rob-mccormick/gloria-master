@@ -105,29 +105,30 @@ server.post('/api/hooks', (req, res, next) => {
     let data = req.body || {};
     console.log(data);
 
-    if (data.data.change && data.hook.event.includes('companychatbot')) {
-        getCompanyData();
-        res.send('Requesting company data from API');
-    } else if (data.data.change && data.hook.event.includes('job')) {
-        getJobs();
-        res.send('Requesting job data from API');
-    } else if (data.data.change && data.hook.event.includes('jobmap')) {
-        getJobMap();
-        res.send('Requesting jobmap data from API');
-    } else if (data.data.change && data.hook.event.includes('benefit')) {
-        getBenefits();
-        res.send('Requesting benefit data from API');
-    } else if (data.data.change && data.hook.event.includes('location')) {
-        getLocations();
-        res.send('Requesting location data from API');
-    } else if (data.data.change && data.hook.event.includes('question')) {
-        getQuestions();
-        res.send('Requesting question data from API');
+    try {
+        if (data.data.change && data.hook.event.includes('companychatbot')) {
+            getCompanyData();
+            res.send('Requesting company data from API');
+        } else if (data.data.change && data.hook.event.includes('job')) {
+            getJobs();
+            res.send('Requesting job data from API');
+        } else if (data.data.change && data.hook.event.includes('jobmap')) {
+            getJobMap();
+            res.send('Requesting jobmap data from API');
+        } else if (data.data.change && data.hook.event.includes('benefit')) {
+            getBenefits();
+            res.send('Requesting benefit data from API');
+        } else if (data.data.change && data.hook.event.includes('location')) {
+            getLocations();
+            res.send('Requesting location data from API');
+        } else if (data.data.change && data.hook.event.includes('question')) {
+            getQuestions();
+            res.send('Requesting question data from API');
+        }
+    } catch (err) {
+        res.status(403);
+        res.send('Unauthorized');
     }
-
-    // If data is not sent in correct hook format:
-    // Return error and don't do anything
-    // res.send('Unauthorized');
     return next();
 });
 

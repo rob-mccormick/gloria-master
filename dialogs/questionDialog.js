@@ -1,11 +1,14 @@
 // Copyright (c) Ideal Role Limited. All rights reserved.
 // Bot Framework licensed under the MIT License from Microsoft Corporation.
 
+const fs = require('fs');
+
 const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
-const { helpTopics } = require('../company/companyDetails');
+// const { helpTopics } = require('../company/companyDetails');
+const helpTopics = JSON.parse(fs.readFileSync('company/questions.json'));
 const { delay, randomSentence } = require('../helperFunctions');
 
 // Import other dialogs
@@ -18,7 +21,7 @@ const QUESTION_DIALOG = 'questionDialog';
 const WATERFALL_DIALOG = 'waterfallDialog';
 
 const responses = {
-    sections: ['Preparing my application', 'After I apply', 'Working options'],
+    sections: helpTopics.sections,
     back: 'Go back',
     answered: 'Yes thanks',
     notAnswered: 'No',
@@ -94,6 +97,7 @@ class QuestionDialog extends CancelAndHelpDialog {
         case responses.sections[1]:
             intro = `Sure, what would you like to know?\n\n`;
             helpObj = helpTopics.afterApply;
+            console.log(`helpObj = ${ JSON.stringify(helpObj) }`);
             break;
         case responses.sections[2]:
             intro = `We try to be flexible and help you find the right balance ⚖️\n\nWhat area would you like to know more about?\n\n`;

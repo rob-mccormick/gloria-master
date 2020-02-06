@@ -1,0 +1,51 @@
+{
+  "prepareApplication": [
+    {
+      "question": "Preparing your CV",
+      "answer": [
+        "We want to hear about what you've achieved, your strengths and skills.\\n\\nWe also want to know how you can apply them to the job you're applying for.",
+        "☝️ And a tip - when talking about your past jobs focus on what you achieved. Not your duties.",
+        "You can make your CV as long or short as you like - just keep it relevant.  And it helps to have a summary on the first page."
+      ]
+    },
+    {
+      "question": "Cover letters",
+      "answer": [
+        "We thought about this one and realised that cover letters are a pain to write and not that helpful...\\n\\nSo you don't need one to apply 😀"
+      ]
+    }
+  ],
+  "afterApply": [
+    {
+      "question": "What happens after I apply?",
+      "answer": [
+        "If you look like a good fit for the job, we'll get in touch to arrange a call.",
+        "After this, you'll be asked to complete a task for some roles.  There are no right or wrong answers to these - we just want to see how you solve real world problems.",
+        "Then you'll come in for an interview at our office.  We'll give you all the specific details based on the job you applied for."
+      ]
+    },
+    {
+      "question": "Do you keep applications for future jobs?",
+      "answer": [
+        "The good news - we keep all applications for future roles.",
+        "The bad news - our system isn't always great at matching people to the right roles.",
+        "To be safe, check back here. And if there are no jobs I can let you know every time we have a new one."
+      ]
+    }
+  ],
+  "workingOptions": [
+    {
+      "question": "Flexible working options",
+      "answer": [
+        "We work hard to make our offices a hive of activity and collaboration.  So while we prefer you work there when you can, we're flexible in hours and location.",
+        "If you need something permanent - like working different hours, part-time or remotely - best to mention this to the recruitment team when they contact you.  We'll do our best to accommodate you."
+      ]
+    }
+  ],
+  "sections": [
+    "Preparing my application",
+    "After I apply",
+    "Working options"
+  ],
+  "lastUpdated": "2020-02-06T11:53:41.803Z"
+}

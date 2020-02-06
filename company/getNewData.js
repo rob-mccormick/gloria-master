@@ -262,6 +262,48 @@ const getLocations = () => {
     });
 };
 
+const getQuestions = () => {
+    const options = setOptions('question');
+
+    request(options, (error, response, body) => {
+        if (error) throw new Error(error);
+
+        console.log(response.statusCode);
+
+        if (!error && response && response.statusCode === 200) {
+            let objArray = response.body;
+            let helpTopics = {};
+            let userAnswers = [];
+
+            let i;
+            for (i = 0; i < objArray.length; i++) {
+                let obj = objArray[i];
+
+                if (!helpTopics[obj.topic.index]) {
+                    helpTopics[obj.topic.index] = [];
+                    userAnswers.push(obj.topic.string);
+                }
+
+                let answerArray = obj.answer.split('\r\n\r\n');
+
+                helpTopics[obj.topic.index].push({
+                    question: obj.question,
+                    answer: answerArray
+                });
+            }
+
+            // Add the user answers for the questionDialog
+            helpTopics['sections'] = userAnswers;
+
+            // Add the most recent update
+            let now = processTime();
+            helpTopics['lastUpdated'] = now;
+
+            writeToFile(helpTopics, 'company/questions.json');
+        }
+    });
+};
+
 // Takes an object and returns the most recent update date
 // const whenLastUpdated = (objArray) => {
 //     let result;
@@ -304,4 +346,4 @@ const getLocations = () => {
 //     writeToFile(companyData, 'company/companyInfo.json');
 // };
 
-module.exports = { getBenefits, getCompanyData, getJobs, getJobMap, getLocations };
+module.exports = { getBenefits, getCompanyData, getJobs, getJobMap, getLocations, getQuestions };

@@ -1,134 +1,62 @@
-[
-  {
-    "id": 8,
-    "title": "Team Leader",
-    "location": "Oakland",
-    "specialism": [
-      "Customer Success"
-    ],
-    "minExperience": "4",
-    "intro": "This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.",
-    "jdLink": "https://www.idealrole.com/demo/job-application",
-    "applyLink": "https://www.idealrole.com/demo/job-application",
-    "video": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4"
-  },
-  {
-    "id": 12,
-    "title": "Data Analyst",
-    "location": "Silicon Valley",
-    "specialism": [
-      "Analytics"
-    ],
-    "minExperience": "1",
-    "intro": "This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.",
-    "jdLink": "https://www.idealrole.com/demo/job-application",
-    "applyLink": "https://www.idealrole.com/demo/job-application",
-    "video": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4"
-  },
-  {
-    "id": 3,
-    "title": "Web Developer",
-    "location": "Silicon Valley",
-    "specialism": [
-      "Marketing",
-      "Engineering"
-    ],
-    "minExperience": "3",
-    "intro": "This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.",
-    "jdLink": "https://www.idealrole.com/demo/job-application",
-    "applyLink": "https://www.idealrole.com/demo/job-application",
-    "video": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4"
-  },
-  {
-    "id": 7,
-    "title": "DevOps Engineer",
-    "location": "Silicon Valley",
-    "specialism": [
-      "Engineering"
-    ],
-    "minExperience": "4",
-    "intro": "",
-    "jdLink": "https://www.idealrole.com/demo/job-application",
-    "applyLink": "https://www.idealrole.com/demo/job-application",
-    "video": ""
-  },
-  {
-    "id": 2,
-    "title": "Design Director",
-    "location": "Silicon Valley",
-    "specialism": [
-      "Design"
-    ],
-    "minExperience": "7",
-    "intro": "This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.",
-    "jdLink": "https://www.idealrole.com/demo/job-application",
-    "applyLink": "https://www.idealrole.com/demo/job-application",
-    "video": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4"
-  },
-  {
-    "id": 5,
-    "title": "Android Developer",
-    "location": "Silicon Valley",
-    "specialism": [
-      "Engineering"
-    ],
-    "minExperience": "2",
-    "intro": "This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.",
-    "jdLink": "https://www.idealrole.com/demo/job-application",
-    "applyLink": "https://www.idealrole.com/demo/job-application",
-    "video": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4"
-  },
-  {
-    "id": 6,
-    "title": "Full-stack Engineer",
-    "location": "Silicon Valley",
-    "specialism": [
-      "Engineering"
-    ],
-    "minExperience": "3",
-    "intro": "This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.",
-    "jdLink": "https://www.idealrole.com/demo/job-application",
-    "applyLink": "https://www.idealrole.com/demo/job-application",
-    "video": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4"
-  },
-  {
-    "id": 9,
-    "title": "Product Designer",
-    "location": "Silicon Valley",
-    "specialism": [
-      "Design",
-      "Product"
-    ],
-    "minExperience": "3",
-    "intro": "This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.",
-    "jdLink": "https://www.idealrole.com/demo/job-application",
-    "applyLink": "https://www.idealrole.com/demo/job-application",
-    "video": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4"
-  },
-  {
-    "id": 10,
-    "title": "Product Manager",
-    "location": "Silicon Valley",
-    "specialism": [
-      "Product"
-    ],
-    "minExperience": "5",
-    "intro": "This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.",
-    "jdLink": "https://www.idealrole.com/demo/job-application",
-    "applyLink": "https://www.idealrole.com/demo/job-application",
-    "video": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4"
-  },
-  {
-    "id": 11,
-    "title": "Data Scientist",
-    "location": "Silicon Valley",
-    "specialism": [
-      "Analytics"
-    ],
-    "minExperience": "2",
-    "intro": "This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.",
-    "jdLink": "https://www.idealrole.com/demo/job-application",
-    "applyLink": "https://www.idealrole.com/demo/job-application",
-    "video": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/video-job-description.mp4"
-  }
-]
+{
+  "jobs": [
+    {
+      "id": 13,
+      "title": "Design Director",
+      "location": "Silicon Valley",
+      "specialism": [
+        "Design"
+      ],
+      "role": "Team leader",
+      "intro": "This will be an intro to what the job aims to achieve. It will help the user decide whether they want to see more.",
+      "jdLink": "https://www.idealrole.com/demo/job-application",
+      "applyLink": "https://www.idealrole.com/demo/job-application",
+      "video": ""
+    },
+    {
+      "id": 14,
+      "title": "Web Developer",
+      "location": "Silicon Valley",
+      "specialism": [
+        "Marketing",
+        "Engineering"
+      ],
+      "role": "Individual contributor",
+      "intro": "",
+      "jdLink": "https://www.idealrole.com/demo/job-application",
+      "applyLink": "https://www.idealrole.com/demo/job-application",
+      "video": ""
+    },
+    {
+      "id": 15,
+      "title": "iOS Developer",
+      "location": "Silicon Valley",
+      "specialism": [
+        "Engineering"
+      ],
+      "role": "Individual contributor",
+      "intro": "",
+      "jdLink": "https://www.idealrole.com/demo/job-application",
+      "applyLink": "https://www.idealrole.com/demo/job-application",
+      "video": ""
+    },
+    {
+      "id": 16,
+      "title": "Android Developer",
+      "location": "Silicon Valley",
+      "specialism": [
+        "Engineering"
+      ],
+      "role": "Individual contributor",
+      "intro": "",
+      "jdLink": "https://www.idealrole.com/demo/job-application",
+      "applyLink": "https://www.idealrole.com/demo/job-application",
+      "video": ""
+    }
+  ],
+  "roleTypes": [
+    "Team leader",
+    "Individual contributor"
+  ],
+  "lastUpdated": "2020-02-06T14:18:25.950Z"
+}

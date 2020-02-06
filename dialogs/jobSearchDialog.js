@@ -10,14 +10,15 @@ const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay, randomSentence } = require('../helperFunctions');
 
 // Load data
-let company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
-let jobMap = JSON.parse(fs.readFileSync('company/jobMap.json'));
-let locationData = JSON.parse(fs.readFileSync('company/locations.json'));
+const company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
+const jobMap = JSON.parse(fs.readFileSync('company/jobMap.json'));
+const locationData = JSON.parse(fs.readFileSync('company/locations.json'));
 let locations = [];
 locationData.locations.forEach(el => locations.push(el.city));
 // let jobsData = fs.readFileSync('company/jobsData.json');
 // let jobs = JSON.parse(jobsData);
-let jobs = JSON.parse(fs.readFileSync('company/jobs.json'));
+const jobObj = JSON.parse(fs.readFileSync('company/jobs.json'));
+const jobs = jobObj.jobs;
 
 // Import other dialogs
 const { JobMoreInfoDialog, JOB_MORE_INFO_DIALOG } = require('./jobMoreInfoDialog');
@@ -33,8 +34,10 @@ const userResponses = {
     back: 'Go back',
     bothLocations: `I'm open to both`,
     allLocations: `I'm open to all`,
-    yearsExperience: ['0', '1', '2', '3', '4', '5', '6', '7+'],
-    allExperience: 'Show me all',
+    // yearsExperience: ['0', '1', '2', '3', '4', '5', '6', '7+'],
+    roleTypes: jobObj.roleTypes,
+    // allExperience: 'Show me all',
+    allRoleTypes: 'All roles',
     moreInfoYes: `That'd be great`,
     moreInfoNo: 'No thanks',
     foundOneJob: 'Yeah, it looks good',
@@ -61,7 +64,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
                 this.selectCategoryOneStep.bind(this),
                 this.selectSpecialismStep.bind(this),
                 this.selectLocationStep.bind(this),
-                this.experienceStep.bind(this),
+                this.roleTypeStep.bind(this),
                 this.presentAvailableJobsStep.bind(this),
                 this.seeMoreInfoStep.bind(this),
                 this.redirectForMoreInfoStep.bind(this),
@@ -204,7 +207,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
      * Save the user's location selection
      * Ask the user to share how much experience they have to narrow down the job search
      */
-    async experienceStep(stepContext) {
+    async roleTypeStep(stepContext) {
         // If clearing filters, go to next step
         if (stepContext.values.conversationData.unfilteredJob) {
             return stepContext.next();
@@ -217,15 +220,15 @@ class JobSearchDialog extends CancelAndHelpDialog {
             stepContext.values.userProfile.location = stepContext.result;
         }
 
-        // Present years experience for the user to select
-        const options = userResponses.yearsExperience;
+        // Present the different role types to the user
+        const options = userResponses.roleTypes;
 
-        // Add option to select all experience levels
-        if (options[(options.length - 1)] !== userResponses.allExperience) {
-            options.push(userResponses.allExperience);
+        // Add option to select all role types
+        if (options[(options.length - 1)] !== userResponses.allRoleTypes) {
+            options.push(userResponses.allRoleTypes);
         }
 
-        const question = MessageFactory.suggestedActions(options, `And how many years experience do you have?`);
+        const question = MessageFactory.suggestedActions(options, `And what type of role are you looking for?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(1000);
@@ -240,11 +243,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
      * - Present them to the user
      */
     async presentAvailableJobsStep(stepContext) {
-        // Save user's experience selection
-        if (stepContext.result === userResponses.allExperience) {
+        // Save user's role type selection
+        if (stepContext.result === userResponses.allRoleTypes) {
             stepContext.values.userProfile.experience = 'all';
         } else if (stepContext.result) {
-            stepContext.values.userProfile.experience = parseInt(stepContext.result, 10);
+            stepContext.values.userProfile.experience = stepContext.result;
         }
 
         // Set the jobSearchComplete to true
@@ -282,7 +285,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
             } else if (stepContext.values.userProfile.location === 'Remote') {
                 response = `Unfortunately, we don't have any remote ${ stepContext.values.userProfile.specialism } jobs for you at the moment.`;
             } else {
-                response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs in ${ stepContext.values.userProfile.location } at the moment.`;
+                response = `Unfortunately, we don't have any ${ stepContext.values.userProfile.specialism } jobs in ${ stepContext.values.userProfile.location } for you at the moment.`;
             }
         }
 
@@ -380,11 +383,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
             const options = [userResponses.clearFiltersYes, userResponses.clearFiltersNo];
 
             if ((location === 'all' || locations.length === 1) && experience !== 'all') {
-                question = `Would you like me to check for all levels of experience?`;
+                question = `Would you like me to check for all types of role?`;
             } else if (location !== 'all' && locations.length > 1 && experience === 'all') {
                 question = `Would you like me to check for ${ stepContext.values.userProfile.specialism } jobs in all locations?`;
             } else if (location !== 'all' && locations.length > 1 && experience !== 'all') {
-                question = `Would you like me to check for ${ stepContext.values.userProfile.specialism } jobs in all locations and for all levels of experience?`;
+                question = `Would you like me to check for ${ stepContext.values.userProfile.specialism } jobs in all locations and for all types of role?`;
             } else {
                 return stepContext.next();
             }

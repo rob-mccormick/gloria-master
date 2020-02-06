@@ -144,10 +144,17 @@ const getJobs = () => {
             let objArray = response.body;
 
             let jobs = [];
+            let roleTypes = [];
 
             let i;
             for (i = 0; i < objArray.length; i++) {
                 let obj = objArray[i];
+                console.log(`Job object: ${ JSON.stringify(obj) }`);
+
+                // Create roleTypes array
+                if (roleTypes.indexOf(obj.role_type.role_type) === -1 ) {
+                    roleTypes.push(obj.role_type.role_type);
+                }
 
                 let specialismArray = [];
                 obj.specialism.forEach(el => specialismArray.push(el.specialism));
@@ -157,7 +164,7 @@ const getJobs = () => {
                     title: obj.title,
                     location: obj.location.city,
                     specialism: specialismArray,
-                    minExperience: obj.role_type,
+                    role: obj.role_type.role_type,
                     intro: obj.intro,
                     jdLink: obj.description_url,
                     applyLink: obj.apply_url,
@@ -166,12 +173,16 @@ const getJobs = () => {
 
                 jobs.push(job);
             }
-
-            // Add the most recent update
+            // Create the job object
             let now = processTime();
-            jobs['lastUpdated'] = now;
 
-            writeToFile(jobs, 'company/jobs.json');
+            let jobObj = {
+                jobs,
+                roleTypes,
+                lastUpdated: now
+            };
+
+            writeToFile(jobObj, 'company/jobs.json');
         }
     });
 };

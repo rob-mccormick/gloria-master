@@ -112,12 +112,18 @@ const getCompanyData = () => {
 
             let now = processTime();
 
+            // Process nextSteps if there are line breaks
+            let nextSteps = obj.next_steps;
+            if (nextSteps.includes('\\n')) {
+                nextSteps = obj.next_steps.replace(/\\n/gi, '\n');
+            }
+
             const companyData = {
                 name: obj.company,
                 privacyNotice: obj.privacy_notice_url,
                 benefitsLink: obj.benefits_url,
                 benefitsMessage: obj.benefits_message,
-                nextSteps: obj.next_steps,
+                nextSteps,
                 emailContacts: [obj.talent_email],
                 lastUpdated: now
             };
@@ -295,7 +301,15 @@ const getQuestions = () => {
                     userAnswers.push(obj.topic.string);
                 }
 
-                let answerArray = obj.answer.split('\r\n\r\n');
+                // Process answers if there are line breaks
+                let answers = obj.answer;
+                if (answers.includes('\\n')) {
+                    answers = obj.answer.replace(/\\n/gi, '\n');
+                }
+                console.log(`answers: ${ JSON.stringify(answers) }`);
+
+                let answerArray = answers.split('\r\n\r\n');
+                console.log(answerArray);
 
                 helpTopics[obj.topic.index].push({
                     question: obj.question,

@@ -158,7 +158,7 @@ const getJobs = () => {
                 console.log(`Job object: ${ JSON.stringify(obj) }`);
 
                 // Create roleTypes array
-                if (roleTypes.indexOf(obj.role_type.role_type) === -1 ) {
+                if (roleTypes.indexOf(obj.role_type.role_type) === -1) {
                     roleTypes.push(obj.role_type.role_type);
                 }
 

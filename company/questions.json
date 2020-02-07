@@ -3,7 +3,7 @@
     {
       "question": "Students",
       "answer": [
-        "Each year we run our Summer Internship Programme 🌞  You'll be able to find details here on our career site from March each year.",
+        "Each year we run our Summer Internship Programme 🌞\n\nYou'll be able to find details here on our career site from March each year.",
         "At the moment we don't offer work placements or a graduate program.  But some of our roles can be a great fit if you're new to the workforce."
       ]
     },
@@ -17,7 +17,7 @@
     {
       "question": "Leave benefits",
       "answer": [
-        "You can find the annual leave you'll get in the job description.  And on top of that, after 4 years you'll get an extra 6 weeks paid time off. A little thanks for your hard work!",
+        "You can find the annual leave you'll get in the job description.\n\nAnd on top of that, after 4 years you'll get an extra 6 weeks paid time off. A little thanks for your hard work!",
         "We're also proud to offer generous maternity and paternity leave."
       ]
     },
@@ -33,7 +33,7 @@
     {
       "question": "What to wear to an interview?",
       "answer": [
-        "What you have to say is important to us - not what you're wearing.  So wear whatever makes you comfortable and confident!"
+        "What you have to say is important to us - not what you're wearing.\n\nSo wear whatever makes you comfortable and confident!"
       ]
     },
     {
@@ -41,7 +41,7 @@
       "answer": [
         "In interviews, we want to get to know you.  Your previous positions and challenges.  And what you're looking for in a career.",
         "So it's a good idea to have some examples of different challenges you've faced.  And be able to explain what action you took.  And how it all turned out.",
-        "It's also good to check out [company] beforehand and get to know us and our industry.  And we'll have copies of your CV or portfolio - so no need to bring them."
+        "It's also good to check out PiedPiper beforehand and get to know us and our industry.  And we'll have copies of your CV or portfolio - so no need to bring them."
       ]
     },
     {
@@ -66,19 +66,19 @@
       "question": "Reapplying for the same job",
       "answer": [
         "If you weren't successful you can always reapply for a job.",
-        "But so you know, we'll look to see how you've addressed the reason you didn't get the job before.  It's normal for this to take time - maybe 6 to 12 months."
+        "But so you know, we'll look to see how you've addressed the reason you didn't get the job before.\n\nIt's normal for this to take time - maybe 6 to 12 months."
       ]
     },
     {
       "question": "If you need a CS degree",
       "answer": [
-        "You don't need a computer science degree to be an engineer at PiedPiper.  We're more interested in what you can do now."
+        "You don't need a computer science degree to be an engineer at PiedPiper.\n\nWe're more interested in what you can do now."
       ]
     },
     {
       "question": "Cover letters",
       "answer": [
-        "We thought about this one and realised that cover letters are a pain to write and not that helpful...   So you don't need one to apply 😀"
+        "We thought about this one and realised that cover letters are a pain to write and not that helpful...\n\nSo you don't need one to apply 😀"
       ]
     },
     {
@@ -95,5 +95,5 @@
     "After I apply",
     "Preparing my application"
   ],
-  "lastUpdated": "2020-02-07T15:37:55.755Z"
+  "lastUpdated": "2020-02-07T15:53:32.083Z"
 }

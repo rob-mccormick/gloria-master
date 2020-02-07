@@ -88,21 +88,31 @@ class QuestionDialog extends CancelAndHelpDialog {
         let question;
         let options;
 
-        switch (stepContext.result) {
-        case responses.sections[0]:
-            intro = `I'm very excited to hear your thinking of applying 😊\n\nWould you like tips on:\n\n`;
-            helpObj = helpTopics.prepareApplication;
-            break;
-        case responses.sections[1]:
-            intro = `Sure, what would you like to know?\n\n`;
-            helpObj = helpTopics.afterApply;
-            console.log(`helpObj = ${ JSON.stringify(helpObj) }`);
-            break;
-        case responses.sections[2]:
+        if (stepContext.result.includes('options')) {
             intro = `We try to be flexible and help you find the right balance ⚖️\n\nWhat area would you like to know more about?\n\n`;
             helpObj = helpTopics.workingOptions;
-            break;
+        } else if (stepContext.result.includes('after' && 'apply')) {
+            intro = `Sure, what would you like to know?\n\n`;
+            helpObj = helpTopics.afterApply;
+        } else if (stepContext.result.includes('prepar') || stepContext.result.includes('Prepar')) {
+            intro = `I'm very excited to hear your thinking of applying 😊\n\nWould you like tips on:\n\n`;
+            helpObj = helpTopics.prepareApplication;
         }
+
+        // switch (stepContext.result) {
+        // case responses.sections[0]:
+        //     intro = `I'm very excited to hear your thinking of applying 😊\n\nWould you like tips on:\n\n`;
+        //     helpObj = helpTopics.prepareApplication;
+        //     break;
+        // case responses.sections[1]:
+        //     intro = `Sure, what would you like to know?\n\n`;
+        //     helpObj = helpTopics.afterApply;
+        //     break;
+        // case responses.sections[2]:
+        //     intro = `We try to be flexible and help you find the right balance ⚖️\n\nWhat area would you like to know more about?\n\n`;
+        //     helpObj = helpTopics.workingOptions;
+        //     break;
+        // }
 
         // Build the question with the numbered questions
         question = this.buildQuestion(intro, helpObj);

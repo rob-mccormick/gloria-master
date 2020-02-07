@@ -118,11 +118,17 @@ const getCompanyData = () => {
                 nextSteps = obj.next_steps.replace(/\\n/gi, '\n');
             }
 
+            // Process benefitsMessage if there are line breaks
+            let benefitsMessage = obj.benefits_message;
+            if (benefitsMessage.includes('\\n')) {
+                benefitsMessage = obj.benefits_message.replace(/\\n/gi, '\n');
+            }
+
             const companyData = {
                 name: obj.company,
                 privacyNotice: obj.privacy_notice_url,
                 benefitsLink: obj.benefits_url,
-                benefitsMessage: obj.benefits_message,
+                benefitsMessage,
                 nextSteps,
                 emailContacts: [obj.talent_email],
                 lastUpdated: now

@@ -1,27 +1,47 @@
 {
-  "prepareApplication": [
+  "workingOptions": [
     {
-      "question": "Preparing your CV",
+      "question": "Students",
       "answer": [
-        "We want to hear about what you've achieved, your strengths and skills.\\n\\nWe also want to know how you can apply them to the job you're applying for.",
-        "☝️ And a tip - when talking about your past jobs focus on what you achieved. Not your duties.",
-        "You can make your CV as long or short as you like - just keep it relevant.  And it helps to have a summary on the first page."
+        "Each year we run our Summer Internship Programme 🌞  You'll be able to find details here on our career site from March each year.",
+        "At the moment we don't offer work placements or a graduate program.  But some of our roles can be a great fit if you're new to the workforce."
       ]
     },
     {
-      "question": "Cover letters",
+      "question": "International workers",
       "answer": [
-        "We thought about this one and realised that cover letters are a pain to write and not that helpful...\\n\\nSo you don't need one to apply 😀"
+        "PiedPiper is a registered sponsor - so we're happy to offer visa support where we can.  But due to Home Office restrictions, we can't sponsor all roles.",
+        "We also offer our international hires help relocating.  It varies a bit by role and requirements, but usually we'll give you some cash to help cover your costs."
+      ]
+    },
+    {
+      "question": "Leave benefits",
+      "answer": [
+        "You can find the annual leave you'll get in the job description.  And on top of that, after 4 years you'll get an extra 6 weeks paid time off. A little thanks for your hard work!",
+        "We're also proud to offer generous maternity and paternity leave."
+      ]
+    },
+    {
+      "question": "Flexible working options",
+      "answer": [
+        "We work hard to make our offices a hive of activity and collaboration.  So while we prefer you work there when you can, we're flexible in hours and location.",
+        "If you need something permanent - like working different hours, part-time or remotely - best to mention this to the recruitment team when they contact you.  We'll do our best to accommodate you."
       ]
     }
   ],
   "afterApply": [
     {
-      "question": "What happens after I apply?",
+      "question": "What to wear to an interview?",
       "answer": [
-        "If you look like a good fit for the job, we'll get in touch to arrange a call.",
-        "After this, you'll be asked to complete a task for some roles.  There are no right or wrong answers to these - we just want to see how you solve real world problems.",
-        "Then you'll come in for an interview at our office.  We'll give you all the specific details based on the job you applied for."
+        "What you have to say is important to us - not what you're wearing.  So wear whatever makes you comfortable and confident!"
+      ]
+    },
+    {
+      "question": "How to prepare for interviews?",
+      "answer": [
+        "In interviews, we want to get to know you.  Your previous positions and challenges.  And what you're looking for in a career.",
+        "So it's a good idea to have some examples of different challenges you've faced.  And be able to explain what action you took.  And how it all turned out.",
+        "It's also good to check out [company] beforehand and get to know us and our industry.  And we'll have copies of your CV or portfolio - so no need to bring them."
       ]
     },
     {
@@ -31,21 +51,49 @@
         "The bad news - our system isn't always great at matching people to the right roles.",
         "To be safe, check back here. And if there are no jobs I can let you know every time we have a new one."
       ]
+    },
+    {
+      "question": "What happens after I apply?",
+      "answer": [
+        "If you look like a good fit for the job, we'll get in touch to arrange a call.",
+        "After this, you'll be asked to complete a task for some roles.  There are no right or wrong answers to these - we just want to see how you solve real world problems.",
+        "Then you'll come in for an interview at our office.  We'll give you all the specific details based on the job you applied for."
+      ]
     }
   ],
-  "workingOptions": [
+  "prepareApplication": [
     {
-      "question": "Flexible working options",
+      "question": "Reapplying for the same job",
       "answer": [
-        "We work hard to make our offices a hive of activity and collaboration.  So while we prefer you work there when you can, we're flexible in hours and location.",
-        "If you need something permanent - like working different hours, part-time or remotely - best to mention this to the recruitment team when they contact you.  We'll do our best to accommodate you."
+        "If you weren't successful you can always reapply for a job.",
+        "But so you know, we'll look to see how you've addressed the reason you didn't get the job before.  It's normal for this to take time - maybe 6 to 12 months."
+      ]
+    },
+    {
+      "question": "If you need a CS degree",
+      "answer": [
+        "You don't need a computer science degree to be an engineer at PiedPiper.  We're more interested in what you can do now."
+      ]
+    },
+    {
+      "question": "Cover letters",
+      "answer": [
+        "We thought about this one and realised that cover letters are a pain to write and not that helpful...   So you don't need one to apply 😀"
+      ]
+    },
+    {
+      "question": "Preparing your CV",
+      "answer": [
+        "We want to hear about what you've achieved, your strengths and skills.    We also want to know how you can apply them to the job you're applying for.",
+        "☝️ And a tip - when talking about your past jobs focus on what you achieved. Not your duties.`,",
+        "You can make your CV as long or short as you like - just keep it relevant.  And it helps to have a summary on the first page."
       ]
     }
   ],
   "sections": [
-    "Preparing my application",
+    "Working options",
     "After I apply",
-    "Working options"
+    "Preparing my application"
   ],
-  "lastUpdated": "2020-02-06T11:53:41.803Z"
+  "lastUpdated": "2020-02-07T10:06:48.265Z"
 }

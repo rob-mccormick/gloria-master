@@ -1,15 +1,15 @@
 {
   "locations": [
     {
-      "streetAddress": "123 Main Street",
-      "city": "Silicon Valley",
-      "country": "United States"
+      "streetAddress": "5332 West 21st Street",
+      "city": "Oakland",
+      "country": "US"
     },
     {
-      "streetAddress": "2233 Broadway",
-      "city": "Oakland",
-      "country": "United States"
+      "streetAddress": "123 Main Street",
+      "city": "Palo Alto",
+      "country": "US"
     }
   ],
-  "lastUpdated": "2020-02-03T15:52:18.027112Z"
+  "lastUpdated": "2020-02-07T10:06:32.648Z"
 }

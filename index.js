@@ -109,12 +109,12 @@ server.post('/api/hooks', (req, res, next) => {
         if (data.data.change && data.hook.event.includes('companychatbot')) {
             getCompanyData();
             res.send('Requesting company data from API');
-        } else if (data.data.change && data.hook.event.includes('job')) {
-            getJobs();
-            res.send('Requesting job data from API');
         } else if (data.data.change && data.hook.event.includes('jobmap')) {
             getJobMap();
             res.send('Requesting jobmap data from API');
+        } else if (data.data.change && data.hook.event.includes('job')) {
+            getJobs();
+            res.send('Requesting job data from API');
         } else if (data.data.change && data.hook.event.includes('benefit')) {
             getBenefits();
             res.send('Requesting benefit data from API');

@@ -1,28 +1,28 @@
 {
   "categoryOne": [
-    "Building the product",
+    "Running the company",
     "Growing the business",
-    "Running the company"
+    "Building the product"
   ],
   "specialism": [
     [
-      "Design",
-      "Product",
-      "Analytics",
-      "Engineering"
-    ],
-    [
-      "Sales",
-      "Marketing",
-      "Customer Success"
-    ],
-    [
+      "Operations",
       "Legal",
-      "Compliance",
-      "Admin",
+      "Finance",
       "People",
-      "Finance"
+      "Compliance"
+    ],
+    [
+      "Customer Success",
+      "Marketing",
+      "Sales"
+    ],
+    [
+      "Analytics",
+      "Product",
+      "Engineering",
+      "Design"
     ]
   ],
-  "lastUpdated": "2020-02-03T12:03:33.996892Z"
+  "lastUpdated": "2020-02-07T10:09:51.332Z"
 }

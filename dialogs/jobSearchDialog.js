@@ -245,6 +245,7 @@ class JobSearchDialog extends CancelAndHelpDialog {
         } else if (stepContext.result) {
             stepContext.values.userProfile.experience = stepContext.result;
         }
+        console.log(stepContext.values.userProfile);
 
         // Set the jobSearchComplete to true
         stepContext.values.conversationData.jobSearchComplete = true;
@@ -697,19 +698,19 @@ class JobSearchDialog extends CancelAndHelpDialog {
             let specIndex = jobList[i].specialism.indexOf(spec);
 
             if (loc === 'all' && exp === 'all') {
-                if (specIndex >= 0) {
+                if (specIndex !== -1) {
                     relevantJobs.push(jobList[i]);
                 }
             } else if (loc === 'all' && exp !== 'all') {
-                if (specIndex >= 0 && jobList[i].minExperience <= exp) {
+                if (specIndex !== -1 && jobList[i].role === exp) {
                     relevantJobs.push(jobList[i]);
                 }
             } else if (loc !== 'all' && exp === 'all') {
-                if (specIndex >= 0 && jobList[i].location === loc) {
+                if (specIndex !== -1 && jobList[i].location === loc) {
                     relevantJobs.push(jobList[i]);
                 }
             } else if (loc !== 'all' && exp !== 'all') {
-                if (specIndex >= 0 && jobList[i].location === loc && jobList[i].minExperience <= exp) {
+                if (specIndex !== -1 && jobList[i].location === loc && jobList[i].role === exp) {
                     relevantJobs.push(jobList[i]);
                 }
             }

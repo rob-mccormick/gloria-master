@@ -1,25 +1,25 @@
 {
   "benefits": [
     {
-      "title": "Generous leave policy",
-      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-island.png?versionId=null"
-    },
-    {
-      "title": "Learning & development",
-      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-book.png?versionId=null"
-    },
-    {
-      "title": "Yoga classes and retreats",
-      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-yoga.png?versionId=null"
+      "title": "Comprehensive health plans",
+      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-health.png?versionId=null"
     },
     {
       "title": "Healthy food and snacks",
       "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-salad.png?versionId=null"
     },
     {
-      "title": "Comprehensive health plans",
-      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-health.png?versionId=null"
+      "title": "Yoga classes and retreats",
+      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-yoga.png?versionId=null"
+    },
+    {
+      "title": "Learning & development budget",
+      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-book.png?versionId=null"
+    },
+    {
+      "title": "Generous leave policy",
+      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-island.png?versionId=null"
     }
   ],
-  "lastUpdated": "2020-02-04T15:49:34.356Z"
+  "lastUpdated": "2020-02-07T10:06:11.657Z"
 }

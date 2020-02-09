@@ -16,9 +16,6 @@ const { QuestionDialog, QUESTION_DIALOG } = require('./questionDialog');
 const { UserProfile } = require('../userProfile');
 const { delay, userIntent, randomSentence } = require('../helperFunctions');
 
-// Load company data
-let company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
-
 const CONVERSATION_DATA_PROPERTY = 'conversationData';
 const USER_PROFILE_PROPERTY = 'userProfile';
 
@@ -309,6 +306,9 @@ class MainDialog extends ComponentDialog {
 
         // Set the new data
         await this.conversationData.set(stepContext.context, conversationData);
+
+        // Load company data
+        const company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
 
         // Ask the welcome message and end dialog
         const choices = [userIntent.searchJobs, userIntent.browsing];

@@ -9,15 +9,6 @@ const { MessageFactory, CardFactory, AttachmentLayoutTypes, ActivityTypes } = re
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay, randomSentence } = require('../helperFunctions');
 
-// Load data
-const company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
-const jobMap = JSON.parse(fs.readFileSync('company/jobMap.json'));
-const locationData = JSON.parse(fs.readFileSync('company/locations.json'));
-let locations = [];
-locationData.locations.forEach(el => locations.push(el.city));
-const jobObj = JSON.parse(fs.readFileSync('company/jobs.json'));
-const jobs = jobObj.jobs;
-
 // Import other dialogs
 const { JobMoreInfoDialog, JOB_MORE_INFO_DIALOG } = require('./jobMoreInfoDialog');
 const { CompanyBenefitsDialog, COMPANY_BENEFITS_DIALOG } = require('./companyBenefitsDialog');
@@ -28,11 +19,15 @@ const JOB_SEARCH_DIALOG = 'jobSearchDialog';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
 
+let locations;
+let company;
+let jobMap;
+let jobObj;
+
 const userResponses = {
     back: 'Go back',
     bothLocations: `I'm open to both`,
     allLocations: `I'm open to all`,
-    roleTypes: jobObj.roleTypes,
     allRoleTypes: 'All roles',
     moreInfoYes: `That'd be great`,
     moreInfoNo: 'No thanks',
@@ -114,6 +109,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
             return stepContext.next();
         }
 
+        // Load the jobMap data
+        jobMap = JSON.parse(fs.readFileSync('company/jobMap.json'));
+
         // Present categoryOne options and ask user to select
         const options = jobMap.categoryOne;
         const question = MessageFactory.suggestedActions(options, `So, what are you interested in?`);
@@ -171,6 +169,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
         // Save user's specialism selection
         stepContext.values.userProfile.specialism = stepContext.result;
 
+        // Load location data and create locations array
+        locations = [];
+        const locationData = JSON.parse(fs.readFileSync('company/locations.json'));
+        locationData.locations.forEach(el => locations.push(el.city));
+
         // Present location options and ask user to select
         const options = locations;
 
@@ -216,8 +219,11 @@ class JobSearchDialog extends CancelAndHelpDialog {
             stepContext.values.userProfile.location = stepContext.result;
         }
 
+        // Load the job object
+        jobObj = JSON.parse(fs.readFileSync('company/jobs.json'));
+
         // Present the different role types to the user
-        const options = userResponses.roleTypes;
+        const options = jobObj.roleTypes;
 
         // Add option to select all role types
         if (options[(options.length - 1)] !== userResponses.allRoleTypes) {
@@ -254,9 +260,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
         let availableJobs;
 
         if (stepContext.values.conversationData.unfilteredJob) {
-            availableJobs = this.findRelevantJobs(jobs, stepContext.values.conversationData.unfilteredJob);
+            availableJobs = this.findRelevantJobs(jobObj.jobs, stepContext.values.conversationData.unfilteredJob);
         } else {
-            availableJobs = this.findRelevantJobs(jobs, stepContext.values.userProfile);
+            availableJobs = this.findRelevantJobs(jobObj.jobs, stepContext.values.userProfile);
         }
 
         // Send the user a message on the job search results
@@ -541,6 +547,9 @@ class JobSearchDialog extends CancelAndHelpDialog {
 
             let message;
             let options;
+
+            // Load company data
+            company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
 
             if (company.companyVideo) {
                 options = [userResponses.seeBenefitsYes, userResponses.seeVideo, userResponses.seeBenefitsNo];

@@ -10,9 +10,6 @@ const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 
 const { delay } = require('../helperFunctions');
 
-// Load company data
-let company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
-
 const GDPR_DIALOG = 'gdprDialog';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
@@ -42,6 +39,9 @@ class GdprDialog extends CancelAndHelpDialog {
         // Create question asking for consent
         const options = [userResponses.yes, userResponses.no];
         const question = MessageFactory.suggestedActions(options, 'Is this ok with you?');
+
+        // Load company data
+        const company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
         await delay(500);

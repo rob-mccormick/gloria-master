@@ -377,4 +377,17 @@ const getQuestions = () => {
 //     writeToFile(companyData, 'company/companyInfo.json');
 // };
 
+// Collecting data from a file - Async and sync
+
+// Async
+// let company;
+// fs.readFile('company/companyInfo.json', (err, data) => {
+//     if (err) throw err;
+//     company = JSON.parse(data);
+// });
+
+// Sync
+// let companyData = fs.readFileSync('company/companyInfo.json');
+// let company = JSON.parse(companyData);
+
 module.exports = { getBenefits, getCompanyData, getJobs, getJobMap, getLocations, getQuestions };

@@ -9,10 +9,6 @@ const { MessageFactory, ActivityTypes } = require('botbuilder');
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 const { delay } = require('../helperFunctions');
 
-// Load company data
-let companyInfo = fs.readFileSync('company/companyInfo.json');
-let company = JSON.parse(companyInfo);
-
 const { postBrowsingData } = require('../company/authorization');
 let browsingData;
 
@@ -22,7 +18,7 @@ const WATERFALL_DIALOG = 'waterfallDialog';
 
 const userOptions = {
     whyOnSite: [
-        `I heard ${ company.name } is hiring`,
+        `I heard you're hiring`,
         `I'm looking at places I might like to work`,
         `I wanted to ask a question`
     ],
@@ -126,6 +122,9 @@ class BrowsingDialog extends CancelAndHelpDialog {
 
             await delay(1000);
             await stepContext.context.sendActivity(`Well, you've come to the right place.`);
+
+            // Get company data
+            const company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
 
             await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
             await delay(1000);

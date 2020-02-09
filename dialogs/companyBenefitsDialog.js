@@ -8,10 +8,6 @@ const { MessageFactory, ActivityTypes, CardFactory, AttachmentLayoutTypes } = re
 
 const { delay } = require('../helperFunctions');
 
-// Load company data
-let benefitData = JSON.parse(fs.readFileSync('company/benefits.json'));
-let company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
-
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 
 const { postJobData } = require('../company/authorization');
@@ -19,6 +15,8 @@ const { postJobData } = require('../company/authorization');
 const COMPANY_BENEFITS_DIALOG = 'companyBenefitsDialog';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
+
+let company;
 
 const responses = {
     otherOptionYes: `Go on`,
@@ -56,11 +54,14 @@ class CompanyBenefitsDialog extends CancelAndHelpDialog {
         const userProfile = stepContext.options.userProfile;
         stepContext.values.userProfile = userProfile;
 
+        // Load company data
+        company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
+
         // Determine what to show
         if (benefits) {
             // Get the benefits to display
-            let benefits = benefitData.benefits;
-            console.log(`benefits: ${ JSON.stringify(benefits) }`);
+            const benefitData = JSON.parse(fs.readFileSync('company/benefits.json'));
+            const benefits = benefitData.benefits;
             let benefitsToDisplay = [];
 
             benefits.forEach(el => benefitsToDisplay.push(this.createHeroCard(el)));

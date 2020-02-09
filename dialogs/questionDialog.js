@@ -7,7 +7,6 @@ const { WaterfallDialog, Dialog } = require('botbuilder-dialogs');
 const { MessageFactory, ActivityTypes } = require('botbuilder');
 
 const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
-const helpTopics = JSON.parse(fs.readFileSync('company/questions.json'));
 const { delay, randomSentence } = require('../helperFunctions');
 
 // Import other dialogs
@@ -19,8 +18,10 @@ const QUESTION_DIALOG = 'questionDialog';
 
 const WATERFALL_DIALOG = 'waterfallDialog';
 
+let helpTopics;
+
 const responses = {
-    sections: helpTopics.sections,
+    // sections: helpTopics.sections,
     back: 'Go back',
     answered: 'Yes thanks',
     notAnswered: 'No',
@@ -68,8 +69,11 @@ class QuestionDialog extends CancelAndHelpDialog {
         const userProfile = stepContext.options.userProfile;
         stepContext.values.userProfile = userProfile;
 
+        // Load the question data
+        helpTopics = JSON.parse(fs.readFileSync('company/questions.json'));
+
         // Check which topic they're interested in
-        const options = responses.sections;
+        const options = helpTopics.sections;
         const question = MessageFactory.suggestedActions(options, `What area can I help you with?`);
 
         await stepContext.context.sendActivity({ type: ActivityTypes.Typing });
@@ -98,21 +102,6 @@ class QuestionDialog extends CancelAndHelpDialog {
             intro = `I'm very excited to hear your thinking of applying 😊\n\nWould you like tips on:\n\n`;
             helpObj = helpTopics.prepareApplication;
         }
-
-        // switch (stepContext.result) {
-        // case responses.sections[0]:
-        //     intro = `I'm very excited to hear your thinking of applying 😊\n\nWould you like tips on:\n\n`;
-        //     helpObj = helpTopics.prepareApplication;
-        //     break;
-        // case responses.sections[1]:
-        //     intro = `Sure, what would you like to know?\n\n`;
-        //     helpObj = helpTopics.afterApply;
-        //     break;
-        // case responses.sections[2]:
-        //     intro = `We try to be flexible and help you find the right balance ⚖️\n\nWhat area would you like to know more about?\n\n`;
-        //     helpObj = helpTopics.workingOptions;
-        //     break;
-        // }
 
         // Build the question with the numbered questions
         question = this.buildQuestion(intro, helpObj);

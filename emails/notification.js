@@ -4,9 +4,8 @@
 const fs = require('fs');
 const sgMail = require('@sendgrid/mail');
 
-const company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
-
 const sendPipelineEmail = (userProfile) => {
+    const company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
     let experience;
 
     if (userProfile.experience && userProfile.experience !== 'all') {
@@ -41,6 +40,8 @@ const sendPipelineEmail = (userProfile) => {
 };
 
 const sendQuestionEmail = (userProfile) => {
+    const company = JSON.parse(fs.readFileSync('company/companyInfo.json'));
+
     sgMail.send({
         to: `${ company.emailContacts }`,
         from: 'gloria@idealrole.com',

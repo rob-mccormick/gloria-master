@@ -1,6 +1,7 @@
 const request = require('request');
 
 const app = require('../index');
+const { sendErrorMessageEmail } = require('../emails/errorAlert');
 
 // Post data to the API using the provided url
 const postData = (data, id, url) => {
@@ -21,9 +22,13 @@ const postData = (data, id, url) => {
 
     // Post to API
     request(options, (error, response, body) => {
-        if (error) throw new Error(error);
-
-        console.log(response.statusCode);
+        // if (error) throw new Error(error);
+        if (error) {
+            console.log(error);
+            sendErrorMessageEmail(error);
+        } else {
+            console.log(response.statusCode);
+        }
     });
 };
 

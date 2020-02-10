@@ -1,25 +1,53 @@
 {
   "benefits": [
     {
-      "title": "Comprehensive health plans",
-      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-health.png?versionId=null"
+      "title": "Enhanced maternity and paternity leave",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-parental.png?versionId=null"
     },
     {
-      "title": "Healthy food and snacks",
-      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-salad.png?versionId=null"
+      "title": "Massages",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-massage.png?versionId=null"
     },
     {
-      "title": "Yoga classes and retreats",
-      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-yoga.png?versionId=null"
+      "title": "Cycle to work",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-cycle.png?versionId=null"
     },
     {
-      "title": "Learning & development budget",
-      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-book.png?versionId=null"
+      "title": "Enhanced pensions",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-pension.png?versionId=null"
     },
     {
-      "title": "Generous leave policy",
-      "imageUrl": "https://gloria-master-test.s3.eu-west-2.amazonaws.com/piedpiper/pp-island.png?versionId=null"
+      "title": "Life insurance",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-life-insurance.png?versionId=null"
+    },
+    {
+      "title": "Health insurance",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-health.png?versionId=null"
+    },
+    {
+      "title": "Inspiring guest speakers",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-inspiring.png?versionId=null"
+    },
+    {
+      "title": "Flexible holidays",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-leave.png?versionId=null"
+    },
+    {
+      "title": "Free lunches",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-lunch.png?versionId=null"
+    },
+    {
+      "title": "Life coaching & support",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-support.png?versionId=null"
+    },
+    {
+      "title": "Stock options",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-stock-options.png?versionId=null"
+    },
+    {
+      "title": "Training & workshops",
+      "imageUrl": "https://habito-ideal-role.s3.eu-west-2.amazonaws.com/icons/habito-training.png?versionId=null"
     }
   ],
-  "lastUpdated": "2020-02-10T10:17:17.682Z"
+  "lastUpdated": "2020-02-10T11:03:58.514Z"
 }

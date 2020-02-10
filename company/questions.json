@@ -1,99 +1,89 @@
 {
-  "workingOptions": [
-    {
-      "question": "Students",
-      "answer": [
-        "Each year we run our Summer Internship Programme 🌞\n\nYou'll be able to find details here on our career site from March each year.",
-        "At the moment we don't offer work placements or a graduate program.  But some of our roles can be a great fit if you're new to the workforce."
-      ]
-    },
-    {
-      "question": "International workers",
-      "answer": [
-        "PiedPiper is a registered sponsor - so we're happy to offer visa support where we can.  But due to Home Office restrictions, we can't sponsor all roles.",
-        "We also offer our international hires help relocating.  It varies a bit by role and requirements, but usually we'll give you some cash to help cover your costs."
-      ]
-    },
-    {
-      "question": "Leave benefits",
-      "answer": [
-        "You can find the annual leave you'll get in the job description.\n\nAnd on top of that, after 4 years you'll get an extra 6 weeks paid time off. A little thanks for your hard work!",
-        "We're also proud to offer generous maternity and paternity leave."
-      ]
-    },
-    {
-      "question": "Flexible working options",
-      "answer": [
-        "We work hard to make our offices a hive of activity and collaboration.  So while we prefer you work there when you can, we're flexible in hours and location.",
-        "If you need something permanent - like working different hours, part-time or remotely - best to mention this to the recruitment team when they contact you.  We'll do our best to accommodate you."
-      ]
-    }
-  ],
-  "afterApply": [
-    {
-      "question": "What to wear to an interview?",
-      "answer": [
-        "What you have to say is important to us - not what you're wearing.\n\nSo wear whatever makes you comfortable and confident!"
-      ]
-    },
-    {
-      "question": "How to prepare for interviews?",
-      "answer": [
-        "In interviews, we want to get to know you.  Your previous positions and challenges.  And what you're looking for in a career.",
-        "So it's a good idea to have some examples of different challenges you've faced.  And be able to explain what action you took.  And how it all turned out.",
-        "It's also good to check out PiedPiper beforehand and get to know us and our industry.  And we'll have copies of your CV or portfolio - so no need to bring them."
-      ]
-    },
-    {
-      "question": "Do you keep applications for future jobs?",
-      "answer": [
-        "The good news - we keep all applications for future roles.",
-        "The bad news - our system isn't always great at matching people to the right roles.",
-        "To be safe, check back here. And if there are no jobs I can let you know every time we have a new one."
-      ]
-    },
-    {
-      "question": "What happens after I apply?",
-      "answer": [
-        "If you look like a good fit for the job, we'll get in touch to arrange a call.",
-        "After this, you'll be asked to complete a task for some roles.  There are no right or wrong answers to these - we just want to see how you solve real world problems.",
-        "Then you'll come in for an interview at our office.  We'll give you all the specific details based on the job you applied for."
-      ]
-    }
-  ],
   "prepareApplication": [
+    {
+      "question": "Preparing your CV",
+      "answer": [
+        "We want to hear about what you've achieved, your strengths and skills.\n\nWe also want to know how they’ll help you in the job you're applying for.",
+        "☝️ And a tip - when talking about your past jobs focus on what you achieved, not your duties."
+      ]
+    },
+    {
+      "question": "If you need a CS degree",
+      "answer": [
+        "You don't need a computer science degree to be an engineer at Habito.\n\nWe're more interested in what you can do now."
+      ]
+    },
     {
       "question": "Reapplying for the same job",
       "answer": [
         "If you weren't successful you can always reapply for a job.",
         "But so you know, we'll look to see how you've addressed the reason you didn't get the job before.\n\nIt's normal for this to take time - maybe 6 to 12 months."
       ]
-    },
+    }
+  ],
+  "afterApply": [
     {
-      "question": "If you need a CS degree",
+      "question": "What happens after I apply?",
       "answer": [
-        "You don't need a computer science degree to be an engineer at PiedPiper.\n\nWe're more interested in what you can do now."
+        "If you look like a good fit for the job, we'll get in touch to arrange a call to discuss the job and your application.",
+        "After this we normally arrange a time for you to come in to our office for an interview.  We'll give you all the specific details based on the job you applied for."
       ]
     },
     {
-      "question": "Cover letters",
+      "question": "Do you keep applications for future jobs?",
       "answer": [
-        "We thought about this one and realised that cover letters are a pain to write and not that helpful...\n\nSo you don't need one to apply 😀"
+        "We keep your details for 6 months and will let you know if a job comes up for you during that time.",
+        "To make sure we respect your personal data and comply with data regulations, we delete all your data after 6 months.",
+        "So if it’s been 6 months or more since you last applied you’ll need to send us a new one."
       ]
     },
     {
-      "question": "Preparing your CV",
+      "question": "How to prepare for interviews?",
       "answer": [
-        "We want to hear about what you've achieved, your strengths and skills.\n\nWe also want to know how you can apply them to the job you're applying for.",
-        "☝️ And a tip - when talking about your past jobs focus on what you achieved. Not your duties.",
-        "You can make your CV as long or short as you like - just keep it relevant.  And it helps to have a summary on the first page."
+        "In interviews we want to get to know you.  Your previous positions and challenges.  And what you're looking for in a career.",
+        "So it's a good idea to have some examples of different challenges you've faced.  And be able to explain what action you took.  And how it all turned out.",
+        "It's also good to check out ${ company.name } beforehand and get to know us and our industry.  And we'll have copies of your CV or portfolio - so no need to bring them."
+      ]
+    },
+    {
+      "question": "What to wear to an interview?",
+      "answer": [
+        "What you have to say is important to us - not what you're wearing.\n\nSo wear whatever makes you comfortable and confident!"
+      ]
+    }
+  ],
+  "workingOptions": [
+    {
+      "question": "Flexible working options",
+      "answer": [
+        "We work hard to make our office a hive of activity and collaboration.  So we prefer you work there.",
+        "But if you need to work different hours, part-time or remotely, it’s best to mention this to the recruitment team when they contact you.  We'll do our best to accommodate you."
+      ]
+    },
+    {
+      "question": "Leave benefits",
+      "answer": [
+        "We have a flexible holiday policy, so you can take your holiday in whatever way works for you.\n\nWe encourage everyone to take a minimum of 20 days a year, plus the 8 bank holidays.",
+        "We also offer enhanced maternity and paternity leave so you can spend more time with your new family."
+      ]
+    },
+    {
+      "question": "International workers",
+      "answer": [
+        "Habito is a registered sponsor - so we're happy to offer visa support where we can.  But due to Home Office restrictions, we can't sponsor all roles."
+      ]
+    },
+    {
+      "question": "Students",
+      "answer": [
+        "We have a number of internships during the year.  You can find these on our career site."
       ]
     }
   ],
   "sections": [
-    "Working options",
+    "Preparing my application",
     "After I apply",
-    "Preparing my application"
+    "Working options"
   ],
-  "lastUpdated": "2020-02-10T10:17:18.040Z"
+  "lastUpdated": "2020-02-10T11:03:58.331Z"
 }

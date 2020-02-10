@@ -4,7 +4,7 @@
 // Import required packages
 const path = require('path');
 const restify = require('restify');
-// const fs = require('fs');
+const fs = require('fs');
 const sgMail = require('@sendgrid/mail');
 
 // Import required bot services. See https://aka.ms/bot-services to learn more about the different parts of a bot.
@@ -82,6 +82,38 @@ const irApi = {
     baseUrl: process.env.BASE_URL
 };
 
+// Check if company files exist - if not call API to get up to date info
+fs.readFile('company/companyInfo.json', (err, data) => {
+    if (err) {
+        getCompanyData();
+    }
+});
+fs.readFile('company/benefits.json', (err, data) => {
+    if (err) {
+        getBenefits();
+    }
+});
+fs.readFile('company/jobMap.json', (err, data) => {
+    if (err) {
+        getJobMap();
+    }
+});
+fs.readFile('company/jobs.json', (err, data) => {
+    if (err) {
+        getJobs();
+    }
+});
+fs.readFile('company/locations.json', (err, data) => {
+    if (err) {
+        getLocations();
+    }
+});
+fs.readFile('company/questions.json', (err, data) => {
+    if (err) {
+        getQuestions();
+    }
+});
+
 // Create HTTP server
 let server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function() {
@@ -104,7 +136,6 @@ server.post('/api/messages', (req, res) => {
 server.post('/api/hooks', (req, res, next) => {
     let data = req.body || {};
     console.log(data);
-
     try {
         if (data.data.change && data.hook.event.includes('companychatbot')) {
             getCompanyData();

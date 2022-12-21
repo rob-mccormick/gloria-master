@@ -1,4 +1,4 @@
-# Gloria
+# Gloria Chatbot
 Gloria is a chatbot that helps people find a job on a company&#39;s career site.
 
 The key tasks Gloria can perform are:

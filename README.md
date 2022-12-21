@@ -6,12 +6,6 @@ The key tasks Gloria can perform are:
 - If the user doesn't find a job they like, take their details to let them know when new jobs become available
 - Let the user ask a question (to be passed to a human to respond)
 
-To be completed:
-- Handle user interruptions for such things as Restart, Help or Cancel
-- Handle any unexpected errors
-- Answer common questions about jobs and benefits
-
-
 ## Prerequisites
 - [Node.js][4] version 10.14 or higher
     ```bash
